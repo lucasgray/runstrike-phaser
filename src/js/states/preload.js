@@ -1,5 +1,9 @@
 export default class Preload extends Phaser.State {
 
+    create() {
+        this.ready = false;
+    }
+
     preload() {
 
         this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBg');
@@ -35,8 +39,14 @@ export default class Preload extends Phaser.State {
 
     }
 
-    create() {
-        this.state.start('Menu');
+    update() {
+        if (this.cache.isSoundDecoded("playMusic") && this.cache.isSoundDecoded("menuMusic") && this.ready === false) {
+            console.log('decoded!');
+            this.ready = true;
+            this.state.start('Menu');
+        } else {
+            console.log('not decoded yet!');
+        }
     }
 
 }

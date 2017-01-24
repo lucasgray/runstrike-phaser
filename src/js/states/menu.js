@@ -6,7 +6,7 @@ export default class Menu extends Phaser.State {
 
         this.music = this.game.add.audio('menuMusic');
 
-        this.title = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-200, "testing " + DATA.user, {
+        this.title = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-200, "testing. ", {
             font: '36px Tahoma',
             fill: 'white',
             align: 'center'
