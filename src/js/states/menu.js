@@ -4,9 +4,9 @@ export default class Menu extends Phaser.State {
 
     create() {
 
-        this.music = this.game.add.audio('menuMusic');
+        this.game.music = this.game.add.audio('futureMusic');
 
-        this.title = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-200, "testing. ", {
+        this.title = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-200, "ATTACK BEGINS", {
             font: '36px Tahoma',
             fill: 'white',
             align: 'center'
@@ -39,7 +39,7 @@ export default class Menu extends Phaser.State {
         this.start.setDownSound(this.btnDownSound);
 
         this.start.onInputUp.add(()=>{
-            this.music.stop();
+            // this.game.music.stop();
             this.state.start('Play');
 
         });
@@ -48,6 +48,7 @@ export default class Menu extends Phaser.State {
         this.menuPanel.add(this.title);
         this.menuPanel.add(this.start);
 
-        this.music.loopFull();
+        this.game.music.loopFull();
+
     }
 }

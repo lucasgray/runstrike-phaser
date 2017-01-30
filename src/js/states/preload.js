@@ -22,8 +22,7 @@ export default class Preload extends Phaser.State {
         this.load.image('healthbar', 'img/healthbar.png');
         this.load.image('hudBg', 'img/hud-bg.png');
 
-        this.load.audio('playMusic', ['audio/music/play.mp3']);
-        this.load.audio('menuMusic', ['audio/music/menu.mp3']);
+        this.load.audio('futureMusic', ['audio/music/2015-baws-responder.mp3']);
 
         this.load.audio('menuOver', ['audio/sound/menu-over.mp3']);
         this.load.audio('menuOut', ['audio/sound/menu-out.mp3']);
@@ -37,10 +36,40 @@ export default class Preload extends Phaser.State {
 
         this.load.audio('gameOver', ['audio/sound/game-over.mp3']);
 
+        //new stuff
+        this.game.load.image('hack_icon', 'img/clock.png', 128, 128); //128x128
+        this.game.load.image('bomb_icon', 'img/grenade.png', 128, 128); //128x128
+        this.game.load.spritesheet('drone', 'img/drone.png', 128, 128, 3); // 128x128 with 2 frames (option param)
+        this.game.load.spritesheet('explosion', 'img/explosion.png', 86, 86);
+
+
+        //TODO check the bridge for this and default to test data if not
+        //https://github.com/jerome-d-russ/phaser-tutorial-game/blob/lucastest/js/lucas.js
+        this.game.gameData = {
+            placedItems: {
+                wall: {
+                    x: 200, y: 200
+                },
+                turret: {
+                    x: 300, y: 300
+                }
+            },
+            inventoryItems: {
+                bomb: 3,
+                hack: 7,
+                turret: 4
+            },
+            shadows: [
+                { size: 'large', at: 450},
+                { size: 'medium', at: 900},
+                { size: 'small', at: 1020}
+            ],
+            status: 'attacking' //viewing or attacking
+        };
     }
 
     update() {
-        if (this.cache.isSoundDecoded("playMusic") && this.cache.isSoundDecoded("menuMusic") && this.ready === false) {
+        if (this.cache.isSoundDecoded("futureMusic") && this.ready === false) {
             console.log('decoded!');
             this.ready = true;
             this.state.start('Menu');

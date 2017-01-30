@@ -5,216 +5,195 @@ import HUD from '../prefabs/hud';
 export default class Play extends Phaser.State {
 
     create() {
+        this.game.stage.backgroundColor = 0x000000;
+        this.bomb = null;
+        this.hack = null;
+        this.wall = null;
+        this.explosion = null;
+        this.sprites = [];
 
-        this.farback = this.add.tileSprite(0, 0, 800, 2380, 'farback');
+        this.game.input.onTap.add(this.onTap, this);
+        this.graphics = this.game.add.graphics(0, 0);
 
-        this.game.time.slowMotion = 1;
+        this.drawHealth();
 
-        this.enemies = this.add.group();
-        this.enemies.enableBody = true;
+        this.drawInput();
 
-        this.player = new Player({
-            game: this.game,
-            x: this.game.world.centerX,
-            y: 0.92 * this.game.world.height,
-            health: 100,
-            asset: 'smallfighter',
-            frame: 1
-        });
-        this.game.stage.addChild(this.player);
+        // drawPlacedItems(game);
 
-        this.hud = new HUD({
-            game: this.game,
-            player: this.player
-        });
+        this.drawEnemies();
 
-        this.game.input.onDown.add(() => {
-            this.game.time.slowMotion = 1;
-        });
+        // drawInventory(game);
 
-        this.game.input.onUp.add(() => {
-            this.game.time.slowMotion = 3;
-        });
+        // drawBase(game);
 
-        this.enemyTime = 0;
-        this.enemyInterval = 1.5;
-        this.enemyShootTime = 0;
-        this.enemyShootInterval = 1;
-        this.playerShootTime = 0;
-        this.playerShootInterval = 0.16;
+        //??
 
-        this.game.time.events.loop(Phaser.Timer.SECOND * 10, () => {
-            if(this.enemyInterval > 0.2 ){
-                this.enemyInterval -= 0.1;
+    }
+
+    drawHealth() {
+        //Draw rectangles for health of enemy army
+        this.graphics.beginFill(0x00FF00);
+        this.graphics.lineStyle(2, 0x0000FF, 1);
+        this.graphics.drawRect(0, 0, 80, 1080);
+
+        let w = this.game.world.width;
+        let h = this.game.world.height;
+
+        //Draw rectangles for health of player army
+        this.graphics.beginFill(0x00FF00);
+        this.graphics.lineStyle(2, 0x0000FF, 1);
+        this.graphics.drawRect(w-80, 0, 80, 1080);
+    }
+
+    drawInput() {
+        // var wallIcon = game.add.sprite(90, 10, 'wall_icon');
+        // wallIcon.scale.setTo(1,1);
+        // wallIcon.inputEnabled = true;
+        // wallIcon.events.onInputDown.add(wallListener, this);
+
+        var hackIcon = this.game.add.sprite(90, 160, 'hack_icon');
+        hackIcon.scale.setTo(1, 1);
+        hackIcon.inputEnabled = true;
+        hackIcon.events.onInputDown.add(this.hackListener, this);
+
+        var bombIcon = this.game.add.sprite(90, 310, 'bomb_icon');
+        bombIcon.scale.setTo(1, 1);
+        bombIcon.inputEnabled = true;
+        bombIcon.events.onInputDown.add(this.bombListener, this);
+        // var iconMask = game.make.bitmapData(128,128);
+        // iconMask.circle(64,64,64);
+        // iconMask.alphaMask('wall_icon');
+        // var wallIcon = game.add.sprite(90, 10, iconMask);
+        // wallIcon.scale.setTo(.75,.75);
+    }
+
+    drawEnemies() {
+
+        console.log(gameData);
+
+        let gameData = this.game.gameData;
+
+        if (gameData.status === 'attacking') {
+
+            gameData.shadows.forEach((shadow) => {
+
+                console.log(shadow);
+
+                var baddiesToMake = 0;
+
+                if (shadow.size === 'large') {
+                    baddiesToMake = 7;
+                } else if (shadow.size === 'medium') {
+                    baddiesToMake = 4;
+                } else if (shadow.size === 'small') {
+                    baddiesToMake = 2;
+                }
+
+                [...Array(baddiesToMake)].map((_, i) => {
+                    console.log(i);
+
+                    //somewhere in a 500 range
+                    var offset = Math.floor(Math.random() * 500) - 250;
+
+                    this.makeSprite(shadow.at + offset);
+                });
+
+            });
+
+        } else {
+            console.log('not implemented yet!!!');
+        }
+    }
+
+    makeSprite(where) {
+        var sprite = this.game.add.sprite(where, 0, 'drone');
+        sprite.animations.add('fly');
+        sprite.animations.play('fly', 30, true);
+        sprite.scale.setTo(.5, .5);
+        sprite.anchor.setTo(.5, .5);
+        sprite.inputEnabled = true;
+        sprite.events.onInputDown.add(this.droneListener, this);
+
+        this.sprites.push(sprite);
+    }
+
+
+    onTap(pointer, doubleTap) {
+        if (this.bomb) {
+            if (doubleTap) {
+                console.log('doubletap');
+            } else {
+                console.log('tap');
             }
-        });
 
-        this.overlayBitmap = this.add.bitmapData(this.game.width, this.game.height);
-        this.overlayBitmap.ctx.fillStyle = '#000';
-        this.overlayBitmap.ctx.fillRect(0, 0, this.game.width, this.game.height);
+            let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
+            explosion.anchor.setTo(.5, .5);
+            let explosionAnimation = explosion.animations.add('fly');
+            explosion.animations.play('fly', 30, false);
 
-        this.overlay = this.add.sprite(0, 0, this.overlayBitmap);
-        this.overlay.visible = false;
-        this.overlay.alpha = 0.75;
+            this.sprites.forEach((sprite) => {
 
-        this.music = this.game.add.audio('playMusic');
-        this.bulletHitSound = this.add.sound('bulletHit');
-        this.enemyExplosionSound = this.add.sound('enemyExplosion');
-        this.playerExplosionSound = this.add.sound('playerExplosion');
-        this.gameOverSound = this.add.sound('gameOver');
+                let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
-        this.music.loopFull();
+                //FIXME
+                //for now we just kills em
+                if (dist <= 50) {
+                    this.hack = true;
+                    this.droneListener(sprite, pointer);
+                }
+            });
+
+            explosionAnimation.onComplete.add(() => {
+                explosion.destroy();
+            });
+        }
+    }
+
+    hackListener() {
+        console.log('hack!');
+        this.hack = true;
+    }
+
+// function wallListener(){
+//   console.log('wall!');
+//   wall = true;
+// }
+
+    bombListener() {
+        console.log('bomb!');
+        this.bomb = true;
+    }
+
+    droneListener(sprite, f) {
+        if (this.hack) {
+            this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+            var fall = this.game.add.tween(sprite.scale).to({
+                x: 0,
+                y: 0
+            }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+            fall.onComplete.add(() => {
+                let explosion = this.game.add.sprite(sprite.x, sprite.y, 'explosion');
+                explosion.anchor.setTo(.2, .2);
+                explosion.scale.setTo(.2, .2);
+                let explosionAnimation = explosion.animations.add('fly');
+                explosion.animations.play('fly', 30, false);
+                sprite.destroy();
+                explosionAnimation.onComplete.add(() => {
+                    explosion.destroy();
+                })
+            });
+        }
     }
 
     update() {
-
-        this.enemyTime += this.game.time.physicsElapsed;
-        this.enemyShootTime += this.game.time.physicsElapsed;
-        this.playerShootTime += this.game.time.physicsElapsed;
-
-        if (this.enemyTime > this.enemyInterval) {
-            this.enemyTime = 0;
-
-            this.createEnemy({
-                game: this.game,
-                x: this.game.rnd.integerInRange(6, 76) * 10,
-                y: 0,
-                speed: {
-                    x: this.game.rnd.integerInRange(5, 10) * 10 * (Math.random() > 0.5 ? 1 : -1),
-                    y: this.game.rnd.integerInRange(5, 10) * 10
-                },
-                health: 9,
-                bulletSpeed: this.game.rnd.integerInRange(10, 20) * 10,
-                asset: 'alien'
-            });
-        }
-
-        if (this.enemyShootTime > this.enemyShootInterval) {
-            this.enemyShootTime = 0;
-            this.enemies.forEachAlive(enemy => enemy.shoot());
-            if (!this.player.alive) {
-                this.game.world.bringToTop(this.overlay);
+        this.sprites.forEach((sprite) => {
+            sprite.y += 1;
+            if (sprite.y > this.game.height) {
+                sprite.y = 0;
             }
-        }
-
-        if (this.playerShootTime > this.playerShootInterval) {
-            this.playerShootTime = 0;
-            if (this.player.alive) {
-                this.player.shoot();
-            }
-        }
-
-        this.game.physics.arcade.overlap(this.player.bullets, this.enemies, this.hitEnemy, null, this);
-
-        this.game.physics.arcade.overlap(this.player, this.enemies, this.crashEnemy, null, this);
-
-        this.enemies.forEach(enemy => this.game.physics.arcade.overlap(this.player, enemy.bullets, this.hitPlayer, null, this));
-
-        this.farback.tilePosition.y += 3;
+        })
     }
 
-    createEnemy(data) {
-
-        let enemy = this.enemies.getFirstExists(false);
-
-        if (!enemy) {
-            enemy = new Enemy(data);
-            this.enemies.add(enemy);
-        }
-        enemy.reset(data);
-    }
-
-    hitEffect(obj, color) {
-        let tween = this.game.add.tween(obj);
-        let emitter = this.game.add.emitter();
-        let emitterPhysicsTime = 0;
-        let particleSpeed = 100;
-        let maxParticles = 10;
-
-        tween.to({tint: 0xff0000}, 100);
-        tween.onComplete.add(() => {
-            obj.tint = 0xffffff;
-        });
-        tween.start();
-
-        emitter.x = obj.x;
-        emitter.y = obj.y;
-        emitter.gravity = 0;
-        emitter.makeParticles('particle');
-
-        if (obj.health <= 0) {
-            particleSpeed = 200;
-            maxParticles = 40;
-            color = 0xff0000;
-        }
-
-        emitter.minParticleSpeed.setTo(-particleSpeed, -particleSpeed);
-        emitter.maxParticleSpeed.setTo(particleSpeed, particleSpeed);
-        emitter.start(true, 500, null, maxParticles);
-        emitter.update = () => {
-            emitterPhysicsTime += this.game.time.physicsElapsed;
-            if(emitterPhysicsTime >= 0.6){
-                emitterPhysicsTime = 0;
-                emitter.destroy();
-            }
-
-        };
-        emitter.forEach(particle => particle.tint = color);
-        if (!this.player.alive) {
-            this.game.world.bringToTop(this.overlay);
-        }
-    }
-
-    hitEnemy(bullet, enemy) {
-        this.bulletHitSound.play("",0,0.5);
-        enemy.damage(bullet.health);
-        this.hitEffect(enemy, bullet.tint);
-        if (!enemy.alive) {
-            this.enemyExplosionSound.play("",0,0.5);
-            this.hud.updateScore(enemy.maxHealth);
-        }
-        bullet.kill();
-    }
-
-    hitPlayer(player, bullet) {
-        this.bulletHitSound.play("",0,0.5);
-        player.damage(bullet.health);
-        this.hud.updateHealth();
-        this.hitEffect(player, bullet.tint);
-        if (!player.alive) {
-            this.playerExplosionSound.play();
-            this.gameOver();
-        }
-        bullet.kill();
-    }
-
-    crashEnemy(player, enemy) {
-        enemy.damage(enemy.health);
-        player.damage(enemy.health);
-        this.hitEffect(player);
-        this.hitEffect(enemy);
-        if (!enemy.alive) {
-            this.enemyExplosionSound.play("",0,0.5);
-            this.hud.updateScore(enemy.maxHealth);
-        }
-        this.hud.updateHealth();
-        if (!player.alive) {
-            this.playerExplosionSound.play();
-            this.gameOver();
-        }
-    }
-
-    gameOver(){
-        this.game.time.slowMotion = 3;
-        this.overlay.visible = true;
-        this.game.world.bringToTop(this.overlay);
-        let timer = this.game.time.create(this.game, true);
-        timer.add(3000, () => {
-            this.music.stop();
-            this.gameOverSound.play();
-            this.game.state.start('Over');
-        });
-        timer.start();
-    }
 
 }
