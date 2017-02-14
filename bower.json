@@ -14,6 +14,7 @@
     "tests"
   ],
   "devDependencies": {
-    "phaser": "~2.4.4"
+    "phaser": "~2.4.4",
+    "easystarjs": "^0.3.1"
   }
 }

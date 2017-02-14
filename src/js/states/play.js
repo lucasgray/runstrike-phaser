@@ -1,10 +1,21 @@
-import Player from '../prefabs/player';
-import Enemy from '../prefabs/enemy';
-import HUD from '../prefabs/hud';
+import * as easystar from "easystarjs";
 
 export default class Play extends Phaser.State {
 
+
+    preload() {
+        this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
+    }
+
     create() {
+        this.game.add.sprite(0,0,'grid');
+
+        console.log('width: ' + this.game.world.width)
+        console.log('height: ' + this.game.world.height)
+
+        this.cellWidth = this.game.world.width / 10;
+        this.cellHeight = this.game.world.height / 15;
+
         this.game.stage.backgroundColor = 0x000000;
         this.bomb = null;
         this.hack = null;
@@ -15,35 +26,68 @@ export default class Play extends Phaser.State {
         this.game.input.onTap.add(this.onTap, this);
         this.graphics = this.game.add.graphics(0, 0);
 
+        this.setupGrid();
+
         this.drawHealth();
 
         this.drawInput();
 
-        // drawPlacedItems(game);
+        this.drawPlacedItems();
 
         this.drawEnemies();
 
-        // drawInventory(game);
+        this.startPathfinding();
 
-        // drawBase(game);
+        // this.drawInventory(game);
+
+        // this.drawBase(game);
 
         //??
 
     }
 
+    setupGrid() {
+
+        //10x15 grid
+        let x = 10;
+        let y = 15;
+
+        //10x15 grid to make it easy.
+
+        var easystar = new EasyStar.js();
+
+        var grid = [];
+
+        Array.from(new Array(y)).forEach(() => {
+            grid.push(new Array(x).fill(0));
+        });
+
+        this.game.gameData.placedItems.forEach((i) => {
+           grid[i.y][i.x] = 1;
+        });
+
+        easystar.setGrid(grid);
+        easystar.setAcceptableTiles([0]);
+        easystar.calculate();
+        easystar.enableDiagonals();
+        easystar.disableCornerCutting();
+
+        this.easystar = easystar;
+    }
+
     drawHealth() {
         //Draw rectangles for health of enemy army
-        this.graphics.beginFill(0x00FF00);
-        this.graphics.lineStyle(2, 0x0000FF, 1);
-        this.graphics.drawRect(0, 0, 80, 1080);
+        // this.graphics.beginFill(0x00FF00);
+        // this.graphics.lineStyle(2, 0x0000FF, 1);
+        // this.graphics.drawRect(0, 0, 80, 1080);
 
         let w = this.game.world.width;
         let h = this.game.world.height;
 
         //Draw rectangles for health of player army
-        this.graphics.beginFill(0x00FF00);
-        this.graphics.lineStyle(2, 0x0000FF, 1);
-        this.graphics.drawRect(w-80, 0, 80, 1080);
+        // this.graphics.beginFill(0x00FF00);
+        // this.graphics.lineStyle(2, 0x0000FF, 1);
+        // this.graphics.drawRect(w-80, 0, 80, 1080);
     }
 
     drawInput() {
@@ -70,8 +114,6 @@ export default class Play extends Phaser.State {
 
     drawEnemies() {
 
-        console.log(gameData);
-
         let gameData = this.game.gameData;
 
         if (gameData.status === 'attacking') {
@@ -83,20 +125,48 @@ export default class Play extends Phaser.State {
                 var baddiesToMake = 0;
 
                 if (shadow.size === 'large') {
-                    baddiesToMake = 7;
+                    baddiesToMake = 5;
                 } else if (shadow.size === 'medium') {
-                    baddiesToMake = 4;
-                } else if (shadow.size === 'small') {
                     baddiesToMake = 2;
+                } else if (shadow.size === 'small') {
+                    baddiesToMake = 1;
                 }
 
-                [...Array(baddiesToMake)].map((_, i) => {
+                [... new Array(baddiesToMake)].map((_, i) => {
                     console.log(i);
 
                     //somewhere in a 500 range
                     var offset = Math.floor(Math.random() * 500) - 250;
 
-                    this.makeSprite(shadow.at + offset);
+                    if (offset < 0) {
+                        offset = 0;
+                    }
+
+                    //center cell of cell 5 (index)
+                    this.makeDrone(shadow.at + offset);
+                });
+
+                this.sprites.forEach((curSprite) => {
+
+                    let curXCell = Math.floor((curSprite.x / 640) * 10);
+                    let curYCell = Math.floor((curSprite.y / 960) * 15);
+
+                    console.log("where am i? " + curXCell + " , " + curYCell)
+
+                    //640x960 find path to bottom left of the screen
+                    this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+
+                        if (path === null) {
+                            console.log("The path to the destination point was not found.");
+                        } else {
+                            console.log("easystar success. ");
+
+                            path.forEach((p) => console.log(JSON.stringify(p)));
+                            curSprite.path = path;
+                        }
+                    });
+
+                    this.easystar.calculate();
                 });
 
             });
@@ -106,8 +176,80 @@ export default class Play extends Phaser.State {
         }
     }
 
-    makeSprite(where) {
-        var sprite = this.game.add.sprite(where, 0, 'drone');
+    startPathfinding() {
+        setInterval(() => {
+
+            if (this.sprites) {
+
+                this.sprites.forEach((sprite) => {
+
+                    if (!sprite.lastMove) {
+
+                        //if we're in the process of moving from loc a to b, keep going
+                        //otherwise prep the next step
+
+                        var path = sprite.path;
+
+                        var first = path[0];
+                        var second = path[1];
+
+                        //negative is left, positive is right.
+                        var xDirection = second.x - first.x;
+
+                        //second.y * 64 to convert to cells
+                        if (sprite.body.y >= (second.y * 64)
+                        ) {
+                            console.log("we made it! altering path");
+
+                            path = path.slice(1);
+                            sprite.path = path;
+
+                            first = path[0];
+                            second = path[1];
+                        }
+
+                        //we want to move towards the CENTER of the next cell.
+                        let xToGo = second.x * 64 + 32;
+                        let yToGo = second.y * 64 + 32;
+
+                        let velocity = 100;
+
+                        if (yToGo >= this.game.height - 64) {
+                            sprite.lastMove = true;
+                            console.log("last move. moving to " + xToGo + "," + this.game.height)
+                            this.game.physics.arcade.moveToXY(sprite, xToGo, this.game.height, velocity);
+                        }
+
+                        console.log("moving to " + xToGo + "," + yToGo)
+                        this.game.physics.arcade.moveToXY(sprite, xToGo, yToGo, velocity);
+                    } else {
+                        console.log('lastmoved.')
+                    }
+                });
+            }
+
+        }, 400);
+    }
+
+    drawPlacedItems() {
+        let gameData = this.game.gameData;
+
+        gameData.placedItems.forEach((placedItem) => {
+
+            if (placedItem.type === 'turret') {
+                this.makeTurret(placedItem.x * this.cellWidth, placedItem.y * this.cellHeight);
+            } else if (placedItem.type === 'wall') {
+                this.makeWall(placedItem.x * this.cellWidth, placedItem.y * this.cellHeight);
+            } else {
+                console.log("unsupported placed item type.");
+            }
+
+        })
+
+    }
+
+    makeDrone(where) {
+        let sprite = this.game.add.sprite(where, 0, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
         sprite.scale.setTo(.5, .5);
@@ -115,7 +257,21 @@ export default class Play extends Phaser.State {
         sprite.inputEnabled = true;
         sprite.events.onInputDown.add(this.droneListener, this);
 
+        this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
+        //sprite.body.velocity.y = 10;
+
         this.sprites.push(sprite);
+    }
+
+    makeTurret(x, y) {
+        var sprite = this.game.add.sprite(x, y, 'turret');
+        sprite.inputEnabled = true;
+    }
+
+    makeWall(x, y) {
+
+        this.graphics.lineStyle(2, 0x0000FF, 1);
+        this.graphics.drawRect(x, y, 64, 64);
     }
 
 
@@ -186,14 +342,14 @@ export default class Play extends Phaser.State {
         }
     }
 
-    update() {
-        this.sprites.forEach((sprite) => {
-            sprite.y += 1;
-            if (sprite.y > this.game.height) {
-                sprite.y = 0;
-            }
-        })
-    }
+    // update() {
+    //     this.sprites.forEach((sprite) => {
+    //         sprite.y += 1;
+    //         if (sprite.y > this.game.height) {
+    //             sprite.y = 0;
+    //         }
+    //     })
+    // }
 
 
 }

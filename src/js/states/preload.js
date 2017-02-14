@@ -13,28 +13,15 @@ export default class Preload extends Phaser.State {
 
         this.load.setPreloadSprite(this.loaderBar);
 
-        this.load.atlasJSONArray('smallfighter', 'img/spritesheet/smallfighter.png', 'data/spritesheet/smallfighter.json');
-        this.load.atlasJSONArray('alien', 'img/spritesheet/alien.png', 'data/spritesheet/alien.json');
-        this.load.atlasJSONArray('button', 'img/spritesheet/button.png', 'data/spritesheet/button.json');
-        this.load.image('farback', 'img/farback.jpg');
-        this.load.image('bullet', 'img/bullet.png');
-        this.load.image('particle', 'img/particle.gif');
-        this.load.image('healthbar', 'img/healthbar.png');
-        this.load.image('hudBg', 'img/hud-bg.png');
+        this.load.audio('futureMusic', ['audio/music/baws-responder.ogg']);
 
-        this.load.audio('futureMusic', ['audio/music/2015-baws-responder.mp3']);
+        this.load.atlasJSONArray('button', 'img/spritesheet/button.png', 'data/spritesheet/button.json');
+
+        this.load.spritesheet('walls', 'img/spritesheet/wall2.png', 16, 16);
 
         this.load.audio('menuOver', ['audio/sound/menu-over.mp3']);
         this.load.audio('menuOut', ['audio/sound/menu-out.mp3']);
         this.load.audio('menuDown', ['audio/sound/menu-click.mp3']);
-
-        this.load.audio('bulletHit', ['audio/sound/bullet-hit.mp3']);
-        this.load.audio('enemyShot', ['audio/sound/enemy-shot.mp3']);
-        this.load.audio('enemyExplosion', ['audio/sound/enemy-explosion.mp3']);
-        this.load.audio('playerShot', ['audio/sound/player-shot.mp3']);
-        this.load.audio('playerExplosion', ['audio/sound/player-explosion.mp3']);
-
-        this.load.audio('gameOver', ['audio/sound/game-over.mp3']);
 
         //new stuff
         this.game.load.image('hack_icon', 'img/clock.png', 128, 128); //128x128
@@ -42,40 +29,88 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('drone', 'img/drone.png', 128, 128, 3); // 128x128 with 2 frames (option param)
         this.game.load.spritesheet('explosion', 'img/explosion.png', 86, 86);
 
-
         //TODO check the bridge for this and default to test data if not
-        //https://github.com/jerome-d-russ/phaser-tutorial-game/blob/lucastest/js/lucas.js
+        //access this as this.game.gameData
         this.game.gameData = {
-            placedItems: {
-                wall: {
-                    x: 200, y: 200
+
+            //where on our 10x15 grid?
+            placedItems: [
+                {
+                    type: 'wall',
+                    x: 3, y: 4
                 },
-                turret: {
-                    x: 300, y: 300
-                }
-            },
+                {
+                    type: 'wall',
+                    x: 4, y: 4
+                },
+                {
+                    type: 'wall',
+                    x: 5, y: 4
+                },
+                {
+                    type: 'wall',
+                    x: 6, y: 4
+                },
+                {
+                    type: 'wall',
+                    x: 2, y: 7
+                },
+                {
+                    type: 'wall',
+                    x: 3, y: 7
+                },
+                {
+                    type: 'wall',
+                    x: 6, y: 9
+                },
+                {
+                    type: 'wall',
+                    x: 7, y: 9
+                },
+                {
+                    type: 'wall',
+                    x: 4, y: 10
+                },
+                {
+                    type: 'wall',
+                    x: 5, y: 10
+                },
+                {
+                    type: 'wall',
+                    x: 2, y: 11
+                },
+                {
+                    type: 'wall',
+                    x: 3, y: 11
+                },
+
+                // {
+                //     type: 'turret',
+                //     x: 3, y: 3
+                // }
+            ],
             inventoryItems: {
                 bomb: 3,
                 hack: 7,
                 turret: 4
             },
             shadows: [
-                { size: 'large', at: 450},
-                { size: 'medium', at: 900},
-                { size: 'small', at: 1020}
+                { size: 'large', at: 100},
+                { size: 'medium', at: 400},
+                { size: 'small', at: 500}
             ],
             status: 'attacking' //viewing or attacking
         };
     }
 
     update() {
-        if (this.cache.isSoundDecoded("futureMusic") && this.ready === false) {
-            console.log('decoded!');
+        // if (this.cache.isSoundDecoded("futureMusic") && this.ready === false) {
+        //     console.log('decoded!');
             this.ready = true;
             this.state.start('Menu');
-        } else {
-            console.log('not decoded yet!');
-        }
+        // } else {
+        //     console.log('not decoded yet!');
+        // }
     }
 
 }
