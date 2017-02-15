@@ -140,10 +140,12 @@ export default class Play extends Phaser.State {
                     //somewhere in a 500 range
                     var offset = Math.floor(Math.random() * 500) - 250;
 
-                    if (offset < 0) {
+                    let x = shadow.at + offset;
+
+                    if (x < 0) {
                         offset = 0;
-                    } if (offset >= this.game.width) {
-                        offset = 9;
+                    } if (x >= this.game.width) {
+                        offset = this.game.width;
                     }
 
                     //center cell of cell 5 (index)
