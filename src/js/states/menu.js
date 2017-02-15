@@ -40,6 +40,7 @@ export default class Menu extends Phaser.State {
 
         this.start.onInputUp.add(()=>{
             // this.game.music.stop();
+            console.log("asking to start play!");
             this.state.start('Play');
 
         });

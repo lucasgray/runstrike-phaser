@@ -83,11 +83,10 @@ export default class Preload extends Phaser.State {
                     type: 'wall',
                     x: 3, y: 11
                 },
-
-                // {
-                //     type: 'turret',
-                //     x: 3, y: 3
-                // }
+                {
+                    type: 'turret',
+                    x: 4, y: 10
+                }
             ],
             inventoryItems: {
                 bomb: 3,

@@ -5,6 +5,9 @@ export default class Play extends Phaser.State {
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
+        this.sprites = [];
+
+        this.graphics = this.game.add.graphics(0, 0);
     }
 
     create() {
@@ -21,10 +24,9 @@ export default class Play extends Phaser.State {
         this.hack = null;
         this.wall = null;
         this.explosion = null;
-        this.sprites = [];
+
 
         this.game.input.onTap.add(this.onTap, this);
-        this.graphics = this.game.add.graphics(0, 0);
 
         this.setupGrid();
 
@@ -140,6 +142,8 @@ export default class Play extends Phaser.State {
 
                     if (offset < 0) {
                         offset = 0;
+                    } if (offset >= this.game.width) {
+                        offset = 9;
                     }
 
                     //center cell of cell 5 (index)
@@ -183,7 +187,7 @@ export default class Play extends Phaser.State {
 
                 this.sprites.forEach((sprite) => {
 
-                    if (!sprite.lastMove) {
+                    if (!sprite.lastMove && !sprite.dead) {
 
                         //if we're in the process of moving from loc a to b, keep going
                         //otherwise prep the next step
@@ -234,17 +238,17 @@ export default class Play extends Phaser.State {
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
-        gameData.placedItems.forEach((placedItem) => {
+        let turrets = gameData.placedItems.filter((it) => it.type === 'turret');
+        let walls = gameData.placedItems.filter((it) => it.type === 'wall');
 
-            if (placedItem.type === 'turret') {
-                this.makeTurret(placedItem.x * this.cellWidth, placedItem.y * this.cellHeight);
-            } else if (placedItem.type === 'wall') {
-                this.makeWall(placedItem.x * this.cellWidth, placedItem.y * this.cellHeight);
-            } else {
-                console.log("unsupported placed item type.");
-            }
+        walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
+        turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
 
-        })
+        setInterval(() => {
+
+
+
+        }, 1000);
 
     }
 
@@ -264,8 +268,8 @@ export default class Play extends Phaser.State {
     }
 
     makeTurret(x, y) {
-        var sprite = this.game.add.sprite(x, y, 'turret');
-        sprite.inputEnabled = true;
+        this.graphics.lineStyle(2, 0x00FF00, 1);
+        this.graphics.drawRect(x, y, 64, 64);
     }
 
     makeWall(x, y) {
@@ -311,11 +315,6 @@ export default class Play extends Phaser.State {
         this.hack = true;
     }
 
-// function wallListener(){
-//   console.log('wall!');
-//   wall = true;
-// }
-
     bombListener() {
         console.log('bomb!');
         this.bomb = true;
@@ -323,6 +322,9 @@ export default class Play extends Phaser.State {
 
     droneListener(sprite, f) {
         if (this.hack) {
+
+            sprite.dead = true;
+
             this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
             var fall = this.game.add.tween(sprite.scale).to({
                 x: 0,
@@ -341,15 +343,4 @@ export default class Play extends Phaser.State {
             });
         }
     }
-
-    // update() {
-    //     this.sprites.forEach((sprite) => {
-    //         sprite.y += 1;
-    //         if (sprite.y > this.game.height) {
-    //             sprite.y = 0;
-    //         }
-    //     })
-    // }
-
-
 }
