@@ -25,8 +25,7 @@ export default class Play extends Phaser.State {
         this.wall = null;
         this.explosion = null;
 
-
-        this.game.input.onTap.add(this.onTap, this);
+        this.setupGlobalListeners();
 
         this.setupGrid();
 
@@ -143,13 +142,13 @@ export default class Play extends Phaser.State {
                     let x = shadow.at + offset;
 
                     if (x < 0) {
-                        offset = 0;
+                        x = 0;
                     } if (x >= this.game.width) {
-                        offset = this.game.width;
+                        x = this.game.width-1;
                     }
 
                     //center cell of cell 5 (index)
-                    this.makeDrone(shadow.at + offset);
+                    this.makeDrone(x);
                 });
 
                 this.sprites.forEach((curSprite) => {
@@ -261,7 +260,11 @@ export default class Play extends Phaser.State {
         sprite.scale.setTo(.5, .5);
         sprite.anchor.setTo(.5, .5);
         sprite.inputEnabled = true;
-        sprite.events.onInputDown.add(this.droneListener, this);
+        sprite.events.onInputDown.add(() => {
+            if (this.inputMode === 'hack') {
+                this.killSprite(sprite);
+            }
+        }, this);
 
         this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
         //sprite.body.velocity.y = 10;
@@ -275,74 +278,70 @@ export default class Play extends Phaser.State {
     }
 
     makeWall(x, y) {
-
         this.graphics.lineStyle(2, 0x0000FF, 1);
         this.graphics.drawRect(x, y, 64, 64);
     }
 
-
-    onTap(pointer, doubleTap) {
-        if (this.bomb) {
-            if (doubleTap) {
-                console.log('doubletap');
-            } else {
-                console.log('tap');
-            }
-
-            let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
-            explosion.anchor.setTo(.5, .5);
-            let explosionAnimation = explosion.animations.add('fly');
-            explosion.animations.play('fly', 30, false);
-
-            this.sprites.forEach((sprite) => {
-
-                let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
-
-                //FIXME
-                //for now we just kills em
-                if (dist <= 50) {
-                    this.hack = true;
-                    this.droneListener(sprite, pointer);
-                }
-            });
-
-            explosionAnimation.onComplete.add(() => {
-                explosion.destroy();
-            });
-        }
-    }
-
     hackListener() {
         console.log('hack!');
-        this.hack = true;
+        this.inputMode = 'hack';
     }
 
     bombListener() {
         console.log('bomb!');
-        this.bomb = true;
+        this.inputMode = 'bomb';
     }
 
-    droneListener(sprite, f) {
-        if (this.hack) {
+    setupGlobalListeners() {
+        this.game.input.onTap.add((pointer, doubleTap) => {
+            if (this.inputMode === 'bomb') {
+                if (doubleTap) {
+                    console.log('doubletap');
+                } else {
+                    console.log('tap');
+                }
 
-            sprite.dead = true;
-
-            this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-            var fall = this.game.add.tween(sprite.scale).to({
-                x: 0,
-                y: 0
-            }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-            fall.onComplete.add(() => {
-                let explosion = this.game.add.sprite(sprite.x, sprite.y, 'explosion');
-                explosion.anchor.setTo(.2, .2);
-                explosion.scale.setTo(.2, .2);
+                let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
+                explosion.anchor.setTo(.5, .5);
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
-                sprite.destroy();
+
+                this.sprites.forEach((sprite) => {
+
+                    let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
+
+                    //FIXME
+                    //for now we just kills em
+                    if (dist <= 50) {
+                        this.killSprite(sprite);
+                    }
+                });
+
                 explosionAnimation.onComplete.add(() => {
                     explosion.destroy();
-                })
-            });
-        }
+                });
+            }
+        }, this);
+    }
+
+    killSprite(sprite) {
+        sprite.dead = true;
+
+        this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        var fall = this.game.add.tween(sprite.scale).to({
+            x: 0,
+            y: 0
+        }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        fall.onComplete.add(() => {
+            let explosion = this.game.add.sprite(sprite.x, sprite.y, 'explosion');
+            explosion.anchor.setTo(.2, .2);
+            explosion.scale.setTo(.2, .2);
+            let explosionAnimation = explosion.animations.add('fly');
+            explosion.animations.play('fly', 30, false);
+            sprite.destroy();
+            explosionAnimation.onComplete.add(() => {
+                explosion.destroy();
+            })
+        });
     }
 }
