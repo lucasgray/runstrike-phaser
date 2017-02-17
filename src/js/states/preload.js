@@ -28,6 +28,7 @@ export default class Preload extends Phaser.State {
         this.game.load.image('bomb_icon', 'img/grenade.png', 128, 128); //128x128
         this.game.load.spritesheet('drone', 'img/drone.png', 128, 128, 3); // 128x128 with 2 frames (option param)
         this.game.load.spritesheet('explosion', 'img/explosion.png', 86, 86);
+        this.game.load.image('bullet', 'img/purple_ball.png', 17, 17);
 
         //TODO check the bridge for this and default to test data if not
         //access this as this.game.gameData
@@ -85,7 +86,7 @@ export default class Preload extends Phaser.State {
                 },
                 {
                     type: 'turret',
-                    x: 4, y: 10
+                    x: 4, y: 3
                 }
             ],
             inventoryItems: {

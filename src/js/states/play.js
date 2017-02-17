@@ -1,4 +1,5 @@
 import * as easystar from "easystarjs";
+import _ from 'lodash';
 
 export default class Play extends Phaser.State {
 
@@ -19,11 +20,10 @@ export default class Play extends Phaser.State {
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
+        this.bulletsGroup = this.game.add.physicsGroup();
+        this.spritesGroup = this.game.add.physicsGroup();
+
         this.game.stage.backgroundColor = 0x000000;
-        this.bomb = null;
-        this.hack = null;
-        this.wall = null;
-        this.explosion = null;
 
         this.setupGlobalListeners();
 
@@ -39,9 +39,9 @@ export default class Play extends Phaser.State {
 
         this.startPathfinding();
 
-        // this.drawInventory(game);
+        // this.drawInventory();
 
-        // this.drawBase(game);
+        // this.drawBase();
 
         //??
 
@@ -245,16 +245,10 @@ export default class Play extends Phaser.State {
         walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
         turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
 
-        setInterval(() => {
-
-
-
-        }, 1000);
-
     }
 
     makeDrone(where) {
-        let sprite = this.game.add.sprite(where, 0, 'drone');
+        let sprite = this.spritesGroup.create(where, 0, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
         sprite.scale.setTo(.5, .5);
@@ -267,7 +261,6 @@ export default class Play extends Phaser.State {
         }, this);
 
         this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
-        //sprite.body.velocity.y = 10;
 
         this.sprites.push(sprite);
     }
@@ -275,6 +268,42 @@ export default class Play extends Phaser.State {
     makeTurret(x, y) {
         this.graphics.lineStyle(2, 0x00FF00, 1);
         this.graphics.drawRect(x, y, 64, 64);
+
+        let center = {x: x + 32, y: y + 32};
+
+        setInterval(() => {
+
+            let turretX = x;
+            let turretY = y;
+
+            let spriteDistances = this.sprites.map((sprite) => {
+                return {
+                    distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
+                    sprite: sprite
+                }
+            });
+
+            let spritesInRange = spriteDistances.filter(s => !s.sprite.dead && s.distance <= 300);
+
+            let rslt = _.minBy(spritesInRange, (s) => s.distance);
+
+            if (rslt) {
+                this.shootBulletFromTo(turretX, turretY, rslt.sprite);
+            }
+        }, 1000);
+
+    }
+
+    shootBulletFromTo(x, y, sprite) {
+
+        //TODO properly figure out where that sprite was going
+        let fudge = 50;
+
+        let bullet = this.game.add.sprite(x, y, 'bullet');
+        this.game.physics.arcade.enable(bullet);
+        this.bulletsGroup.add(bullet);
+
+        this.game.physics.arcade.moveToXY(bullet, sprite.x, sprite.y+fudge, 300);
     }
 
     makeWall(x, y) {
@@ -322,6 +351,7 @@ export default class Play extends Phaser.State {
                 });
             }
         }, this);
+
     }
 
     killSprite(sprite) {
@@ -343,5 +373,19 @@ export default class Play extends Phaser.State {
                 explosion.destroy();
             })
         });
+    }
+
+    update() {
+        this.game.physics.arcade.overlap(this.bulletsGroup, this.spritesGroup, (bullet, sprite) => {
+            console.log("BULLET COLLISION!");
+            this.killSprite(sprite);
+            bullet.kill();
+        }, null, this);
+
+        this.cleanUp();
+    }
+
+    cleanUp() {
+        this.bulletsGroup.forEachDead((i) => i.destroy())
     }
 }
