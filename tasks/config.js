@@ -17,7 +17,8 @@ export default (() => {
         js: path.join(cfg.paths.src.root, 'js', path.sep),
         img: path.join(cfg.paths.src.root, 'img', '**', '*'),
         data: path.join(cfg.paths.src.root, 'data', '**', '*.json'),
-        audio: path.join(cfg.paths.src.root, 'audio', '**', '*')
+        audio: path.join(cfg.paths.src.root, 'audio', '**', '*'),
+        css: path.join(cfg.paths.src.root, 'css', '**', '*')
     };
 
     Object.keys(globs).forEach(type => cfg.paths.src[type] = globs[type]);

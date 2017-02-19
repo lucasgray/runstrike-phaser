@@ -12,7 +12,8 @@ gulp.task('build', () => {
             'audio:prod',
             'data:prod',
             'img:prod',
-            'js:prod'
+            'js:prod',
+            'css:prod'
         ],
         'html:prod',
         'rev:prod'
@@ -30,7 +31,8 @@ gulp.task('default', () => {
             'data:dev',
             'img:dev',
             'js:dev',
-            'html:dev'
+            'html:dev',
+            'css:dev',
         ],
         'watch',
         'serve'

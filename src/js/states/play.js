@@ -22,6 +22,8 @@ export default class Play extends Phaser.State {
 
         this.bulletsGroup = this.game.add.physicsGroup();
         this.spritesGroup = this.game.add.physicsGroup();
+        this.spritesGroup.enableBody = true;
+        this.spritesGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
         this.game.stage.backgroundColor = 0x000000;
 
@@ -213,11 +215,12 @@ export default class Play extends Phaser.State {
                             second = path[1];
                         }
 
-                        //we want to move towards the CENTER of the next cell.
-                        let xToGo = second.x * 64 + 32;
-                        let yToGo = second.y * 64 + 32;
+                        //we want to move towards the CENTER of the next cell.. plus a little randomness
+                        let xToGo = (second.x * 64 + 32) + (Math.random() * 20);
+                        let yToGo = (second.y * 64 + 32) + (Math.random() * 20);
 
-                        let velocity = 100;
+
+                        let velocity = sprite.randomVelocity;
 
                         if (yToGo >= this.game.height - 64) {
                             sprite.lastMove = true;
@@ -251,7 +254,7 @@ export default class Play extends Phaser.State {
         let sprite = this.spritesGroup.create(where, 0, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
-        sprite.scale.setTo(.5, .5);
+        sprite.scale.setTo(.25, .25);
         sprite.anchor.setTo(.5, .5);
         sprite.inputEnabled = true;
         sprite.events.onInputDown.add(() => {
@@ -259,6 +262,8 @@ export default class Play extends Phaser.State {
                 this.killSprite(sprite);
             }
         }, this);
+
+        sprite.randomVelocity = 50 + (Math.random() * 30);
 
         this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
 
@@ -290,7 +295,7 @@ export default class Play extends Phaser.State {
             if (rslt) {
                 this.shootBulletFromTo(turretX, turretY, rslt.sprite);
             }
-        }, 1000);
+        }, 3000);
 
     }
 

@@ -1,55 +1,88 @@
-import TextButton from '../extensions/textbutton';
-
 export default class Menu extends Phaser.State {
 
     create() {
 
         this.game.music = this.game.add.audio('futureMusic');
+        this.graphics = this.game.add.graphics(0, 0);
+        this.btnDownSound = this.add.sound('menuDown');
 
-        this.title = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-200, "ATTACK BEGINS", {
-            font: '36px Tahoma',
+        this.title = this.game.add.text(
+            this.game.world.centerX,
+            this.game.world.centerY-200,
+            "Your hideout", {
+            font: '50px Joystix',
             fill: 'white',
             align: 'center'
         });
         this.title.anchor.setTo(0.5);
 
-        this.start = new TextButton({
-            game: this.game,
-            x: this.game.world.centerX,
-            y: this.game.world.centerY,
-            asset: 'button',
-            overFrame: 2,
-            outFrame: 1,
-            downFrame: 0,
-            upFrame: 1,
-            label: 'Start',
-            style: {
-                font: '16px Verdana',
-                fill: 'white',
-                align: 'center'
+        this.makeButton(
+            this.game.world.centerX,
+            this.game.world.centerY,
+            this.game.width * .7,
+            this.game.height * .1,
+            'setup', ()=>{
+                console.log("asking to setup");
+                this.state.start('Setup');
             }
-        });
+        );
 
-        this.btnOverSound = this.add.sound('menuOver');
-        this.btnOutSound = this.add.sound('menuOut');
-        this.btnDownSound = this.add.sound('menuDown');
+        this.makeButton(
+            this.game.world.centerX,
+            this.game.world.centerY+200,
+            this.game.width * .7,
+            this.game.height * .1,
+            'defend', ()=>{
+                console.log("asking to start play!");
+                this.state.start('Play');
+            }
+        );
 
-        this.start.setOverSound(this.btnOverSound);
-        this.start.setOutSound(this.btnOutSound);
-        this.start.setDownSound(this.btnDownSound);
+        // this.btnOverSound = this.add.sound('menuOver');
+        // this.btnOutSound = this.add.sound('menuOut');
+        // this.btnDownSound = this.add.sound('menuDown');
+        //
+        // this.start.setOverSound(this.btnOverSound);
+        // this.start.setOutSound(this.btnOutSound);
+        // this.start.setDownSound(this.btnDownSound);
 
-        this.start.onInputUp.add(()=>{
-            // this.game.music.stop();
-            console.log("asking to start play!");
-            this.state.start('Play');
+        // this.start.onInputUp.add();
 
-        });
-
-        this.menuPanel = this.add.group();
-        this.menuPanel.add(this.title);
-        this.menuPanel.add(this.start);
+        // this.menuPanel = this.add.group();
+        // this.menuPanel.add(this.title);
+        // this.menuPanel.add(this.title2);
+        // this.menuPanel.add(this.start);
 
         // this.game.music.loopFull();
+
+    }
+
+    makeButton(x,y,width,height,label,callback) {
+
+        let button = this.game.add.button(x,y,null,callback);
+        button.width = width;
+        button.height = height;
+        button.anchor.setTo(0.5);
+        button.setDownSound(this.btnDownSound);
+
+        this.graphics.lineStyle(5, 0xFF0000, 1);
+        let rect = this.graphics.drawRect(
+            x - (width/2),
+            y - (height/2),
+            width,
+            height
+        );
+
+        // rect.anchor.setTo(0.5);
+
+        let text = this.game.add.text(x, y, label, {
+            font: 'Joystix',
+            fill: 'white',
+            align: 'center',
+            fontSize: height * .5
+        });
+        text.anchor.setTo(0.5);
+
 
     }
 }

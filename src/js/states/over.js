@@ -1,4 +1,4 @@
-import TextButton from '../extensions/textbutton';
+import ASTARButton from '../extensions/ASTARbutton';
 
 export default class Over extends Phaser.State {
 
@@ -11,7 +11,7 @@ export default class Over extends Phaser.State {
         });
         this.gameOverTitle.anchor.setTo(0.5);
 
-        this.start = new TextButton({
+        this.start = new ASTARButton({
             game: this.game,
             x: this.game.world.centerX,
             y: this.game.world.centerY-30,
@@ -28,7 +28,7 @@ export default class Over extends Phaser.State {
             }
         });
 
-        this.menu = new TextButton({
+        this.menu = new ASTARButton({
             game: this.game,
             x: this.game.world.centerX,
             y: this.game.world.centerY+30,
