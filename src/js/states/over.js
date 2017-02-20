@@ -1,4 +1,4 @@
-import ASTARButton from '../extensions/ASTARbutton';
+import Buttons from '../extensions/Buttons';
 
 export default class Over extends Phaser.State {
 
@@ -11,39 +11,39 @@ export default class Over extends Phaser.State {
         });
         this.gameOverTitle.anchor.setTo(0.5);
 
-        this.start = new ASTARButton({
-            game: this.game,
-            x: this.game.world.centerX,
-            y: this.game.world.centerY-30,
-            asset: 'button',
-            overFrame: 2,
-            outFrame: 1,
-            downFrame: 0,
-            upFrame: 1,
-            label: 'Try again',
-            style: {
-                font: '16px Verdana',
-                fill: 'white',
-                align: 'center'
-            }
-        });
-
-        this.menu = new ASTARButton({
-            game: this.game,
-            x: this.game.world.centerX,
-            y: this.game.world.centerY+30,
-            asset: 'button',
-            overFrame: 2,
-            outFrame: 1,
-            downFrame: 0,
-            upFrame: 1,
-            label: 'Menu',
-            style: {
-                font: '16px Verdana',
-                fill: 'white',
-                align: 'center'
-            }
-        });
+        // this.start = new ASTARButton({
+        //     game: this.game,
+        //     x: this.game.world.centerX,
+        //     y: this.game.world.centerY-30,
+        //     asset: 'button',
+        //     overFrame: 2,
+        //     outFrame: 1,
+        //     downFrame: 0,
+        //     upFrame: 1,
+        //     label: 'Try again',
+        //     style: {
+        //         font: '16px Verdana',
+        //         fill: 'white',
+        //         align: 'center'
+        //     }
+        // });
+        //
+        // this.menu = new ASTARButton({
+        //     game: this.game,
+        //     x: this.game.world.centerX,
+        //     y: this.game.world.centerY+30,
+        //     asset: 'button',
+        //     overFrame: 2,
+        //     outFrame: 1,
+        //     downFrame: 0,
+        //     upFrame: 1,
+        //     label: 'Menu',
+        //     style: {
+        //         font: '16px Verdana',
+        //         fill: 'white',
+        //         align: 'center'
+        //     }
+        // });
 
         this.btnOverSound = this.add.sound('menuOver');
         this.btnOutSound = this.add.sound('menuOut');

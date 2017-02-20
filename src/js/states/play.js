@@ -1,8 +1,8 @@
 import * as easystar from "easystarjs";
 import _ from 'lodash';
+import Buttons from "../extensions/Buttons";
 
 export default class Play extends Phaser.State {
-
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
@@ -112,6 +112,20 @@ export default class Play extends Phaser.State {
         // iconMask.alphaMask('wall_icon');
         // var wallIcon = game.add.sprite(90, 10, iconMask);
         // wallIcon.scale.setTo(.75,.75);
+
+        this.btnDownSound = this.add.sound('menuDown');
+        Buttons.makeButton(
+            this.game,
+            100,
+            this.game.height - 40,
+            100,
+            20,
+            this.btnDownSound,
+            'back', ()=>{
+                console.log("asking to go to menu");
+                this.state.start('Menu');
+            }
+        );
     }
 
     drawEnemies() {
@@ -131,7 +145,7 @@ export default class Play extends Phaser.State {
             }
         });
 
-        setInterval(() => {
+        this.baddieInterval = setInterval(() => {
             gameData.shadows.forEach((shadow) => {
 
                 if (shadow.total >= shadow.amount) {
@@ -197,7 +211,7 @@ export default class Play extends Phaser.State {
             });
         }, 300);
 
-        setInterval(() => {
+        this.pathfindingInterval = setInterval(() => {
             this.checkPathfinding();
         }, 300);
     }
@@ -263,6 +277,8 @@ export default class Play extends Phaser.State {
         let walls = gameData.placedItems.filter((it) => it.type === 'wall');
 
         walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
+
+        this.turretIntervals = [];
         turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
 
     }
@@ -295,7 +311,7 @@ export default class Play extends Phaser.State {
 
         let center = {x: x + 32, y: y + 32};
 
-        setInterval(() => {
+        this.turretIntervals.push(setInterval(() => {
 
             let turretX = x;
             let turretY = y;
@@ -314,7 +330,7 @@ export default class Play extends Phaser.State {
             if (rslt) {
                 this.shootBulletFromTo(turretX, turretY, rslt.sprite);
             }
-        }, 1000);
+        }, 1000));
 
     }
 
@@ -407,5 +423,13 @@ export default class Play extends Phaser.State {
 
     cleanUp() {
         this.bulletsGroup.forEachDead((i) => i.destroy())
+    }
+
+    shutdown() {
+        console.log("shut down called")
+
+        this.turretIntervals.forEach((it) => clearInterval(it));
+        clearInterval(this.baddieInterval);
+        clearInterval(this.pathfindingInterval);
     }
 }
