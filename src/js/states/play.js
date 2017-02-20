@@ -12,6 +12,7 @@ export default class Play extends Phaser.State {
     }
 
     create() {
+
         this.game.add.sprite(0,0,'grid');
 
         console.log('width: ' + this.game.world.width)
@@ -38,8 +39,6 @@ export default class Play extends Phaser.State {
         this.drawPlacedItems();
 
         this.drawEnemies();
-
-        this.startPathfinding();
 
         // this.drawInventory();
 
@@ -119,124 +118,142 @@ export default class Play extends Phaser.State {
 
         let gameData = this.game.gameData;
 
-        if (gameData.status === 'attacking') {
+        gameData.shadows.forEach((shadow) => {
+            shadow.amount = 0;
 
+            //TODO scale with levels!
+            if (shadow.size === 'large') {
+                shadow.total = 30;
+            } else if (shadow.size === 'medium') {
+                shadow.total = 15;
+            } else if (shadow.size === 'small') {
+                shadow.total = 5;
+            }
+        });
+
+        setInterval(() => {
             gameData.shadows.forEach((shadow) => {
 
-                console.log(shadow);
+                if (shadow.total >= shadow.amount) {
 
-                var baddiesToMake = 0;
+                    console.log("shadow "  + JSON.stringify(shadow));
 
-                if (shadow.size === 'large') {
-                    baddiesToMake = 5;
-                } else if (shadow.size === 'medium') {
-                    baddiesToMake = 2;
-                } else if (shadow.size === 'small') {
-                    baddiesToMake = 1;
-                }
+                    let weight = 0;
 
-                [... new Array(baddiesToMake)].map((_, i) => {
-                    console.log(i);
-
-                    //somewhere in a 500 range
-                    var offset = Math.floor(Math.random() * 500) - 250;
-
-                    let x = shadow.at + offset;
-
-                    if (x < 0) {
-                        x = 0;
-                    } if (x >= this.game.width) {
-                        x = this.game.width-1;
+                    if (shadow.size === 'large') {
+                        weight = .7;
+                    } else if (shadow.size === 'medium') {
+                        weight = .4;
+                    } else if (shadow.size === 'small') {
+                        weight = .2;
                     }
 
-                    //center cell of cell 5 (index)
-                    this.makeDrone(x);
-                });
+                    let baddiesToMake = Math.floor(Math.random() / weight);
 
-                this.sprites.forEach((curSprite) => {
+                    let baddies = [];
 
-                    let curXCell = Math.floor((curSprite.x / 640) * 10);
-                    let curYCell = Math.floor((curSprite.y / 960) * 15);
+                    [... new Array(baddiesToMake)].map((_, i) => {
+                        console.log(i);
 
-                    console.log("where am i? " + curXCell + " , " + curYCell)
+                        //somewhere in a 500 range
+                        var offset = Math.floor(Math.random() * 500) - 250;
 
-                    //640x960 find path to bottom left of the screen
-                    this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+                        let x = shadow.at + offset;
 
-                        if (path === null) {
-                            console.log("The path to the destination point was not found.");
-                        } else {
-                            console.log("easystar success. ");
-
-                            path.forEach((p) => console.log(JSON.stringify(p)));
-                            curSprite.path = path;
+                        if (x < 0) {
+                            x = 0;
+                        } if (x >= this.game.width) {
+                            x = this.game.width-1;
                         }
+
+                        //center cell of cell 5 (index)
+                        baddies.push(this.makeDrone(x));
+                        shadow.amount = shadow.amount + baddiesToMake;
                     });
 
-                    this.easystar.calculate();
-                });
+                    baddies.forEach((curSprite) => {
 
+                        let curXCell = Math.floor((curSprite.x / 640) * 10);
+                        let curYCell = Math.floor((curSprite.y / 960) * 15);
+
+                        // console.log("where am i? " + curXCell + " , " + curYCell)
+
+                        //640x960 find path to bottom left of the screen
+                        this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+
+                            if (path === null) {
+                                // console.log("The path to the destination point was not found.");
+                            } else {
+                                // console.log("easystar success. ");
+
+                                // path.forEach((p) => console.log(JSON.stringify(p)));
+                                curSprite.path = path;
+                            }
+                        });
+                    });
+                } else {
+                    // console.log("shadow " + JSON.stringify(shadow) + "done generating enemies");
+                }
             });
+        }, 300);
 
-        } else {
-            console.log('not implemented yet!!!');
-        }
+        setInterval(() => {
+            this.checkPathfinding();
+        }, 300);
     }
 
-    startPathfinding() {
-        setInterval(() => {
+    checkPathfinding() {
+        if (this.sprites) {
 
-            if (this.sprites) {
+            this.sprites.forEach((sprite) => {
 
-                this.sprites.forEach((sprite) => {
+                if (!sprite.lastMove && !sprite.dead) {
 
-                    if (!sprite.lastMove && !sprite.dead) {
+                    //if we're in the process of moving from loc a to b, keep going
+                    //otherwise prep the next step
 
-                        //if we're in the process of moving from loc a to b, keep going
-                        //otherwise prep the next step
+                    var path = sprite.path;
 
-                        var path = sprite.path;
+                    if (!sprite.path) return;
 
-                        var first = path[0];
-                        var second = path[1];
+                    var first = path[0];
+                    var second = path[1];
 
-                        //negative is left, positive is right.
-                        var xDirection = second.x - first.x;
+                    //negative is left, positive is right.
+                    var xDirection = second.x - first.x;
 
-                        //second.y * 64 to convert to cells
-                        if (sprite.body.y >= (second.y * 64)
-                        ) {
-                            console.log("we made it! altering path");
+                    //second.y * 64 to convert to cells
+                    if (sprite.body.y >= (second.y * 64)
+                    ) {
+                        // console.log("we made it! altering path");
 
-                            path = path.slice(1);
-                            sprite.path = path;
+                        path = path.slice(1);
+                        sprite.path = path;
 
-                            first = path[0];
-                            second = path[1];
-                        }
-
-                        //we want to move towards the CENTER of the next cell.. plus a little randomness
-                        let xToGo = (second.x * 64 + 32) + (Math.random() * 20);
-                        let yToGo = (second.y * 64 + 32) + (Math.random() * 20);
-
-
-                        let velocity = sprite.randomVelocity;
-
-                        if (yToGo >= this.game.height - 64) {
-                            sprite.lastMove = true;
-                            console.log("last move. moving to " + xToGo + "," + this.game.height)
-                            this.game.physics.arcade.moveToXY(sprite, xToGo, this.game.height, velocity);
-                        }
-
-                        console.log("moving to " + xToGo + "," + yToGo)
-                        this.game.physics.arcade.moveToXY(sprite, xToGo, yToGo, velocity);
-                    } else {
-                        console.log('lastmoved.')
+                        first = path[0];
+                        second = path[1];
                     }
-                });
-            }
 
-        }, 400);
+                    //we want to move towards the CENTER of the next cell.. plus a little randomness
+                    let xToGo = (second.x * 64 + 32) + (Math.random() * 20);
+                    let yToGo = (second.y * 64 + 32) + (Math.random() * 20);
+
+
+                    let velocity = sprite.randomVelocity;
+
+                    if (yToGo >= this.game.height - 64) {
+                        sprite.lastMove = true;
+                        console.log("last move. moving to " + xToGo + "," + this.game.height)
+                        this.game.physics.arcade.moveToXY(sprite, xToGo, this.game.height, velocity);
+                    }
+
+                    // console.log("moving to " + xToGo + "," + yToGo)
+                    this.game.physics.arcade.moveToXY(sprite, xToGo, yToGo, velocity);
+                } else {
+                    // console.log('lastmoved.')
+                }
+            });
+        }
     }
 
     drawPlacedItems() {
@@ -268,6 +285,8 @@ export default class Play extends Phaser.State {
         this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
 
         this.sprites.push(sprite);
+
+        return sprite;
     }
 
     makeTurret(x, y) {
@@ -295,7 +314,7 @@ export default class Play extends Phaser.State {
             if (rslt) {
                 this.shootBulletFromTo(turretX, turretY, rslt.sprite);
             }
-        }, 3000);
+        }, 1000);
 
     }
 
@@ -329,11 +348,6 @@ export default class Play extends Phaser.State {
     setupGlobalListeners() {
         this.game.input.onTap.add((pointer, doubleTap) => {
             if (this.inputMode === 'bomb') {
-                if (doubleTap) {
-                    console.log('doubletap');
-                } else {
-                    console.log('tap');
-                }
 
                 let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
                 explosion.anchor.setTo(.5, .5);
@@ -382,11 +396,12 @@ export default class Play extends Phaser.State {
 
     update() {
         this.game.physics.arcade.overlap(this.bulletsGroup, this.spritesGroup, (bullet, sprite) => {
-            console.log("BULLET COLLISION!");
+            // console.log("BULLET COLLISION!");
             this.killSprite(sprite);
             bullet.kill();
         }, null, this);
 
+        this.easystar.calculate();
         this.cleanUp();
     }
 

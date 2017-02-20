@@ -19,9 +19,9 @@ export default class Menu extends Phaser.State {
         this.makeButton(
             this.game.world.centerX,
             this.game.world.centerY,
-            this.game.width * .7,
-            this.game.height * .1,
-            'setup', ()=>{
+            this.game.width * .8,
+            60,
+            'setup defenses', ()=>{
                 console.log("asking to setup");
                 this.state.start('Setup');
             }
@@ -29,9 +29,9 @@ export default class Menu extends Phaser.State {
 
         this.makeButton(
             this.game.world.centerX,
-            this.game.world.centerY+200,
-            this.game.width * .7,
-            this.game.height * .1,
+            this.game.world.centerY+70,
+            this.game.width * .8,
+            60,
             'defend', ()=>{
                 console.log("asking to start play!");
                 this.state.start('Play');
@@ -65,7 +65,7 @@ export default class Menu extends Phaser.State {
         button.anchor.setTo(0.5);
         button.setDownSound(this.btnDownSound);
 
-        this.graphics.lineStyle(5, 0xFF0000, 1);
+        this.graphics.lineStyle(2, 0xFF0000, 1);
         let rect = this.graphics.drawRect(
             x - (width/2),
             y - (height/2),
@@ -79,7 +79,7 @@ export default class Menu extends Phaser.State {
             font: 'Joystix',
             fill: 'white',
             align: 'center',
-            fontSize: height * .5
+            fontSize: height * .7
         });
         text.anchor.setTo(0.5);
 
