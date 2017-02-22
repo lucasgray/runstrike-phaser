@@ -39,38 +39,30 @@ export default class Setup extends Phaser.State {
     }
 
     makeTurret(x, y) {
-        let graphics = this.game.add.graphics(0, 0);
-        graphics.lineStyle(2, 0x00FF00, 1);
-        graphics.drawRect(x, y, 64, 64);
+        this.drawColor(0x00FF00, x, y, this.getWallCallback());
     }
 
     makeWall(x, y) {
-        let graphics = this.game.add.graphics(0, 0);
-        graphics.lineStyle(2, 0x0000FF, 1);
-        graphics.drawRect(x, y, 64, 64);
+        this.drawColor(0x0000FF, x, y, this.getWallCallback());
     }
 
     drawInputs() {
 
-        var g = this.game.add.graphics(0, 0);
-        g.lineStyle(2, 0x0000FF, 0.5);
-        g.beginFill(0x0000FF, 1);
-        g.drawRect(0, 0, 64, 64);
-        g.endFill();
-        g.inputEnabled = true;
-        g.events.onInputDown.add(function () {
-            console.log("turret selected...");
-        }, this.game);
+        var g = this.drawColor(0x00FF00, 0, 0, () => {
+            console.log("making turret");
+            this.placeTurretMode = true;
 
-        var g2 = this.game.add.graphics(0, 0);
-        g2.lineStyle(2, 0x00FF00, 0.5);
-        g2.beginFill(0x00FF00, 1);
-        g2.drawRect(0, 64, 64, 64);
-        g2.endFill();
-        g2.inputEnabled = true;
-        g2.events.onInputDown.add(function () {
-            console.log("wall selected...");
-        }, this.game);
+            console.log("input is at " + this.game.input.position.x, + "," + this.game.input.position.y);
+
+            this.curTurret = this.drawColor(0x00FF00, this.game.input.x - 32, this.game.input.y - 32);
+        });
+
+        var g2 = this.drawColor(0x0000FF, 0, 64, () => {
+            console.log("making wall");
+            this.placeWallMode = true;
+
+            this.curWall = this.drawColor(0x0000FF, this.game.input.x - 32, this.game.input.y - (64+32));
+        });
 
         Buttons.makeButton(
             this.game,
@@ -87,4 +79,80 @@ export default class Setup extends Phaser.State {
     }
 
 
+    drawColor(color, x, y, callback) {
+        var g = this.game.add.graphics(0, 0);
+        g.lineStyle(2, color, 0.5);
+        g.beginFill(color, 1);
+        g.drawRect(x, y, 64, 64); //no anchor, need to move it!
+        g.endFill();
+        g.inputEnabled = true;
+
+        if (callback) {
+            g.events.onInputDown.add(callback, this.game);
+        }
+
+        return g;
+    }
+
+    update() {
+
+        if (this.game.input.activePointer.isDown)
+        {
+            console.log('down!')
+            if (this.curTurret) {
+                this.curTurret.x = this.game.input.x - 32;
+                this.curTurret.y = this.game.input.y - 32;
+            } else if (this.curWall) {
+                this.curWall.x = this.game.input.x - 32;
+                this.curWall.y = this.game.input.y - 32;
+            }
+        } else {
+            if (this.curTurret) {
+
+                console.log("placing turret!");
+                this.curTurret.destroy();
+                this.curTurret = null;
+
+                let gridX = Math.floor(this.game.input.x / 64);
+                let gridY = Math.floor(this.game.input.y / 64);
+
+                console.log("placing turret at " + gridX + "," + gridY);
+
+                this.game.gameData.placedItems.push({
+                    type: 'turret',
+                    x: gridX,
+                    y: gridY
+                })
+
+                this.drawColor(0x00FF00, gridX*64, gridY*64, this.getTurretCallback())
+
+            } else if (this.curWall) {
+                console.log("placing wall!");
+                this.curWall.destroy();
+                this.curWall = null;
+
+                let gridX = Math.floor(this.game.input.x / 64);
+                let gridY = Math.floor(this.game.input.y / 64);
+
+                console.log("placing wall at " + gridX + "," + gridY);
+
+                this.game.gameData.placedItems.push({
+                    type: 'wall',
+                    x: gridX,
+                    y: gridY
+                })
+
+                this.drawColor(0x0000FF, gridX*64, gridY*64, this.getWallCallback())
+            }
+        }
+
+    }
+
+    getTurretCallback() {
+        return () => {console.log('clicked turret!')};
+    }
+
+    getWallCallback() {
+        return () => {console.log('clicked wall!')};
+    }
 }

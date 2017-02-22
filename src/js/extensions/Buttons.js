@@ -6,7 +6,7 @@ export default class Buttons {
         button.width = width;
         button.height = height;
         button.anchor.setTo(0.5);
-        button.setDownSound(btnDownSound);
+        // button.setDownSound(btnDownSound);
 
         let graphics = game.add.graphics(0, 0);
         graphics.lineStyle(2, 0xFF0000, 1);
