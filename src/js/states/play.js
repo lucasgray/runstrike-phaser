@@ -412,7 +412,9 @@ export default class Play extends Phaser.State {
     update() {
         this.game.physics.arcade.overlap(this.bulletsGroup, this.spritesGroup, (bullet, sprite) => {
             // console.log("BULLET COLLISION!");
-            this.killSprite(sprite);
+            if(sprite.alive){
+              this.killSprite(sprite);
+            }
             bullet.kill();
         }, null, this);
 
