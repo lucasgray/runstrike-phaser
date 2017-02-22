@@ -221,7 +221,7 @@ export default class Play extends Phaser.State {
 
             this.sprites.forEach((sprite) => {
 
-                if (!sprite.lastMove && !sprite.dead) {
+                if (!sprite.lastMove && sprite.alive) {
 
                     //if we're in the process of moving from loc a to b, keep going
                     //otherwise prep the next step
@@ -323,7 +323,7 @@ export default class Play extends Phaser.State {
                 }
             });
 
-            let spritesInRange = spriteDistances.filter(s => !s.sprite.dead && s.distance <= 300);
+            let spritesInRange = spriteDistances.filter(s => s.sprite.alive && s.distance <= 300);
 
             let rslt = _.minBy(spritesInRange, (s) => s.distance);
 
@@ -370,7 +370,7 @@ export default class Play extends Phaser.State {
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
 
-                this.sprites.forEach((sprite) => {
+                this.spritesGroup.forEachAlive((sprite) => {
 
                     let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
@@ -390,7 +390,7 @@ export default class Play extends Phaser.State {
     }
 
     killSprite(sprite) {
-        sprite.dead = true;
+        sprite.alive = false;
 
         this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         var fall = this.game.add.tween(sprite.scale).to({
@@ -403,7 +403,6 @@ export default class Play extends Phaser.State {
             explosion.scale.setTo(.2, .2);
             let explosionAnimation = explosion.animations.add('fly');
             explosion.animations.play('fly', 30, false);
-            sprite.destroy();
             explosionAnimation.onComplete.add(() => {
                 explosion.destroy();
             })
