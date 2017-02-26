@@ -1,6 +1,7 @@
 import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
+import SpriteHelper from "../helpers/SpriteHelper";
 
 export default class Play extends Phaser.State {
 
@@ -278,7 +279,7 @@ export default class Play extends Phaser.State {
 
         walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
 
-        this.turretIntervals = [];
+
         turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
 
     }
@@ -306,15 +307,16 @@ export default class Play extends Phaser.State {
     }
 
     makeTurret(x, y) {
-        this.graphics.lineStyle(2, 0x00FF00, 1);
-        this.graphics.drawRect(x, y, 64, 64);
+
+        let turret = SpriteHelper.drawTurret(this.game, x, y);
 
         let center = {x: x + 32, y: y + 32};
 
-        this.turretIntervals.push(setInterval(() => {
+        this.turretIntervals = [];
 
-            let turretX = x;
-            let turretY = y;
+        let shouldFireBulletCounter = 0;
+
+        this.turretIntervals.push(setInterval(() => {
 
             let spriteDistances = this.sprites.map((sprite) => {
                 return {
@@ -323,21 +325,37 @@ export default class Play extends Phaser.State {
                 }
             });
 
-            let spritesInRange = spriteDistances.filter(s => s.sprite.alive && s.distance <= 300);
+            let spritesInRange = spriteDistances.filter(s => s.sprite.alive);
 
             let rslt = _.minBy(spritesInRange, (s) => s.distance);
 
             if (rslt) {
-                this.shootBulletFromTo(turretX, turretY, rslt.sprite);
+
+                //TODO properly figure out where that sprite was going
+                let fudge = 50;
+
+                //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
+                let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(turret.x, turret.y, rslt.sprite.x, rslt.sprite.y+fudge);
+
+                if(targetAngle < 0)
+                    targetAngle += 360;
+
+                //then i think it needs 90 degrees since its left/right instead of top/down
+                turret.angle = targetAngle + 90;
+
+                if (shouldFireBulletCounter > (1000 / 20) && rslt.distance <= 300) {
+                    shouldFireBulletCounter = 0;
+                    this.shootBulletFromTo(center.x, center.y, rslt.sprite, fudge);
+                } else {
+                    shouldFireBulletCounter++;
+                }
             }
-        }, 1000));
+
+        }, 20));
 
     }
 
-    shootBulletFromTo(x, y, sprite) {
-
-        //TODO properly figure out where that sprite was going
-        let fudge = 50;
+    shootBulletFromTo(x, y, sprite, fudge) {
 
         let bullet = this.game.add.sprite(x, y, 'bullet');
         this.game.physics.arcade.enable(bullet);
