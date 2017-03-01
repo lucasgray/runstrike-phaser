@@ -1,6 +1,7 @@
 import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
+import SpriteHelper from "../helpers/SpriteHelper";
 
 export default class Setup extends Phaser.State {
 
@@ -39,7 +40,7 @@ export default class Setup extends Phaser.State {
     }
 
     makeTurret(x, y) {
-        this.drawColor(0x00FF00, x, y, this.getWallCallback());
+        SpriteHelper.drawTurret(this.game, x, y, this.getWallCallback());
     }
 
     makeWall(x, y) {
@@ -48,16 +49,16 @@ export default class Setup extends Phaser.State {
 
     drawInputs() {
 
-        var g = this.drawColor(0x00FF00, 0, 0, () => {
+        SpriteHelper.drawTurret(this.game, 0, 0, () => {
             console.log("making turret");
             this.placeTurretMode = true;
 
             console.log("input is at " + this.game.input.position.x, + "," + this.game.input.position.y);
 
-            this.curTurret = this.drawColor(0x00FF00, this.game.input.x - 32, this.game.input.y - 32);
+            this.curTurret = SpriteHelper.drawTurret(this.game, this.game.input.x, this.game.input.y);
         });
 
-        var g2 = this.drawColor(0x0000FF, 0, 64, () => {
+        this.drawColor(0x0000FF, 0, 64, () => {
             console.log("making wall");
             this.placeWallMode = true;
 
@@ -78,13 +79,13 @@ export default class Setup extends Phaser.State {
         );
     }
 
-
     drawColor(color, x, y, callback) {
         var g = this.game.add.graphics(0, 0);
         g.lineStyle(2, color, 0.5);
         g.beginFill(color, 1);
         g.drawRect(x, y, 64, 64); //no anchor, need to move it!
         g.endFill();
+
         g.inputEnabled = true;
 
         if (callback) {
@@ -100,8 +101,8 @@ export default class Setup extends Phaser.State {
         {
             console.log('down!')
             if (this.curTurret) {
-                this.curTurret.x = this.game.input.x - 32;
-                this.curTurret.y = this.game.input.y - 32;
+                this.curTurret.x = this.game.input.x;
+                this.curTurret.y = this.game.input.y;
             } else if (this.curWall) {
                 this.curWall.x = this.game.input.x - 32;
                 this.curWall.y = this.game.input.y - 32;
@@ -124,7 +125,7 @@ export default class Setup extends Phaser.State {
                     y: gridY
                 })
 
-                this.drawColor(0x00FF00, gridX*64, gridY*64, this.getTurretCallback())
+                SpriteHelper.drawTurret(this.game, gridX * 64, gridY * 64, this.getTurretCallback())
 
             } else if (this.curWall) {
                 console.log("placing wall!");
