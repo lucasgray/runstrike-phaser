@@ -16,10 +16,6 @@ export default class Play extends Phaser.State {
     create() {
         this.mission = new missions["Defend"](this.game);
         this.game.add.sprite(0,0,'grid');
-
-        console.log('width: ' + this.game.world.width)
-        console.log('height: ' + this.game.world.height)
-
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
