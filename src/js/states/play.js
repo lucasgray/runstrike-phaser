@@ -40,8 +40,6 @@ export default class Play extends Phaser.State {
 
         this.drawPlacedItems();
 
-        this.drawEnemies();
-
         // this.drawInventory();
 
         // this.drawBase();
@@ -130,148 +128,6 @@ export default class Play extends Phaser.State {
         );
     }
 
-    drawEnemies() {
-
-        let gameData = this.game.gameData;
-
-        gameData.shadows.forEach((shadow) => {
-            shadow.amount = 0;
-
-            //TODO scale with levels!
-            if (shadow.size === 'large') {
-                shadow.total = 30;
-            } else if (shadow.size === 'medium') {
-                shadow.total = 15;
-            } else if (shadow.size === 'small') {
-                shadow.total = 5;
-            }
-        });
-
-        this.baddieInterval = setInterval(() => {
-            gameData.shadows.forEach((shadow) => {
-
-                if (shadow.total >= shadow.amount) {
-
-                    console.log("shadow "  + JSON.stringify(shadow));
-
-                    let weight = 0;
-
-                    if (shadow.size === 'large') {
-                        weight = .7;
-                    } else if (shadow.size === 'medium') {
-                        weight = .4;
-                    } else if (shadow.size === 'small') {
-                        weight = .2;
-                    }
-
-                    let baddiesToMake = Math.floor(Math.random() / weight);
-
-                    let baddies = [];
-
-                    [... new Array(baddiesToMake)].map((_, i) => {
-                        console.log(i);
-
-                        //somewhere in a 500 range
-                        var offset = Math.floor(Math.random() * 500) - 250;
-
-                        let x = shadow.at + offset;
-
-                        if (x < 0) {
-                            x = 0;
-                        } if (x >= this.game.width) {
-                            x = this.game.width-1;
-                        }
-
-                        //center cell of cell 5 (index)
-                        baddies.push(this.makeDrone(x));
-                        shadow.amount = shadow.amount + baddiesToMake;
-                    });
-
-                    baddies.forEach((curSprite) => {
-
-                        let curXCell = Math.floor((curSprite.x / 640) * 10);
-                        let curYCell = Math.floor((curSprite.y / 960) * 15);
-
-                        // console.log("where am i? " + curXCell + " , " + curYCell)
-
-                        //640x960 find path to bottom left of the screen
-                        this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
-
-                            if (path === null) {
-                                // console.log("The path to the destination point was not found.");
-                            } else {
-                                // console.log("easystar success. ");
-
-                                // path.forEach((p) => console.log(JSON.stringify(p)));
-                                curSprite.path = path;
-                            }
-                        });
-                    });
-                } else {
-                    // console.log("shadow " + JSON.stringify(shadow) + "done generating enemies");
-                }
-            });
-        }, 300);
-
-        this.pathfindingInterval = setInterval(() => {
-            this.checkPathfinding();
-        }, 300);
-    }
-
-    checkPathfinding() {
-        if (this.sprites) {
-
-            this.sprites.forEach((sprite) => {
-
-                if (!sprite.lastMove && sprite.alive) {
-
-                    //if we're in the process of moving from loc a to b, keep going
-                    //otherwise prep the next step
-
-                    var path = sprite.path;
-
-                    if (!sprite.path) return;
-
-                    var first = path[0];
-                    var second = path[1];
-
-                    //negative is left, positive is right.
-                    var xDirection = second.x - first.x;
-
-                    //second.y * 64 to convert to cells
-                    if (sprite.body.y >= (second.y * 64)
-                    ) {
-                        // console.log("we made it! altering path");
-
-                        path = path.slice(1);
-                        sprite.path = path;
-
-                        first = path[0];
-                        second = path[1];
-                    }
-
-                    //we want to move towards the CENTER of the next cell.. plus a little randomness
-                    let xToGo = (second.x * 64 + 32) + (Math.random() * 20);
-                    let yToGo = (second.y * 64 + 32) + (Math.random() * 20);
-
-
-                    let velocity = sprite.randomVelocity;
-
-                    if (yToGo >= this.game.height - 64) {
-                        sprite.lastMove = true;
-                        console.log("last move. moving to " + xToGo + "," + this.game.height)
-                        this.game.physics.arcade.moveToXY(sprite, xToGo, this.game.height, velocity);
-                    }
-
-                    // console.log("moving to " + xToGo + "," + yToGo)
-                    this.game.physics.arcade.moveToXY(sprite, xToGo, yToGo, velocity);
-                } else {
-                    // console.log('lastmoved.')
-                }
-            });
-        }
-    }
-
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
@@ -283,28 +139,6 @@ export default class Play extends Phaser.State {
 
         turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
 
-    }
-
-    makeDrone(where) {
-        let sprite = this.spritesGroup.create(where, 0, 'drone');
-        sprite.animations.add('fly');
-        sprite.animations.play('fly', 30, true);
-        sprite.scale.setTo(.25, .25);
-        sprite.anchor.setTo(.5, .5);
-        sprite.inputEnabled = true;
-        sprite.events.onInputDown.add(() => {
-            if (this.inputMode === 'hack') {
-                this.killSprite(sprite);
-            }
-        }, this);
-
-        sprite.randomVelocity = 50 + (Math.random() * 30);
-
-        this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
-
-        this.sprites.push(sprite);
-
-        return sprite;
     }
 
     makeTurret(x, y) {
@@ -406,26 +240,6 @@ export default class Play extends Phaser.State {
             }
         }, this);
 
-    }
-
-    killSprite(sprite) {
-        sprite.alive = false;
-
-        this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        var fall = this.game.add.tween(sprite.scale).to({
-            x: 0,
-            y: 0
-        }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        fall.onComplete.add(() => {
-            let explosion = this.game.add.sprite(sprite.x, sprite.y, 'explosion');
-            explosion.anchor.setTo(.2, .2);
-            explosion.scale.setTo(.2, .2);
-            let explosionAnimation = explosion.animations.add('fly');
-            explosion.animations.play('fly', 30, false);
-            explosionAnimation.onComplete.add(() => {
-                explosion.destroy();
-            })
-        });
     }
 
     update() {
