@@ -253,11 +253,6 @@ export default class Play extends Phaser.State {
 
         this.mission.update(this.sprites, this.objects, this.easystar);
         this.easystar.calculate();
-        this.cleanUp();
-    }
-
-    cleanUp() {
-        this.bulletsGroup.forEachDead((i) => i.destroy())
     }
 
     shutdown() {
