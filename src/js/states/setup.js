@@ -7,12 +7,12 @@ export default class Setup extends Phaser.State {
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
-        this.sprites = [];
     }
 
     create() {
 
         this.objects = [];
+        this.enemies = this.game.add.physicsGroup();
 
         this.game.add.sprite(0,0,'grid');
         this.btnDownSound = this.add.sound('menuDown');
@@ -38,15 +38,15 @@ export default class Setup extends Phaser.State {
         let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
         walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, this.sprites, null, [this.objects]));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
     }
 
     makeTurret(x, y) {
-        SpriteHelper.drawTurret(this.game, x, y, this.getWallCallback());
+        new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies);
     }
 
     makeWall(x, y) {
-        this.drawColor(0x0000FF, x, y, this.getWallCallback());
+        new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
     }
 
     drawInputs() {
@@ -127,7 +127,7 @@ export default class Setup extends Phaser.State {
                     y: gridY
                 })
 
-                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, this.sprites, null, [this.objects]);
+                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects], this.enemies);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
