@@ -13,7 +13,7 @@ export default class Play extends Phaser.State {
     }
 
     create() {
-        this.mission = new missions["Defend"](this.game);
+        this.mission = new missions[this.game.mission](this.game);
         this.game.add.sprite(0,0,'grid');
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
@@ -120,7 +120,7 @@ export default class Play extends Phaser.State {
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");
-                this.state.start('Menu');
+                this.state.start('Missions');
             }
         );
     }
