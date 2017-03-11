@@ -261,12 +261,6 @@ export default class Play extends Phaser.State {
     }
 
     shutdown() {
-        console.log("shut down called")
-
-        if(this.turretIntervals) {
-          this.turretIntervals.forEach((it) => clearInterval(it));
-        }
-        clearInterval(this.baddieInterval);
-        clearInterval(this.pathfindingInterval);
+        console.log("shut down called");
     }
 }
