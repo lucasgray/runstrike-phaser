@@ -53,7 +53,7 @@ export default class Play extends Phaser.State {
 
         //10x15 grid to make it easy.
 
-        var easystar = new EasyStar.js();
+        let easystar = new EasyStar.js();
 
         var grid = [];
 
@@ -71,7 +71,7 @@ export default class Play extends Phaser.State {
         easystar.enableDiagonals();
         easystar.disableCornerCutting();
 
-        this.easystar = easystar;
+        this.game.easystar = easystar;
     }
 
     drawHealth() {
@@ -132,7 +132,7 @@ export default class Play extends Phaser.State {
         let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
         walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, this.enemies, [this.objects]));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
     }
 
     hackListener() {
@@ -174,8 +174,8 @@ export default class Play extends Phaser.State {
 
     update() {
         this.objects.forEach((it) => it.update());
-        this.mission.update(this.enemies, this.objects, this.easystar);
-        this.easystar.calculate();
+        this.mission.update(this.enemies, this.objects);
+        this.game.easystar.calculate();
     }
 
     shutdown() {

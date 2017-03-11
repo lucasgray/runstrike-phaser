@@ -47,10 +47,10 @@ export default class Defend {
       }
     }
 
-    update(sprites, objects, easystar){
+    update(sprites, objects){
       if(!this.allDeployed && Date.now() - this.lastDeployment > this.enemies[this.enemy].delay){
 
-        sprites.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0, easystar, [objects]));
+        sprites.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0, [objects]));
 
         this.enemy++;
         if(this.enemy > this.lastEnemy){

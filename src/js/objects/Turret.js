@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export default class Turret extends MapObject {
 
-    constructor(game, x, y, enemies, enemyGroup, groups) {
+    constructor(game, x, y, groups, enemies) {
         super();
         let g = game.add.sprite(x+35, y+33, 'turret-bottom');
         // g.anchor.y = -.1;

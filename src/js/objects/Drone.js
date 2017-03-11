@@ -2,7 +2,7 @@ import MapObject from './MapObject';
 
 export default class Turret extends MapObject {
 
-    constructor(game, x, y, easystar, groups) {
+    constructor(game, x, y, groups) {
         super();
         let sprite = game.add.sprite(x, y, 'drone');
         sprite.animations.add('fly');
@@ -19,7 +19,6 @@ export default class Turret extends MapObject {
         sprite.randomVelocity = 50 + (Math.random() * 30);
         sprite.shot = this.shot;
         this.sprite = sprite;
-        this.easystar = easystar;
         this.game = game;
         this.lastCalculation = 0;
         if(groups){
@@ -81,7 +80,7 @@ export default class Turret extends MapObject {
               console.log('out of bounds!');
             } else {
               //640x960 find path to bottom left of the screen
-              this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+              this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
                   if (path === null) {
                        //console.log("The path to the destination point was not found.");
                   } else {
