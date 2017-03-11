@@ -1,2 +1,2 @@
 //"Master" Object
-export {default as Defend} from './Defend';
+export {default as Skirmish} from './Skirmish';
