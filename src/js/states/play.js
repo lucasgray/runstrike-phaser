@@ -2,6 +2,7 @@ import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
 import SpriteHelper from "../helpers/SpriteHelper";
+import * as missions from "../missions";
 
 export default class Play extends Phaser.State {
 
@@ -13,7 +14,7 @@ export default class Play extends Phaser.State {
     }
 
     create() {
-
+        this.mission = new missions["Defend"](this.game);
         this.game.add.sprite(0,0,'grid');
 
         console.log('width: ' + this.game.world.width)
@@ -436,6 +437,7 @@ export default class Play extends Phaser.State {
             bullet.kill();
         }, null, this);
 
+        this.mission.update(this.sprites, this.objects, this.easystar);
         this.easystar.calculate();
         this.cleanUp();
     }
