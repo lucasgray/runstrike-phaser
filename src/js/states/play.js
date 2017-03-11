@@ -19,7 +19,6 @@ export default class Play extends Phaser.State {
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
-        this.bulletsGroup = this.game.add.physicsGroup();
         this.spritesGroup = this.game.add.physicsGroup();
         this.spritesGroup.enableBody = true;
         this.spritesGroup.physicsBodyType = Phaser.Physics.ARCADE;
@@ -127,77 +126,11 @@ export default class Play extends Phaser.State {
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
-        let turrets = gameData.placedItems.filter((it) => it.type === 'turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'wall');
+        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
+        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
-        walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
-
-
-        turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
-
-    }
-
-    makeTurret(x, y) {
-
-        let turret = SpriteHelper.drawTurret(this.game, x, y);
-
-        let center = {x: x + 32, y: y + 32};
-
-        this.turretIntervals = [];
-
-        let shouldFireBulletCounter = 0;
-
-        this.turretIntervals.push(setInterval(() => {
-
-            let spriteDistances = this.sprites.map((sprite) => {
-                return {
-                    distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
-                    sprite: sprite
-                }
-            });
-
-            let spritesInRange = spriteDistances.filter(s => s.sprite.alive);
-
-            let rslt = _.minBy(spritesInRange, (s) => s.distance);
-
-            if (rslt) {
-
-                //TODO properly figure out where that sprite was going
-                let fudge = 50;
-
-                //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
-                let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(turret.x, turret.y, rslt.sprite.x, rslt.sprite.y+fudge);
-
-                if(targetAngle < 0)
-                    targetAngle += 360;
-
-                //then i think it needs 90 degrees since its left/right instead of top/down
-                turret.angle = targetAngle + 90;
-
-                if (shouldFireBulletCounter > (1000 / 20) && rslt.distance <= 300) {
-                    shouldFireBulletCounter = 0;
-                    this.shootBulletFromTo(center.x, center.y, rslt.sprite, fudge);
-                } else {
-                    shouldFireBulletCounter++;
-                }
-            }
-
-        }, 20));
-
-    }
-
-    shootBulletFromTo(x, y, sprite, fudge) {
-
-        let bullet = this.game.add.sprite(x, y, 'bullet');
-        this.game.physics.arcade.enable(bullet);
-        this.bulletsGroup.add(bullet);
-
-        this.game.physics.arcade.moveToXY(bullet, sprite.x, sprite.y+fudge, 300);
-    }
-
-    makeWall(x, y) {
-        this.graphics.lineStyle(2, 0x0000FF, 1);
-        this.graphics.drawRect(x, y, 64, 64);
+        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, this.sprites, [this.objects]));
     }
 
     hackListener() {
