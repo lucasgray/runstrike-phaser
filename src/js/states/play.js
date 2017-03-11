@@ -2,14 +2,13 @@ import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
 import SpriteHelper from "../helpers/SpriteHelper";
+import * as gameObjects from "../objects";
 import * as missions from "../missions";
 
 export default class Play extends Phaser.State {
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
-        this.sprites = [];
-
         this.graphics = this.game.add.graphics(0, 0);
     }
 
@@ -19,9 +18,12 @@ export default class Play extends Phaser.State {
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
-        this.spritesGroup = this.game.add.physicsGroup();
-        this.spritesGroup.enableBody = true;
-        this.spritesGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        //Collection of all GameObjects created for the game
+        this.objects = [];
+        this.lastCalculation = 0;
+
+        this.sprites = this.game.add.physicsGroup();
+
 
         this.game.stage.backgroundColor = 0x000000;
 
@@ -152,8 +154,7 @@ export default class Play extends Phaser.State {
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
 
-                this.spritesGroup.forEachAlive((sprite) => {
-
+                this.sprites.forEachAlive((sprite) => {
                     let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
                     //FIXME
