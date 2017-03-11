@@ -230,7 +230,7 @@ export default class Play extends Phaser.State {
                     //FIXME
                     //for now we just kills em
                     if (dist <= 50) {
-                        this.killSprite(sprite);
+                        sprite.shot();
                     }
                 });
 
