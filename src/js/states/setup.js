@@ -1,16 +1,18 @@
 import * as easystar from "easystarjs";
-import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
 import SpriteHelper from "../helpers/SpriteHelper";
+import * as gameObjects from "../objects";
 
 export default class Setup extends Phaser.State {
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
-        this.sprites = [];
     }
 
     create() {
+
+        this.objects = [];
+        this.enemies = this.game.add.physicsGroup();
 
         this.game.add.sprite(0,0,'grid');
         this.btnDownSound = this.add.sound('menuDown');
@@ -32,19 +34,19 @@ export default class Setup extends Phaser.State {
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
-        let turrets = gameData.placedItems.filter((it) => it.type === 'turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'wall');
+        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
+        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
-        walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
-        turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
+        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
     }
 
     makeTurret(x, y) {
-        SpriteHelper.drawTurret(this.game, x, y, this.getWallCallback());
+        new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies);
     }
 
     makeWall(x, y) {
-        this.drawColor(0x0000FF, x, y, this.getWallCallback());
+        new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
     }
 
     drawInputs() {
@@ -120,12 +122,12 @@ export default class Setup extends Phaser.State {
                 console.log("placing turret at " + gridX + "," + gridY);
 
                 this.game.gameData.placedItems.push({
-                    type: 'turret',
+                    type: 'Turret',
                     x: gridX,
                     y: gridY
                 })
 
-                SpriteHelper.drawTurret(this.game, gridX * 64, gridY * 64, this.getTurretCallback())
+                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects], this.enemies);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
@@ -138,22 +140,14 @@ export default class Setup extends Phaser.State {
                 console.log("placing wall at " + gridX + "," + gridY);
 
                 this.game.gameData.placedItems.push({
-                    type: 'wall',
+                    type: 'Wall',
                     x: gridX,
                     y: gridY
                 })
 
-                this.drawColor(0x0000FF, gridX*64, gridY*64, this.getWallCallback())
+                var wall = new gameObjects["Wall"](this.game, gridX*64, gridY*64, [this.objects]);
             }
         }
 
-    }
-
-    getTurretCallback() {
-        return () => {console.log('clicked turret!')};
-    }
-
-    getWallCallback() {
-        return () => {console.log('clicked wall!')};
     }
 }

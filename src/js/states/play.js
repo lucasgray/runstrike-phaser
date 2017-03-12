@@ -2,30 +2,28 @@ import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
 import SpriteHelper from "../helpers/SpriteHelper";
+import * as gameObjects from "../objects";
+import * as missions from "../missions";
 
 export default class Play extends Phaser.State {
 
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
-        this.sprites = [];
-
         this.graphics = this.game.add.graphics(0, 0);
     }
 
     create() {
-
+        this.mission = new missions[this.game.mission](this.game);
         this.game.add.sprite(0,0,'grid');
-
-        console.log('width: ' + this.game.world.width)
-        console.log('height: ' + this.game.world.height)
-
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
-        this.bulletsGroup = this.game.add.physicsGroup();
-        this.spritesGroup = this.game.add.physicsGroup();
-        this.spritesGroup.enableBody = true;
-        this.spritesGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        //Collection of all GameObjects created for the game
+        this.objects = [];
+        this.lastCalculation = 0;
+
+        this.enemies = this.game.add.physicsGroup();
+
 
         this.game.stage.backgroundColor = 0x000000;
 
@@ -38,8 +36,6 @@ export default class Play extends Phaser.State {
         this.drawInput();
 
         this.drawPlacedItems();
-
-        this.drawEnemies();
 
         // this.drawInventory();
 
@@ -57,7 +53,7 @@ export default class Play extends Phaser.State {
 
         //10x15 grid to make it easy.
 
-        var easystar = new EasyStar.js();
+        let easystar = new EasyStar.js();
 
         var grid = [];
 
@@ -75,7 +71,7 @@ export default class Play extends Phaser.State {
         easystar.enableDiagonals();
         easystar.disableCornerCutting();
 
-        this.easystar = easystar;
+        this.game.easystar = easystar;
     }
 
     drawHealth() {
@@ -124,249 +120,19 @@ export default class Play extends Phaser.State {
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");
-                this.state.start('Menu');
+                this.state.start('Missions');
             }
         );
-    }
-
-    drawEnemies() {
-
-        let gameData = this.game.gameData;
-
-        gameData.shadows.forEach((shadow) => {
-            shadow.amount = 0;
-
-            //TODO scale with levels!
-            if (shadow.size === 'large') {
-                shadow.total = 30;
-            } else if (shadow.size === 'medium') {
-                shadow.total = 15;
-            } else if (shadow.size === 'small') {
-                shadow.total = 5;
-            }
-        });
-
-        this.baddieInterval = setInterval(() => {
-            gameData.shadows.forEach((shadow) => {
-
-                if (shadow.total >= shadow.amount) {
-
-                    console.log("shadow "  + JSON.stringify(shadow));
-
-                    let weight = 0;
-
-                    if (shadow.size === 'large') {
-                        weight = .7;
-                    } else if (shadow.size === 'medium') {
-                        weight = .4;
-                    } else if (shadow.size === 'small') {
-                        weight = .2;
-                    }
-
-                    let baddiesToMake = Math.floor(Math.random() / weight);
-
-                    let baddies = [];
-
-                    [... new Array(baddiesToMake)].map((_, i) => {
-                        console.log(i);
-
-                        //somewhere in a 500 range
-                        var offset = Math.floor(Math.random() * 500) - 250;
-
-                        let x = shadow.at + offset;
-
-                        if (x < 0) {
-                            x = 0;
-                        } if (x >= this.game.width) {
-                            x = this.game.width-1;
-                        }
-
-                        //center cell of cell 5 (index)
-                        baddies.push(this.makeDrone(x));
-                        shadow.amount = shadow.amount + baddiesToMake;
-                    });
-
-                    baddies.forEach((curSprite) => {
-
-                        let curXCell = Math.floor((curSprite.x / 640) * 10);
-                        let curYCell = Math.floor((curSprite.y / 960) * 15);
-
-                        // console.log("where am i? " + curXCell + " , " + curYCell)
-
-                        //640x960 find path to bottom left of the screen
-                        this.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
-
-                            if (path === null) {
-                                // console.log("The path to the destination point was not found.");
-                            } else {
-                                // console.log("easystar success. ");
-
-                                // path.forEach((p) => console.log(JSON.stringify(p)));
-                                curSprite.path = path;
-                            }
-                        });
-                    });
-                } else {
-                    // console.log("shadow " + JSON.stringify(shadow) + "done generating enemies");
-                }
-            });
-        }, 300);
-
-        this.pathfindingInterval = setInterval(() => {
-            this.checkPathfinding();
-        }, 300);
-    }
-
-    checkPathfinding() {
-        if (this.sprites) {
-
-            this.sprites.forEach((sprite) => {
-
-                if (!sprite.lastMove && sprite.alive) {
-
-                    //if we're in the process of moving from loc a to b, keep going
-                    //otherwise prep the next step
-
-                    var path = sprite.path;
-
-                    if (!sprite.path) return;
-
-                    var first = path[0];
-                    var second = path[1];
-
-                    //negative is left, positive is right.
-                    var xDirection = second.x - first.x;
-
-                    //second.y * 64 to convert to cells
-                    if (sprite.body.y >= (second.y * 64)
-                    ) {
-                        // console.log("we made it! altering path");
-
-                        path = path.slice(1);
-                        sprite.path = path;
-
-                        first = path[0];
-                        second = path[1];
-                    }
-
-                    //we want to move towards the CENTER of the next cell.. plus a little randomness
-                    let xToGo = (second.x * 64 + 32) + (Math.random() * 20);
-                    let yToGo = (second.y * 64 + 32) + (Math.random() * 20);
-
-
-                    let velocity = sprite.randomVelocity;
-
-                    if (yToGo >= this.game.height - 64) {
-                        sprite.lastMove = true;
-                        console.log("last move. moving to " + xToGo + "," + this.game.height)
-                        this.game.physics.arcade.moveToXY(sprite, xToGo, this.game.height, velocity);
-                    }
-
-                    // console.log("moving to " + xToGo + "," + yToGo)
-                    this.game.physics.arcade.moveToXY(sprite, xToGo, yToGo, velocity);
-                } else {
-                    // console.log('lastmoved.')
-                }
-            });
-        }
     }
 
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
-        let turrets = gameData.placedItems.filter((it) => it.type === 'turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'wall');
+        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
+        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
-        walls.forEach((it) => this.makeWall(it.x * this.cellWidth, it.y * this.cellHeight));
-
-
-        turrets.forEach((it) => this.makeTurret(it.x * this.cellWidth, it.y * this.cellHeight));
-
-    }
-
-    makeDrone(where) {
-        let sprite = this.spritesGroup.create(where, 0, 'drone');
-        sprite.animations.add('fly');
-        sprite.animations.play('fly', 30, true);
-        sprite.scale.setTo(.25, .25);
-        sprite.anchor.setTo(.5, .5);
-        sprite.inputEnabled = true;
-        sprite.events.onInputDown.add(() => {
-            if (this.inputMode === 'hack') {
-                this.killSprite(sprite);
-            }
-        }, this);
-
-        sprite.randomVelocity = 50 + (Math.random() * 30);
-
-        this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
-
-        this.sprites.push(sprite);
-
-        return sprite;
-    }
-
-    makeTurret(x, y) {
-
-        let turret = SpriteHelper.drawTurret(this.game, x, y);
-
-        let center = {x: x + 32, y: y + 32};
-
-        this.turretIntervals = [];
-
-        let shouldFireBulletCounter = 0;
-
-        this.turretIntervals.push(setInterval(() => {
-
-            let spriteDistances = this.sprites.map((sprite) => {
-                return {
-                    distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
-                    sprite: sprite
-                }
-            });
-
-            let spritesInRange = spriteDistances.filter(s => s.sprite.alive);
-
-            let rslt = _.minBy(spritesInRange, (s) => s.distance);
-
-            if (rslt) {
-
-                //TODO properly figure out where that sprite was going
-                let fudge = 50;
-
-                //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
-                let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(turret.x, turret.y, rslt.sprite.x, rslt.sprite.y+fudge);
-
-                if(targetAngle < 0)
-                    targetAngle += 360;
-
-                //then i think it needs 90 degrees since its left/right instead of top/down
-                turret.angle = targetAngle + 90;
-
-                if (shouldFireBulletCounter > (1000 / 20) && rslt.distance <= 300) {
-                    shouldFireBulletCounter = 0;
-                    this.shootBulletFromTo(center.x, center.y, rslt.sprite, fudge);
-                } else {
-                    shouldFireBulletCounter++;
-                }
-            }
-
-        }, 20));
-
-    }
-
-    shootBulletFromTo(x, y, sprite, fudge) {
-
-        let bullet = this.game.add.sprite(x, y, 'bullet');
-        this.game.physics.arcade.enable(bullet);
-        this.bulletsGroup.add(bullet);
-
-        this.game.physics.arcade.moveToXY(bullet, sprite.x, sprite.y+fudge, 300);
-    }
-
-    makeWall(x, y) {
-        this.graphics.lineStyle(2, 0x0000FF, 1);
-        this.graphics.drawRect(x, y, 64, 64);
+        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
     }
 
     hackListener() {
@@ -388,14 +154,13 @@ export default class Play extends Phaser.State {
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
 
-                this.spritesGroup.forEachAlive((sprite) => {
-
+                this.enemies.forEachAlive((sprite) => {
                     let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
                     //FIXME
                     //for now we just kills em
                     if (dist <= 50) {
-                        this.killSprite(sprite);
+                        sprite.shot();
                     }
                 });
 
@@ -407,48 +172,13 @@ export default class Play extends Phaser.State {
 
     }
 
-    killSprite(sprite) {
-        sprite.alive = false;
-
-        this.game.add.tween(sprite).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        var fall = this.game.add.tween(sprite.scale).to({
-            x: 0,
-            y: 0
-        }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        fall.onComplete.add(() => {
-            let explosion = this.game.add.sprite(sprite.x, sprite.y, 'explosion');
-            explosion.anchor.setTo(.2, .2);
-            explosion.scale.setTo(.2, .2);
-            let explosionAnimation = explosion.animations.add('fly');
-            explosion.animations.play('fly', 30, false);
-            explosionAnimation.onComplete.add(() => {
-                explosion.destroy();
-            })
-        });
-    }
-
     update() {
-        this.game.physics.arcade.overlap(this.bulletsGroup, this.spritesGroup, (bullet, sprite) => {
-            // console.log("BULLET COLLISION!");
-            if(sprite.alive){
-              this.killSprite(sprite);
-            }
-            bullet.kill();
-        }, null, this);
-
-        this.easystar.calculate();
-        this.cleanUp();
-    }
-
-    cleanUp() {
-        this.bulletsGroup.forEachDead((i) => i.destroy())
+        this.objects.forEach((it) => it.update());
+        this.mission.update(this.enemies, this.objects);
+        this.game.easystar.calculate();
     }
 
     shutdown() {
-        console.log("shut down called")
-
-        this.turretIntervals.forEach((it) => clearInterval(it));
-        clearInterval(this.baddieInterval);
-        clearInterval(this.pathfindingInterval);
+        console.log("shut down called");
     }
 }

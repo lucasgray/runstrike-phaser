@@ -43,70 +43,7 @@ export default class Preload extends Phaser.State {
                 //     type: 'wall',
                 //     x: 2, y: 3
                 // },
-                // {
-                //     type: 'wall',
-                //     x: 3, y: 4
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 4, y: 5
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 8, y: 3
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 7, y: 4
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 6, y: 3
-                // },
-                // {
-                //     type: 'turret',
-                //     x: 2, y: 4
-                // },
-                // {
-                //     type: 'turret',
-                //     x: 3, y: 5
-                // },
-                // {
-                //     type: 'turret',
-                //     x: 4, y: 6
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 2, y: 7
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 3, y: 7
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 6, y: 9
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 7, y: 9
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 4, y: 10
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 5, y: 10
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 2, y: 11
-                // },
-                // {
-                //     type: 'wall',
-                //     x: 3, y: 11
-                // }
+                // etc.
             ],
             inventoryItems: {
                 bomb: 3,

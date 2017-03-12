@@ -38,8 +38,8 @@ export default class Menu extends Phaser.State {
             60,
             this.btnDownSound,
             'defend', ()=>{
-                console.log("asking to start play!");
-                this.state.start('Play');
+                console.log("asking to start mission select!");
+                this.state.start('Missions');
             }
         );
     }
