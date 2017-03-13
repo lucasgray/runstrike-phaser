@@ -4,6 +4,7 @@ import Buttons from "../extensions/Buttons";
 import SpriteHelper from "../helpers/SpriteHelper";
 import * as gameObjects from "../objects";
 import * as missions from "../missions";
+import * as inputHandlers from "../handlers";
 
 export default class Play extends Phaser.State {
 
@@ -22,12 +23,12 @@ export default class Play extends Phaser.State {
         this.objects = [];
         this.lastCalculation = 0;
 
+        this.game.inputHandler = ()=>'';
+
         this.game.enemies = this.game.add.physicsGroup();
 
 
         this.game.stage.backgroundColor = 0x000000;
-
-        this.setupInputListeners();
 
         this.setupGrid();
 
@@ -89,25 +90,7 @@ export default class Play extends Phaser.State {
     }
 
     drawInput() {
-        // var wallIcon = game.add.sprite(90, 10, 'wall_icon');
-        // wallIcon.scale.setTo(1,1);
-        // wallIcon.inputEnabled = true;
-        // wallIcon.events.onInputDown.add(wallListener, this);
-
-        var hackIcon = this.game.add.sprite(90, 160, 'hack_icon');
-        hackIcon.scale.setTo(1, 1);
-        hackIcon.inputEnabled = true;
-        hackIcon.events.onInputDown.add(this.hackListener, this);
-
-        var bombIcon = this.game.add.sprite(90, 310, 'bomb_icon');
-        bombIcon.scale.setTo(1, 1);
-        bombIcon.inputEnabled = true;
-        bombIcon.events.onInputDown.add(this.bombListener, this);
-        // var iconMask = game.make.bitmapData(128,128);
-        // iconMask.circle(64,64,64);
-        // iconMask.alphaMask('wall_icon');
-        // var wallIcon = game.add.sprite(90, 10, iconMask);
-        // wallIcon.scale.setTo(.75,.75);
+        Object.keys(inputHandlers).forEach((ih,index) => new inputHandlers[ih](this.game, 90, 310 + (90 * index)));
 
         this.btnDownSound = this.add.sound('menuDown');
         Buttons.makeButton(
@@ -122,43 +105,6 @@ export default class Play extends Phaser.State {
                 this.state.start('Missions');
             }
         );
-    }
-
-    hackListener() {
-        console.log('hack!');
-        this.inputMode = 'hack';
-    }
-
-    bombListener() {
-        console.log('bomb!');
-        this.inputMode = 'bomb';
-    }
-
-    setupInputListeners() {
-        this.game.input.onTap.add((pointer, doubleTap) => {
-            if (this.inputMode === 'bomb') {
-
-                let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
-                explosion.anchor.setTo(0.5, 0.5);
-                let explosionAnimation = explosion.animations.add('fly');
-                explosion.animations.play('fly', 30, false);
-
-                this.game.enemies.forEachAlive((sprite) => {
-                    let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
-
-                    //FIXME
-                    //for now we just kills em
-                    if (dist <= 50) {
-                        sprite.shot();
-                    }
-                });
-
-                explosionAnimation.onComplete.add(() => {
-                    explosion.destroy();
-                });
-            }
-        }, this);
-
     }
 
     update() {

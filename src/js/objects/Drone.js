@@ -11,10 +11,8 @@ export default class Turret extends MapObject {
         sprite.anchor.setTo(.5, .5);
         sprite.inputEnabled = true;
         //TODO: Fix events
-        sprite.events.onInputDown.add(() => {
-            if (this.inputMode === 'hack') {
-                this.shot(sprite);
-            }
+        sprite.events.onInputDown.add((sprite, pointer) => {
+          this.game.input.onTap.dispatch(pointer, false, sprite);
         }, this);
         sprite.randomVelocity = 50 + (Math.random() * 30);
         sprite.shot = this.shot;
