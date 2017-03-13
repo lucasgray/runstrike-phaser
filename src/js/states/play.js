@@ -27,7 +27,7 @@ export default class Play extends Phaser.State {
 
         this.game.stage.backgroundColor = 0x000000;
 
-        this.setupGlobalListeners();
+        this.setupInputListeners();
 
         this.setupGrid();
 
@@ -145,12 +145,12 @@ export default class Play extends Phaser.State {
         this.inputMode = 'bomb';
     }
 
-    setupGlobalListeners() {
+    setupInputListeners() {
         this.game.input.onTap.add((pointer, doubleTap) => {
             if (this.inputMode === 'bomb') {
 
                 let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
-                explosion.anchor.setTo(.5, .5);
+                explosion.anchor.setTo(0.5, 0.5);
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
 
