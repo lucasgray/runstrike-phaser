@@ -15,13 +15,14 @@ export default class Turret extends MapObject {
         h.inputEnabled = true;
         g.addChild(h);
 
-        h.events.onInputDown.add(()=>{console.log('turret clicked!')}, h);
         this.base = g;
         this.gun = h;
         this.game = game;
         this.lastShot = 0;
         this.bulletsGroup = this.game.add.physicsGroup();
         this.addToGroup(groups);
+
+        return this;
     }
 
     update(){

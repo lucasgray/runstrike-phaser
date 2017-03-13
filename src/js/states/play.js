@@ -1,7 +1,6 @@
 import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
-import SpriteHelper from "../helpers/SpriteHelper";
 import * as gameObjects from "../objects";
 import * as missions from "../missions";
 import * as inputHandlers from "../handlers";
