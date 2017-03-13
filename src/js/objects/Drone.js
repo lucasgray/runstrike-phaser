@@ -59,8 +59,6 @@ export default class Turret extends MapObject {
 
             if (yToGo >= this.game.height - 64) {
                 this.sprite.lastMove = true;
-                console.log("last move. moving to " + xToGo + "," + this.game.height)
-                //this.sprite.game.physics.arcade.moveToXY(this.sprite, xToGo, this.sprite.game.height, velocity);
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
@@ -74,8 +72,6 @@ export default class Turret extends MapObject {
             let curXCell = Math.floor((this.sprite.x / 640) * 10);
             let curYCell = Math.floor((this.sprite.y / 960) * 15);
 
-            console.log(curXCell + ' | ' + curYCell);
-
             if(curYCell > 14){
               console.log('out of bounds!');
             } else {
@@ -85,7 +81,7 @@ export default class Turret extends MapObject {
                        //console.log("The path to the destination point was not found.");
                   } else {
                       // console.log("easystar success. ");
-                      path.forEach((p) => console.log(JSON.stringify(p)));
+                      //path.forEach((p) => console.log(JSON.stringify(p)));
                       this.sprite.path = path;
                   }
               });
