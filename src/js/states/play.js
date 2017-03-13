@@ -35,8 +35,6 @@ export default class Play extends Phaser.State {
 
         this.drawInput();
 
-        this.drawPlacedItems();
-
         // this.drawInventory();
 
         // this.drawBase();
@@ -61,8 +59,9 @@ export default class Play extends Phaser.State {
             grid.push(new Array(x).fill(0));
         });
 
-        this.game.gameData.placedItems.forEach((i) => {
-           grid[i.y][i.x] = 1;
+        this.game.gameData.placedItems.forEach((it) => {
+          grid[it.y][it.x] = 1;
+          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
         });
 
         easystar.setGrid(grid);
@@ -123,16 +122,6 @@ export default class Play extends Phaser.State {
                 this.state.start('Missions');
             }
         );
-    }
-
-    drawPlacedItems() {
-        let gameData = this.game.gameData;
-
-        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
-
-        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
     }
 
     hackListener() {

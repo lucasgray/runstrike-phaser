@@ -25,28 +25,12 @@ export default class Setup extends Phaser.State {
 
         this.game.stage.backgroundColor = 0x000000;
 
-        this.drawPlacedItems();
+        this.game.gameData.placedItems.forEach((it) => {
+          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
+        });
 
         this.drawInputs();
 
-    }
-
-    drawPlacedItems() {
-        let gameData = this.game.gameData;
-
-        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
-
-        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-    }
-
-    makeTurret(x, y) {
-        new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
-    }
-
-    makeWall(x, y) {
-        new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
     }
 
     drawInputs() {
