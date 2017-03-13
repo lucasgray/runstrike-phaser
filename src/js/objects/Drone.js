@@ -72,6 +72,7 @@ export default class Turret extends MapObject {
 
             if(curYCell > 14){
               console.log('out of bounds!');
+              this.game.state.start('Defeat');
             } else {
               //640x960 find path to bottom left of the screen
               this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {

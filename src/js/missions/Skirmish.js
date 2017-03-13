@@ -44,6 +44,8 @@ export default class Defend {
       this.lastDeployment = 0;
       if(this.enemy > this.lastEnemy){
         this.allDeployed = true;
+      } else {
+        this.allDeployed = false;
       }
     }
 
@@ -57,6 +59,15 @@ export default class Defend {
           this.allDeployed = true;
         }
         this.lastDeployment = Date.now();
+      }
+      if(this.allDeployed && this.game.enemies.getFirstAlive() === null){
+        if(this.won){
+          if(Date.now() - this.won > 2000){
+            this.game.state.start('Victory');
+          }
+        } else {
+          this.won = Date.now();
+        }
       }
     }
 }
