@@ -24,7 +24,7 @@ export default class Menu extends Phaser.State {
               this.game,
               this.game.world.centerX,
               this.game.world.centerY + (70 * index),
-              this.game.width * .8,
+              this.game.width * 0.8,
               60,
               this.btnDownSound,
               mission, ()=>{

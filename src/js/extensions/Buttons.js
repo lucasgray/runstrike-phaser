@@ -23,7 +23,7 @@ export default class Buttons {
             font: 'Joystix',
             fill: 'white',
             align: 'center',
-            fontSize: height * .7
+            fontSize: height * 0.7
         });
         text.anchor.setTo(0.5);
 

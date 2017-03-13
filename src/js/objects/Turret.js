@@ -34,7 +34,7 @@ export default class Turret extends MapObject {
             return {
                 distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
                 sprite: sprite
-            }
+            };
         });
 
         let spritesInRange = spriteDistances.filter(s => s.sprite.alive);

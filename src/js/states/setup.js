@@ -16,8 +16,8 @@ export default class Setup extends Phaser.State {
         this.game.add.sprite(0,0,'grid');
         this.btnDownSound = this.add.sound('menuDown');
 
-        console.log('width: ' + this.game.world.width)
-        console.log('height: ' + this.game.world.height)
+        console.log('width: ' + this.game.world.width);
+        console.log('height: ' + this.game.world.height);
 
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
@@ -79,7 +79,6 @@ export default class Setup extends Phaser.State {
 
         if (this.game.input.activePointer.isDown)
         {
-            console.log('down!')
             if (this.curTurret) {
                 this.curTurret.x = this.game.input.x;
                 this.curTurret.y = this.game.input.y;
@@ -103,7 +102,7 @@ export default class Setup extends Phaser.State {
                     type: 'Turret',
                     x: gridX,
                     y: gridY
-                })
+                });
 
                 var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects]);
 
@@ -121,7 +120,7 @@ export default class Setup extends Phaser.State {
                     type: 'Wall',
                     x: gridX,
                     y: gridY
-                })
+                });
 
                 var wall = new gameObjects["Wall"](this.game, gridX*64, gridY*64, [this.objects]);
             }

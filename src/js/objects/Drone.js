@@ -7,8 +7,8 @@ export default class Turret extends MapObject {
         let sprite = game.add.sprite(x, y, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
-        sprite.scale.setTo(.25, .25);
-        sprite.anchor.setTo(.5, .5);
+        sprite.scale.setTo(0.25, 0.25);
+        sprite.anchor.setTo(0.5, 0.5);
         sprite.inputEnabled = true;
         //TODO: Fix events
         sprite.events.onInputDown.add((sprite, pointer) => {
@@ -98,14 +98,14 @@ export default class Turret extends MapObject {
         }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         fall.onComplete.add(() => {
             let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
-            explosion.anchor.setTo(.2, .2);
-            explosion.scale.setTo(.2, .2);
+            explosion.anchor.setTo(0.2, 0.2);
+            explosion.scale.setTo(0.2, 0.2);
             let explosionAnimation = explosion.animations.add('fly');
             explosion.animations.play('fly', 30, false);
             explosionAnimation.onComplete.add(() => {
                 explosion.destroy();
                 this.destroy();
-            })
+            });
         });
     }
 }
