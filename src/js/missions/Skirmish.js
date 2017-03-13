@@ -47,10 +47,10 @@ export default class Defend {
       }
     }
 
-    update(enemies, objects){
+    update(objects){
       if(!this.allDeployed && Date.now() - this.lastDeployment > this.enemies[this.enemy].delay){
 
-        enemies.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0, [objects]));
+        this.game.enemies.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0, [objects]));
 
         this.enemy++;
         if(this.enemy > this.lastEnemy){

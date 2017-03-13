@@ -22,7 +22,7 @@ export default class Play extends Phaser.State {
         this.objects = [];
         this.lastCalculation = 0;
 
-        this.enemies = this.game.add.physicsGroup();
+        this.game.enemies = this.game.add.physicsGroup();
 
 
         this.game.stage.backgroundColor = 0x000000;
@@ -132,7 +132,7 @@ export default class Play extends Phaser.State {
         let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
 
         walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
+        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
     }
 
     hackListener() {
@@ -154,7 +154,7 @@ export default class Play extends Phaser.State {
                 let explosionAnimation = explosion.animations.add('fly');
                 explosion.animations.play('fly', 30, false);
 
-                this.enemies.forEachAlive((sprite) => {
+                this.game.enemies.forEachAlive((sprite) => {
                     let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
                     //FIXME
@@ -174,7 +174,7 @@ export default class Play extends Phaser.State {
 
     update() {
         this.objects.forEach((it) => it.update());
-        this.mission.update(this.enemies, this.objects);
+        this.mission.update(this.objects);
         this.game.easystar.calculate();
     }
 

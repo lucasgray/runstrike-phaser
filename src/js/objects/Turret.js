@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export default class Turret extends MapObject {
 
-    constructor(game, x, y, groups, enemies) {
+    constructor(game, x, y, groups) {
         super();
         let g = game.add.sprite(x+35, y+33, 'turret-bottom');
         // g.anchor.y = -.1;
@@ -18,7 +18,6 @@ export default class Turret extends MapObject {
         h.events.onInputDown.add(()=>{console.log('turret clicked!')}, h);
         this.base = g;
         this.gun = h;
-        this.enemies = enemies;
         this.game = game;
         this.lastShot = 0;
         this.bulletsGroup = this.game.add.physicsGroup();
@@ -30,7 +29,7 @@ export default class Turret extends MapObject {
       let center = {x: this.base.x - 2, y: this.base.y - 1};
       if(this.lastCheck && Date.now() - this.lastCheck >= 20){
         console.log('now!');
-        let spriteDistances = this.enemies.hash.map((sprite) => {
+        let spriteDistances = this.game.enemies.hash.map((sprite) => {
             return {
                 distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
                 sprite: sprite
@@ -64,7 +63,7 @@ export default class Turret extends MapObject {
       }
       this.lastCheck = Date.now();
 
-      this.game.physics.arcade.overlap(this.bulletsGroup, this.enemies, (bullet, sprite) => {
+      this.game.physics.arcade.overlap(this.bulletsGroup, this.game.enemies, (bullet, sprite) => {
           if(sprite.alive){
             sprite.shot();
           }
