@@ -1,6 +1,6 @@
-import MapObject from './MapObject';
+import EnemyObject from './EnemyObject';
 
-export default class Turret extends MapObject {
+export default class Turret extends EnemyObject {
 
     constructor(game, x, y, groups) {
         super();
