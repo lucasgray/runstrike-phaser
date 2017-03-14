@@ -1,8 +1,10 @@
 import * as gameObjects from "../objects";
+import Mission from './Mission';
 
-export default class Defend {
+export default class Skirmish {
     constructor(game) {
-      this.game = game;
+      super(game);
+      this.game.stage.backgroundColor = 0x002200;
       this.enemies = [
         { type: 'Drone', delay: 300, size: 'large', at: 100},
         { type: 'Drone', delay: 600, size: 'medium', at: 400},
@@ -60,6 +62,8 @@ export default class Defend {
         }
         this.lastDeployment = Date.now();
       }
+
+      // Check win condition
       if(this.allDeployed && this.game.enemies.getFirstAlive() === null){
         if(this.won){
           if(Date.now() - this.won > 2000){

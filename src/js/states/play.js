@@ -26,9 +26,6 @@ export default class Play extends Phaser.State {
 
         this.game.enemies = this.game.add.physicsGroup();
 
-
-        this.game.stage.backgroundColor = 0x000000;
-
         this.setupGrid();
 
         this.drawHealth();
@@ -114,5 +111,6 @@ export default class Play extends Phaser.State {
 
     shutdown() {
         console.log("shut down called");
+        this.mission.shutdown();
     }
 }
