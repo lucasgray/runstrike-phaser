@@ -25,6 +25,14 @@ export default class HackHandler extends InputHandler {
       }
       if(sprite && sprite.alive){
         sprite.shot();
+        let hack = this.game.add.sprite(sprite.x, sprite.y, 'hack');
+        hack.anchor.setTo(0.5, 0.5);
+        hack.scale.setTo(0.6, 0.6);
+        let hackAnimation = hack.animations.add('fly');
+        hack.animations.play('fly', 30, false);
+        hackAnimation.onComplete.add(() => {
+            hack.destroy();
+        });
       }
     }
 

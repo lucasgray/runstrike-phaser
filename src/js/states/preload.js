@@ -26,7 +26,8 @@ export default class Preload extends Phaser.State {
         //new stuff
         this.game.load.image('hack_icon', 'img/clock.png', 128, 128); //128x128
         this.game.load.image('bomb_icon', 'img/grenade.png', 128, 128); //128x128
-        this.game.load.spritesheet('drone', 'img/drone.png', 128, 128, 3); // 128x128 with 2 frames (option param)
+        this.game.load.spritesheet('drone', 'img/drone.png', 128, 128, 3); // 128x128 with 3 frames (option param)
+        this.game.load.spritesheet('hack', 'img/hack.png', 128, 128, 3); // 128x128 with 2 frames (option param)
         this.game.load.spritesheet('explosion', 'img/explosion.png', 86, 86);
         this.game.load.image('bullet', 'img/orange_bullet.png', 17, 17);
         this.game.load.image('turret-top', 'img/turret-top.png', 64, 64);
