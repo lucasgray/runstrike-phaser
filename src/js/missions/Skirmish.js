@@ -1,7 +1,7 @@
 import * as gameObjects from "../objects";
 import Mission from './Mission';
 
-export default class Skirmish {
+export default class Skirmish extends Mission {
     constructor(game) {
       super(game);
       this.game.stage.backgroundColor = 0x002200;
