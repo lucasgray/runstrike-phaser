@@ -14,32 +14,7 @@ export default class Skirmish extends Mission {
         { type: 'Drone', delay: 300, size: 'small', at: 500},
         { type: 'Drone', delay: 300, size: 'large', at: 100},
         { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 3000, size: 'small', at: 500},
-        { type: 'Drone', delay: 900, size: 'small', at: 500},
-        { type: 'Drone', delay: 400, size: 'large', at: 100},
-        { type: 'Drone', delay: 60, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500},
-        { type: 'Drone', delay: 300, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 3000, size: 'small', at: 500},
-        { type: 'Drone', delay: 300, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500},
-        { type: 'Drone', delay: 300, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 900, size: 'small', at: 500},
-        { type: 'Drone', delay: 300, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500},
-        { type: 'Drone', delay: 900, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500},
-        { type: 'Drone', delay: 300, size: 'large', at: 100},
-        { type: 'Drone', delay: 900, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500},
-        { type: 'Drone', delay: 900, size: 'large', at: 100},
-        { type: 'Drone', delay: 300, size: 'medium', at: 400},
-        { type: 'Drone', delay: 300, size: 'small', at: 500}
+        { type: 'Drone', delay: 3000, size: 'small', at: 500}
       ];
       this.enemy = 0;
       this.lastEnemy = this.enemies.length - 1;
