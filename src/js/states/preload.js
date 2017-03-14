@@ -58,6 +58,16 @@ export default class Preload extends Phaser.State {
             ],
             status: 'attacking' //viewing or attacking
         };
+        this.game.physics.arcade.rotateToXY = function(sprite, x, y, offset){
+          let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(sprite.x, sprite.y, x, y);
+
+          if(targetAngle < 0)
+              targetAngle += 360;
+
+          //then i think it needs 90 degrees since its left/right instead of top/down
+          sprite.angle = targetAngle + offset;
+          return sprite;
+        };
     }
 
     update() {

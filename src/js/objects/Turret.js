@@ -45,13 +45,7 @@ export default class Turret extends MapObject {
             //TODO properly figure out where that sprite was going
             let fudge = 50;
             //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
-            let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(this.base.x, this.base.y, rslt.sprite.x, rslt.sprite.y+fudge);
-
-            if(targetAngle < 0)
-                targetAngle += 360;
-
-            //then i think it needs 90 degrees since its left/right instead of top/down
-            this.base.angle = targetAngle + 90;
+            this.game.physics.arcade.rotateToXY(this.base, rslt.sprite.x, rslt.sprite.y+fudge, 90); //rotate with a 90 deg offset
 
             if (Date.now() - this.lastShot > 1000 && rslt.distance <= 300) {
               console.log('fire!' + rslt.distance);

@@ -61,6 +61,7 @@ export default class Turret extends MapObject {
 
             // console.log("moving to " + xToGo + "," + yToGo)
             this.game.physics.arcade.moveToXY(this.sprite, xToGo, yToGo, velocity);
+            this.game.physics.arcade.rotateToXY(this.sprite, xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
         }
