@@ -53,7 +53,7 @@ export default class Turret extends EnemyObject {
             let yToGo = (second.y * 64 + 32) ;//+ (Math.random() * 20);
 
 
-            let velocity = this.randomVelocity;
+            let velocity = this.sprite.randomVelocity;
 
             if (yToGo >= this.game.height - 64) {
                 this.sprite.lastMove = true;
