@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class Preload extends Phaser.State {
 
     create() {
@@ -32,11 +34,10 @@ export default class Preload extends Phaser.State {
         this.game.load.image('turret-top', 'img/turret-top.png', 64, 64);
         this.game.load.image('turret-bottom', 'img/turret-bottom.png', 64, 64);
 
-        //TODO check the bridge for this and default to test data if not
-        //TODO save this to firebase
-        //access this as this.game.gameData
+
         this.game.gameData = {
 
+            isReactNative: true,
             //where on our 10x15 grid?
             placedItems: [
                 // {
@@ -54,9 +55,16 @@ export default class Preload extends Phaser.State {
                 { size: 'large', at: 100},
                 { size: 'medium', at: 400},
                 { size: 'small', at: 500}
-            ],
-            status: 'attacking' //viewing or attacking
+            ]
         };
+
+        if (typeof(DATA) !== "undefined") {
+            this.game.gameData.isReactNative = true;
+
+            this.game.gameData.placedItems = _.values(DATA.placed_loot);
+        } else {
+            this.game.gameData.isReactNative = false;
+        }
     }
 
     update() {

@@ -5,3 +5,4 @@ export {default as Play} from './play';
 export {default as Over} from './over';
 export {default as Setup} from './setup';
 export {default as Missions} from './missions';
+export {default as Debug} from './debug';

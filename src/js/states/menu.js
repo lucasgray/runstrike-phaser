@@ -17,6 +17,19 @@ export default class Menu extends Phaser.State {
         });
         this.title.anchor.setTo(0.5);
 
+        if (typeof(DATA) !== "undefined") {
+            this.debug = this.game.add.text(
+                this.game.world.centerX,
+                this.game.world.centerY-300,
+                "data "+ JSON.stringify(DATA), {
+                    font: '5px Joystix',
+                    fill: 'white',
+                    align: 'center'
+                });
+            this.debug.anchor.setTo(0.5);
+        }
+
+
         Buttons.makeButton(
             this.game,
             this.game.world.centerX,
@@ -40,6 +53,19 @@ export default class Menu extends Phaser.State {
             'defend', ()=>{
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
+            }
+        );
+
+        Buttons.makeButton(
+            this.game,
+            this.game.world.centerX,
+            this.game.world.centerY+140,
+            this.game.width * .8,
+            60,
+            this.btnDownSound,
+            'debug data', ()=>{
+                console.log("going to data!");
+                this.state.start('Debug');
             }
         );
     }

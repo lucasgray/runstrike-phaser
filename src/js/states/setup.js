@@ -34,8 +34,8 @@ export default class Setup extends Phaser.State {
     drawPlacedItems() {
         let gameData = this.game.gameData;
 
-        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'Wall');
+        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret' || it.type === 'turret');
+        let walls = gameData.placedItems.filter((it) => it.type === 'Wall' || it.type === 'wall');
 
         walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
         turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
@@ -121,11 +121,20 @@ export default class Setup extends Phaser.State {
 
                 console.log("placing turret at " + gridX + "," + gridY);
 
-                this.game.gameData.placedItems.push({
-                    type: 'Turret',
+                let turretPayload = {
+                    type: 'turret',
                     x: gridX,
                     y: gridY
-                })
+                };
+
+                this.game.gameData.placedItems.push(turretPayload);
+
+                if (this.game.gameData.isReactNative) {
+                    window.postMessage(JSON.stringify({
+                        type: "PLACE_ITEM",
+                        payload: turretPayload
+                    }))
+                }
 
                 var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects], this.enemies);
 
