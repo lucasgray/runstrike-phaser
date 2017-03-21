@@ -68,6 +68,7 @@ export default class Play extends Phaser.State {
         easystar.disableCornerCutting();
 
         this.game.easystar = easystar;
+        this.game.easystar.calculate();
     }
 
     drawHealth() {
