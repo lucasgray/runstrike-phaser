@@ -6,3 +6,4 @@ export {default as Setup} from './setup';
 export {default as Missions} from './missions';
 export {default as Victory} from './victory';
 export {default as Defeat} from './defeat';
+export {default as Debug} from './debug';

@@ -98,11 +98,20 @@ export default class Setup extends Phaser.State {
 
                 console.log("placing turret at " + gridX + "," + gridY);
 
-                this.game.gameData.placedItems.push({
-                    type: 'Turret',
+                let turretPayload = {
+                    type: 'turret',
                     x: gridX,
                     y: gridY
-                });
+                };
+
+                this.game.gameData.placedItems.push(turretPayload);
+
+                if (this.game.gameData.isReactNative) {
+                    window.postMessage(JSON.stringify({
+                        type: "PLACE_ITEM",
+                        payload: turretPayload
+                    }))
+                }
 
                 var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects]);
 

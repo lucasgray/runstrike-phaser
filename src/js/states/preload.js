@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class Preload extends Phaser.State {
 
     create() {
@@ -55,9 +57,17 @@ export default class Preload extends Phaser.State {
                 { size: 'large', at: 100},
                 { size: 'medium', at: 400},
                 { size: 'small', at: 500}
-            ],
-            status: 'attacking' //viewing or attacking
+            ]
         };
+
+        if (typeof(DATA) !== "undefined") {
+            this.game.gameData.isReactNative = true;
+
+            this.game.gameData.placedItems = _.values(DATA.placed_loot);
+        } else {
+            this.game.gameData.isReactNative = false;
+        }
+
         this.game.physics.arcade.rotateToXY = function(sprite, x, y, offset){
           let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(sprite.x, sprite.y, x, y);
 

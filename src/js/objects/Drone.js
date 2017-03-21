@@ -2,7 +2,7 @@ import EnemyObject from './EnemyObject';
 
 export default class Turret extends EnemyObject {
 
-    constructor(game, x, y, groups) {
+    constructor(game, x, y, groups, active) {
         super();
         let sprite = game.add.sprite(x, y, 'drone');
         sprite.animations.add('fly');
@@ -22,6 +22,28 @@ export default class Turret extends EnemyObject {
         if(groups){
           this.addToGroup(groups);
         }
+
+        let curXCell = Math.floor((this.sprite.x / 640) * 10);
+        let curYCell = Math.floor((this.sprite.y / 960) * 15);
+
+        console.log(curXCell + ' | ' + curYCell);
+
+        if(curYCell > 14){
+            console.log('out of bounds!');
+        } else {
+            //640x960 find path to bottom left of the screen
+            this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+                if (!path) {
+                    console.log("The path to the destination point was not found.");
+                } else {
+                    console.log("easystar success. ");
+                    path.forEach((p) => console.log(JSON.stringify(p)));
+                    sprite.path = path;
+                }
+                this.lastCalculation = Date.now();
+            });
+        }
+
         return sprite;
     }
 
@@ -64,29 +86,6 @@ export default class Turret extends EnemyObject {
             this.game.physics.arcade.rotateToXY(this.sprite, xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
-        }
-
-        if(Date.now() - this.lastCalculation > 500){
-
-            let curXCell = Math.floor((this.sprite.x / 640) * 10);
-            let curYCell = Math.floor((this.sprite.y / 960) * 15);
-
-            if(curYCell > 14){
-              console.log('out of bounds!');
-              this.game.state.start('Defeat');
-            } else {
-              //640x960 find path to bottom left of the screen
-              this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
-                  if (path === null) {
-                       //console.log("The path to the destination point was not found.");
-                  } else {
-                      // console.log("easystar success. ");
-                      //path.forEach((p) => console.log(JSON.stringify(p)));
-                      this.sprite.path = path;
-                  }
-              });
-            }
-            this.lastCalculation = Date.now();
         }
     }
 
