@@ -10,7 +10,6 @@ export default class Wall extends MapObject {
         g.drawRect(x, y, 64, 64); //no anchor, need to move it!
         g.endFill();
         g.inputEnabled = true;
-        g.events.onInputDown.add(()=>{console.log('wall clicked!')}, g);
         this.addToGroup(groups);
     }
 }

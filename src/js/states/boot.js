@@ -12,11 +12,11 @@ export default class Boot extends Phaser.State {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-        // var x = this.calculateScreenMetrics(1920,1080);
-        // this.game.scale.setUserScale(x.scaleX, x.scaleY, x.offsetX, x.offsetY);
-        // this.game.scale.pageAlignVertically = true;
-        // this.game.scale.pageAlignHorizontally = true;
-        // this.game.scale.refresh();
+        //  var x = this.calculateScreenMetrics(1920,1080);
+        //  this.game.scale.setUserScale(x.scaleX, x.scaleY, x.offsetX, x.offsetY);
+        //  this.game.scale.pageAlignVertically = true;
+        //  this.game.scale.pageAlignHorizontally = true;
+        //  this.game.scale.refresh();
 
         this.state.start('Preload');
     }
@@ -79,7 +79,7 @@ export default class Boot extends Phaser.State {
             scaleY: scaleY,
             offsetX: offsetX,
             offsetY: offsetY
-        }
+        };
 
     }
 
