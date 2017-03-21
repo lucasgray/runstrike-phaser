@@ -1,6 +1,5 @@
 import * as easystar from "easystarjs";
 import Buttons from "../extensions/Buttons";
-import SpriteHelper from "../helpers/SpriteHelper";
 import * as gameObjects from "../objects";
 
 export default class Setup extends Phaser.State {
@@ -12,58 +11,37 @@ export default class Setup extends Phaser.State {
     create() {
 
         this.objects = [];
-        this.enemies = this.game.add.physicsGroup();
+        this.game.enemies = this.game.add.physicsGroup();
 
         this.game.add.sprite(0,0,'grid');
         this.btnDownSound = this.add.sound('menuDown');
 
-        console.log('width: ' + this.game.world.width)
-        console.log('height: ' + this.game.world.height)
+        console.log('width: ' + this.game.world.width);
+        console.log('height: ' + this.game.world.height);
 
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
 
         this.game.stage.backgroundColor = 0x000000;
 
-        this.drawPlacedItems();
+        this.game.gameData.placedItems.forEach((it) => {
+          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
+        });
 
         this.drawInputs();
 
     }
 
-    drawPlacedItems() {
-        let gameData = this.game.gameData;
-
-        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret' || it.type === 'turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'Wall' || it.type === 'wall');
-
-        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
-    }
-
-    makeTurret(x, y) {
-        new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies);
-    }
-
-    makeWall(x, y) {
-        new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
-    }
-
     drawInputs() {
 
-        SpriteHelper.drawTurret(this.game, 0, 0, () => {
-            console.log("making turret");
-            this.placeTurretMode = true;
-
-            console.log("input is at " + this.game.input.position.x, + "," + this.game.input.position.y);
-
-            this.curTurret = SpriteHelper.drawTurret(this.game, this.game.input.x, this.game.input.y);
-        });
-
+        var turret = new gameObjects["Turret"](this.game, 0, 0, [this.objects]);
+        turret.base.events.onInputDown.add((sprite, pointer) => {
+          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]).base;
+        }, this);
+        turret.gun.events.onInputDown.add((sprite, pointer) => {
+          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]).base;
+        }, this);
         this.drawColor(0x0000FF, 0, 64, () => {
-            console.log("making wall");
-            this.placeWallMode = true;
-
             this.curWall = this.drawColor(0x0000FF, this.game.input.x - 32, this.game.input.y - (64+32));
         });
 
@@ -101,7 +79,6 @@ export default class Setup extends Phaser.State {
 
         if (this.game.input.activePointer.isDown)
         {
-            console.log('down!')
             if (this.curTurret) {
                 this.curTurret.x = this.game.input.x;
                 this.curTurret.y = this.game.input.y;
@@ -136,7 +113,7 @@ export default class Setup extends Phaser.State {
                     }))
                 }
 
-                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects], this.enemies);
+                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects]);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
@@ -152,7 +129,7 @@ export default class Setup extends Phaser.State {
                     type: 'Wall',
                     x: gridX,
                     y: gridY
-                })
+                });
 
                 var wall = new gameObjects["Wall"](this.game, gridX*64, gridY*64, [this.objects]);
             }

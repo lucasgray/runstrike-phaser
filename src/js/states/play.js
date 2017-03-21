@@ -1,9 +1,9 @@
 import * as easystar from "easystarjs";
 import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
-import SpriteHelper from "../helpers/SpriteHelper";
 import * as gameObjects from "../objects";
 import * as missions from "../missions";
+import * as inputHandlers from "../handlers";
 
 export default class Play extends Phaser.State {
 
@@ -22,20 +22,15 @@ export default class Play extends Phaser.State {
         this.objects = [];
         this.lastCalculation = 0;
 
-        this.enemies = this.game.add.physicsGroup();
+        this.game.inputHandler = ()=>'';
 
-
-        this.game.stage.backgroundColor = 0x000000;
-
-        this.setupGlobalListeners();
+        this.game.enemies = this.game.add.physicsGroup();
 
         this.setupGrid();
 
         this.drawHealth();
 
         this.drawInput();
-
-        this.drawPlacedItems();
 
         // this.drawInventory();
 
@@ -61,8 +56,9 @@ export default class Play extends Phaser.State {
             grid.push(new Array(x).fill(0));
         });
 
-        this.game.gameData.placedItems.forEach((i) => {
-           grid[i.y][i.x] = 1;
+        this.game.gameData.placedItems.forEach((it) => {
+          grid[it.y][it.x] = 1;
+          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
         });
 
         easystar.setGrid(grid);
@@ -90,25 +86,7 @@ export default class Play extends Phaser.State {
     }
 
     drawInput() {
-        // var wallIcon = game.add.sprite(90, 10, 'wall_icon');
-        // wallIcon.scale.setTo(1,1);
-        // wallIcon.inputEnabled = true;
-        // wallIcon.events.onInputDown.add(wallListener, this);
-
-        var hackIcon = this.game.add.sprite(90, 160, 'hack_icon');
-        hackIcon.scale.setTo(1, 1);
-        hackIcon.inputEnabled = true;
-        hackIcon.events.onInputDown.add(this.hackListener, this);
-
-        var bombIcon = this.game.add.sprite(90, 310, 'bomb_icon');
-        bombIcon.scale.setTo(1, 1);
-        bombIcon.inputEnabled = true;
-        bombIcon.events.onInputDown.add(this.bombListener, this);
-        // var iconMask = game.make.bitmapData(128,128);
-        // iconMask.circle(64,64,64);
-        // iconMask.alphaMask('wall_icon');
-        // var wallIcon = game.add.sprite(90, 10, iconMask);
-        // wallIcon.scale.setTo(.75,.75);
+        Object.keys(inputHandlers).forEach((ih,index) => new inputHandlers[ih](this.game, 90, 310 + (90 * index)));
 
         this.btnDownSound = this.add.sound('menuDown');
         Buttons.makeButton(
@@ -125,60 +103,14 @@ export default class Play extends Phaser.State {
         );
     }
 
-    drawPlacedItems() {
-        let gameData = this.game.gameData;
-
-        let turrets = gameData.placedItems.filter((it) => it.type === 'Turret' || it.type === 'turret');
-        let walls = gameData.placedItems.filter((it) => it.type === 'Wall' || it.type === 'wall');
-
-        walls.forEach((it) => new gameObjects["Wall"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]));
-        turrets.forEach((it) => new gameObjects["Turret"](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects], this.enemies));
-    }
-
-    hackListener() {
-        console.log('hack!');
-        this.inputMode = 'hack';
-    }
-
-    bombListener() {
-        console.log('bomb!');
-        this.inputMode = 'bomb';
-    }
-
-    setupGlobalListeners() {
-        this.game.input.onTap.add((pointer, doubleTap) => {
-            if (this.inputMode === 'bomb') {
-
-                let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
-                explosion.anchor.setTo(.5, .5);
-                let explosionAnimation = explosion.animations.add('fly');
-                explosion.animations.play('fly', 30, false);
-
-                this.enemies.forEachAlive((sprite) => {
-                    let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
-
-                    //FIXME
-                    //for now we just kills em
-                    if (dist <= 50) {
-                        sprite.shot();
-                    }
-                });
-
-                explosionAnimation.onComplete.add(() => {
-                    explosion.destroy();
-                });
-            }
-        }, this);
-
-    }
-
     update() {
         this.objects.forEach((it) => it.update());
-        this.mission.update(this.enemies, this.objects);
+        this.mission.update(this.objects);
         this.game.easystar.calculate();
     }
 
     shutdown() {
         console.log("shut down called");
+        this.mission.shutdown();
     }
 }

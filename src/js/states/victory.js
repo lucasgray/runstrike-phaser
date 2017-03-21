@@ -1,7 +1,6 @@
 import Buttons from "../extensions/Buttons";
-import * as missions from "../missions";
 
-export default class Menu extends Phaser.State {
+export default class Victory extends Phaser.State {
 
     create() {
 
@@ -12,28 +11,12 @@ export default class Menu extends Phaser.State {
         this.title = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY-200,
-            "Select Mission", {
+            "Victory!", {
             font: '50px Joystix',
             fill: 'white',
             align: 'center'
         });
         this.title.anchor.setTo(0.5);
-
-        Object.keys(missions).forEach((mission, index) => {
-          Buttons.makeButton(
-              this.game,
-              this.game.world.centerX,
-              this.game.world.centerY + (70 * index),
-              this.game.width * 0.8,
-              60,
-              this.btnDownSound,
-              mission, ()=>{
-                  console.log("asking to play a mission!");
-                  this.game.mission = mission;
-                  this.state.start('Play');
-              }
-          );
-        });
 
         Buttons.makeButton(
             this.game,
