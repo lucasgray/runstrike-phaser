@@ -2,7 +2,7 @@ import EnemyObject from './EnemyObject';
 
 export default class Turret extends EnemyObject {
 
-    constructor(game, x, y, groups, active) {
+    constructor(game, x, y, groups) {
         super();
         let sprite = game.add.sprite(x, y, 'drone');
         sprite.animations.add('fly');
@@ -30,6 +30,7 @@ export default class Turret extends EnemyObject {
 
         if(curYCell > 14){
             console.log('out of bounds!');
+            this.game.state.start('Defeat');
         } else {
             //640x960 find path to bottom left of the screen
             this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {

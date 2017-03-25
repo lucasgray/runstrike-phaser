@@ -99,7 +99,7 @@ export default class Setup extends Phaser.State {
                 console.log("placing turret at " + gridX + "," + gridY);
 
                 let turretPayload = {
-                    type: 'turret',
+                    type: 'Turret',
                     x: gridX,
                     y: gridY
                 };
