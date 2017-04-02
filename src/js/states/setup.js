@@ -52,9 +52,22 @@ export default class Setup extends Phaser.State {
             100,
             20,
             this.btnDownSound,
-            'back', ()=>{
-                console.log("asking to go to menu");
-                this.state.start('Menu');
+            'Back', ()=>{
+                console.log("asking to go back");
+                this.state.start('Missions');
+            }
+        );
+
+        Buttons.makeButton(
+            this.game,
+            this.game.width - 80,
+            this.game.height - 40,
+            100,
+            20,
+            this.btnDownSound,
+            'Defend', ()=>{
+                console.log("asking to defend");
+                this.state.start('Play');
             }
         );
     }
