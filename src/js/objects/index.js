@@ -15,3 +15,5 @@ export {default as Drone} from './Drone';
 
 //Enemy Objects, inherits from StoryObject
 export {default as Dialogue} from './Dialogue';
+export {default as Intro} from './Intro';
+export {default as Caption} from './Caption';

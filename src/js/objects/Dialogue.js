@@ -19,7 +19,6 @@ export default class Dialogue extends StoryObject {
       if(this.alive){
         if(Date.now() >= this.showUntil){
           this.destroy();
-          this.options.game.enemies.remove(this);
         }
       }
     }
