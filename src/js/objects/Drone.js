@@ -16,15 +16,14 @@ export default class Turret extends EnemyObject {
         }, this);
         sprite.randomVelocity = 50 + (Math.random() * 30);
         sprite.shot = this.shot;
-        this.sprite = sprite;
         this.game = game;
         this.lastCalculation = 0;
         if(groups){
           this.addToGroup(groups);
         }
 
-        let curXCell = Math.floor((this.sprite.x / 640) * 10);
-        let curYCell = Math.floor((this.sprite.y / 960) * 15);
+        let curXCell = Math.floor((this.x / 640) * 10);
+        let curYCell = Math.floor((this.y / 960) * 15);
 
         console.log(curXCell + ' | ' + curYCell);
 
@@ -44,15 +43,18 @@ export default class Turret extends EnemyObject {
             });
         }
 
+        sprite.update = this.update;
+
         return sprite;
     }
 
     update(){
-        if (!this.sprite.lastMove && this.sprite.alive && this.sprite.path) {
+      console.trace();
+        if (!this.lastMove && this.alive && this.path) {
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
 
-            var path = this.sprite.path;
+            var path = this.path;
             var first = path[0];
             var second = path[1];
 
@@ -60,11 +62,11 @@ export default class Turret extends EnemyObject {
             var xDirection = second.x - first.x;
 
             //second.y * 64 to convert to cells
-            if (this.sprite.body.y >= (second.y * 64)) {
+            if (this.body.y >= (second.y * 64)) {
                 // console.log("we made it! altering path");
 
                 path = path.slice(1);
-                this.sprite.path = path;
+                this.path = path;
 
                 first = path[0];
                 second = path[1];
@@ -75,15 +77,15 @@ export default class Turret extends EnemyObject {
             let yToGo = (second.y * 64 + 32) ;//+ (Math.random() * 20);
 
 
-            let velocity = this.sprite.randomVelocity;
+            let velocity = this.randomVelocity;
 
             if (yToGo >= this.game.height - 64) {
-                this.sprite.lastMove = true;
+                this.lastMove = true;
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this.sprite, xToGo, yToGo, velocity);
-            this.game.physics.arcade.rotateToXY(this.sprite, xToGo, yToGo, 90); //rotate with a 90 deg offset
+            this.game.physics.arcade.moveToXY(this, xToGo, yToGo, velocity);
+            this.game.physics.arcade.rotateToXY(this, xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
             if(this.body.y > this.game.height){
