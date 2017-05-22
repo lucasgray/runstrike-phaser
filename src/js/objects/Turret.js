@@ -5,29 +5,30 @@ export default class Turret extends MapObject {
 
     constructor(game, x, y, groups) {
         super();
-        let g = game.add.sprite(x+35, y+33, 'turret-bottom');
+        let base = game.add.sprite(x+35, y+33, 'turret-bottom');
         // g.anchor.y = -.1;
-        g.inputEnabled = true;
-        g.anchor.setTo(0.5);
+        base.inputEnabled = true;
+        base.anchor.setTo(0.5);
 
-        let h = game.add.sprite(0, -15, 'turret-top');
-        h.anchor.setTo(0.5);
-        h.inputEnabled = true;
-        g.addChild(h);
+        let gun = game.add.sprite(0, -15, 'turret-top');
+        gun.anchor.setTo(0.5);
+        gun.inputEnabled = true;
+        base.addChild(gun);
+        base.gun = gun;
 
-        this.base = g;
-        this.gun = h;
-        this.game = game;
-        this.lastShot = 0;
-        this.bulletsGroup = this.game.add.physicsGroup();
-        this.addToGroup(groups);
+        base.game = game;
+        base.lastShot = 0;
+        base.bulletsGroup = base.game.add.physicsGroup();
 
-        return this;
+        base.update = this.update;
+        base.shootBulletFromTo = this.shootBulletFromTo;
+
+        return base;
     }
 
     update(){
       console.log(this.lastCheck);
-      let center = {x: this.base.x - 2, y: this.base.y - 1};
+      let center = {x: this.x - 2, y: this.y - 1};
       if(this.lastCheck && Date.now() - this.lastCheck >= 20){
         console.log('now!');
         let spriteDistances = this.game.enemies.hash.map((sprite) => {
@@ -45,7 +46,7 @@ export default class Turret extends MapObject {
             //TODO properly figure out where that sprite was going
             let fudge = 50;
             //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
-            this.game.physics.arcade.rotateToXY(this.base, rslt.sprite.x, rslt.sprite.y+fudge, 90); //rotate with a 90 deg offset
+            this.game.physics.arcade.rotateToXY(this, rslt.sprite.x, rslt.sprite.y+fudge, 90); //rotate with a 90 deg offset
 
             if (Date.now() - this.lastShot > 1000 && rslt.distance <= 300) {
               console.log('fire!' + rslt.distance);

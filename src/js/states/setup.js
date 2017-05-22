@@ -35,11 +35,11 @@ export default class Setup extends Phaser.State {
     drawInputs() {
 
         var turret = new gameObjects["Turret"](this.game, 0, 0, [this.objects]);
-        turret.base.events.onInputDown.add((sprite, pointer) => {
-          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]).base;
+        turret.events.onInputDown.add((sprite, pointer) => {
+          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
         }, this);
         turret.gun.events.onInputDown.add((sprite, pointer) => {
-          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]).base;
+          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
         }, this);
         this.drawColor(0x0000FF, 0, 64, () => {
             this.curWall = this.drawColor(0x0000FF, this.game.input.x - 32, this.game.input.y - (64+32));
@@ -92,6 +92,8 @@ export default class Setup extends Phaser.State {
 
         if (this.game.input.activePointer.isDown)
         {
+          console.log('moving turret');
+          console.log(this.curTurret);
             if (this.curTurret) {
                 this.curTurret.x = this.game.input.x;
                 this.curTurret.y = this.game.input.y;
