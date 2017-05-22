@@ -29,7 +29,6 @@ export default class Turret extends EnemyObject {
 
         if(curYCell > 14){
             console.log('out of bounds!');
-            this.game.state.start('Defeat');
         } else {
             //640x960 find path to bottom left of the screen
             this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
@@ -89,6 +88,9 @@ export default class Turret extends EnemyObject {
             this.game.physics.arcade.rotateToXY(this, xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
+            if(this.body.y > this.game.height){
+              this.game.state.start('Defeat');
+            }
         }
     }
 

@@ -10,17 +10,24 @@ export default class Play extends Phaser.State {
     preload() {
         this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
         this.graphics = this.game.add.graphics(0, 0);
+        this.mission = new missions[this.game.mission](this.game);
+        //TODO: look through all missions and add the sprites used!
+        this.mission.enemies.forEach((it) => {
+          console.log(it.image);
+          if(it.image){
+            console.log('there is an image!');
+            if(!this.game.cache.checkImageKey(it.image)){
+              console.log('...and it wasnt cached yet!');
+              this.game.load.image(it.image, it.imageSrc, it.imageSize.x, it.imageSize.y);
+            }
+          }
+        });
     }
 
     create() {
-        this.mission = new missions[this.game.mission](this.game);
         this.game.add.sprite(0,0,'grid');
         this.cellWidth = this.game.world.width / 10;
         this.cellHeight = this.game.world.height / 15;
-
-        //Collection of all GameObjects created for the game
-        this.objects = [];
-        this.lastCalculation = 0;
 
         this.game.inputHandler = ()=>'';
 
@@ -31,12 +38,6 @@ export default class Play extends Phaser.State {
         this.drawHealth();
 
         this.drawInput();
-
-        // this.drawInventory();
-
-        // this.drawBase();
-
-        //??
 
     }
 
@@ -58,7 +59,7 @@ export default class Play extends Phaser.State {
 
         this.game.gameData.placedItems.forEach((it) => {
           grid[it.y][it.x] = 1;
-          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
+          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight);
         });
 
         easystar.setGrid(grid);
@@ -105,8 +106,7 @@ export default class Play extends Phaser.State {
     }
 
     update() {
-        this.objects.forEach((it) => it.update());
-        this.mission.update(this.objects);
+        this.mission.update();
         this.game.easystar.calculate();
     }
 
