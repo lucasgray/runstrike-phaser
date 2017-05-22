@@ -49,7 +49,6 @@ export default class Turret extends EnemyObject {
     }
 
     update(){
-      console.trace();
         if (!this.lastMove && this.alive && this.path) {
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
