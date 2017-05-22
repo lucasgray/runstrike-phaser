@@ -7,8 +7,8 @@ export default class Intro extends StoryObject {
         //buid caption box
         //image
         let g = options.game.add.graphics(0, 0);
-        g.lineStyle(2, 0x0000FF, 0.5);
-        g.beginFill(0x0000FF, 1);
+        g.lineStyle(2, 0x002200, 0.5);
+        g.beginFill(0x002200, 1);
         g.drawRect(0, 0, options.game.width, options.game.height); //no anchor, need to move it!
         g.endFill();
         g.inputEnabled = true;
