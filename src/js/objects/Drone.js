@@ -41,7 +41,6 @@ export default class Turret extends EnemyObject {
                 }
                 sprite.lastCalculation = Date.now();
             });
-            sprite.game.easystar.calculate();
         }
 
         sprite.update = this.update;
