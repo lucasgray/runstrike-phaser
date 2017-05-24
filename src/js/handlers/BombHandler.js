@@ -6,7 +6,10 @@ export default class BombHandler extends InputHandler {
       var bombIcon = game.add.sprite(x, y, 'bomb_icon');
       bombIcon.scale.setTo(1, 1);
       bombIcon.inputEnabled = true;
-      bombIcon.events.onInputDown.add(this.inputListener, this);
+      bombIcon.events.onInputDown.add(this.inputListener, bombIcon);
+
+      bombIcon.inputListener = this.inputListener;
+      bombIcon.action = this.action;
     }
 
     update(){

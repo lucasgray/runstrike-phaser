@@ -6,7 +6,10 @@ export default class HackHandler extends InputHandler {
       var hackIcon = game.add.sprite(x, y, 'hack_icon');
       hackIcon.scale.setTo(1, 1);
       hackIcon.inputEnabled = true;
-      hackIcon.events.onInputDown.add(this.inputListener, this);
+      hackIcon.events.onInputDown.add(this.inputListener, hackIcon);
+
+      hackIcon.inputListener = this.inputListener;
+      hackIcon.action = this.action;
     }
 
     update(){
