@@ -18,12 +18,20 @@ export default class BombHandler extends InputHandler {
     inputListener(){
       this.firstEvent = true;
       this.game.input.onTap.removeAll();
+      if(this.game.activeInputHandler){
+        this.game.activeInputHandler.border.kill();
+      }
       this.game.input.onTap.add(this.action, this);
     }
 
     action(pointer, doubleTap, sprite){
       if(this.firstEvent){
         this.firstEvent = false;
+        this.game.activeInputHandler = this;
+        this.border = this.game.add.graphics(0, 0);
+        this.border.lineStyle(3, 0xFF69B4, 1);
+        this.border.drawRect(0, 0, this.texture.width, this.texture.height);
+        this.addChild(this.border);
         return;
       }
       let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
