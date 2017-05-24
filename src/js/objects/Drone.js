@@ -11,19 +11,19 @@ export default class Turret extends EnemyObject {
         sprite.anchor.setTo(0.5, 0.5);
         sprite.inputEnabled = true;
         //TODO: Fix events
+        sprite.game = game;
         sprite.events.onInputDown.add((sprite, pointer) => {
-          this.game.input.onTap.dispatch(pointer, false, sprite);
-        }, this);
+          sprite.game.input.onTap.dispatch(pointer, false, sprite);
+        }, sprite);
         sprite.randomVelocity = 50 + (Math.random() * 30);
         sprite.shot = this.shot;
-        this.game = game;
-        this.lastCalculation = 0;
+        sprite.lastCalculation = 0;
         if(groups){
           this.addToGroup(groups);
         }
 
-        let curXCell = Math.floor((this.x / 640) * 10);
-        let curYCell = Math.floor((this.y / 960) * 15);
+        let curXCell = Math.floor((sprite.x / 640) * 10);
+        let curYCell = Math.floor((sprite.y / 960) * 15);
 
         console.log(curXCell + ' | ' + curYCell);
 
@@ -31,7 +31,7 @@ export default class Turret extends EnemyObject {
             console.log('out of bounds!');
         } else {
             //640x960 find path to bottom left of the screen
-            this.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+            sprite.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
                 if (!path) {
                     console.log("The path to the destination point was not found.");
                 } else {
@@ -39,8 +39,9 @@ export default class Turret extends EnemyObject {
                     path.forEach((p) => console.log(JSON.stringify(p)));
                     sprite.path = path;
                 }
-                this.lastCalculation = Date.now();
+                sprite.lastCalculation = Date.now();
             });
+            sprite.game.easystar.calculate();
         }
 
         sprite.update = this.update;
