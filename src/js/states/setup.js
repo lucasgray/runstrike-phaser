@@ -23,7 +23,7 @@ export default class Setup extends Phaser.State {
 
         this.game.stage.backgroundColor = 0x000000;
 
-        this.game.gameData.placedItems.filter(it => it.mission === this.game.mission).forEach((it) => {
+        this.game.gameData.placedItems.filter(it => it.mission === this.game.mission.constructor.name).forEach((it) => {
           new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
         });
 
@@ -116,7 +116,7 @@ export default class Setup extends Phaser.State {
                     type: 'Turret',
                     x: gridX,
                     y: gridY,
-                    mission: this.game.mission
+                    mission: this.game.mission.constructor.name
                 };
 
                 this.game.gameData.placedItems.push(turretPayload);
