@@ -12,27 +12,21 @@ export default class Setup extends Phaser.State {
         this.objects = [];
         this.game.enemies = this.game.add.physicsGroup();
 
-        this.game.add.sprite(0,0,'grid');
+        this.game.add.sprite(this.game.mission.gridSize.offsetX,0,'grid');
         this.btnDownSound = this.add.sound('menuDown');
-
-        console.log('width: ' + this.game.world.width);
-        console.log('height: ' + this.game.world.height);
-
-        this.cellWidth = this.game.world.width / 10;
-        this.cellHeight = this.game.world.height / 15;
 
         this.game.stage.backgroundColor = 0x000000;
 
+
+        console.log(this.game.gameData.placedItems);
         this.game.gameData.placedItems.filter(it => it.mission === this.game.mission.constructor.name).forEach((it) => {
-          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight, [this.objects]);
+          new gameObjects[it.type](this.game, (this.game.mission.gridSize.offsetX + (it.x * this.game.mission.gridSize.cellWidth)), it.y * this.game.mission.gridSize.cellHeight, [this.objects]);
         });
 
         this.drawInputs();
-
     }
 
     drawInputs() {
-
         var turret = new gameObjects["Turret"](this.game, 0, 0, [this.objects]);
         turret.events.onInputDown.add((sprite, pointer) => {
           this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
@@ -107,8 +101,20 @@ export default class Setup extends Phaser.State {
                 this.curTurret.destroy();
                 this.curTurret = null;
 
-                let gridX = Math.floor(this.game.input.x / 64);
-                let gridY = Math.floor(this.game.input.y / 64);
+                let gridX = Math.floor((this.game.input.x - this.game.mission.gridSize.offsetX) / this.game.mission.gridSize.cellWidth);
+                if(gridX < 0){
+                  gridX = 0;
+                }
+                if(gridX >= this.game.mission.gridSize.x){
+                  gridX = this.game.mission.gridSize.x-1;
+                }
+                let gridY = Math.floor(this.game.input.y / this.game.mission.gridSize.cellHeight);
+                if(gridY < 0){
+                  gridY = 0;
+                }
+                if(gridY >= this.game.mission.gridSize.y){
+                  gridY = this.game.mission.gridSize.y -1;
+                }
 
                 console.log("placing turret at " + gridX + "," + gridY);
 
@@ -121,6 +127,8 @@ export default class Setup extends Phaser.State {
 
                 this.game.gameData.placedItems.push(turretPayload);
 
+                console.log(this.game.gameData.placedItems);
+
                 if (this.game.gameData.isReactNative) {
                     window.postMessage(JSON.stringify({
                         type: "PLACE_ITEM",
@@ -128,15 +136,27 @@ export default class Setup extends Phaser.State {
                     }))
                 }
 
-                var turret = new gameObjects["Turret"](this.game, gridX * 64, gridY * 64, [this.objects]);
+                var turret = new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellHeight, [this.objects]);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
                 this.curWall.destroy();
                 this.curWall = null;
 
-                let gridX = Math.floor(this.game.input.x / 64);
-                let gridY = Math.floor(this.game.input.y / 64);
+                let gridX = Math.floor((this.game.input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
+                if(gridX < 0){
+                  gridX = 0;
+                }
+                if(gridX >= this.game.mission.gridSize.x){
+                  gridX = this.game.mission.gridSize.x-1;
+                }
+                let gridY = Math.floor(this.game.input.y / this.game.mission.gridSize.cellHeight);
+                if(gridY < 0){
+                  gridY = 0;
+                }
+                if(gridY >= this.game.mission.gridSize.y){
+                  gridY = this.game.mission.gridSize.y -1;
+                }
 
                 console.log("placing wall at " + gridX + "," + gridY);
 
@@ -147,7 +167,9 @@ export default class Setup extends Phaser.State {
                     mission: this.game.mission
                 });
 
-                var wall = new gameObjects["Wall"](this.game, gridX*64, gridY*64, [this.objects]);
+                console.log(this.game.gameData.placedItems);
+
+                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellheight, [this.objects]);
             }
         }
 
