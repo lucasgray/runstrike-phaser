@@ -16,11 +16,17 @@ export default class Mission {
       this.game.inputHandler = ()=>'';
     }
 
+    calculateGridSize(){
+      this.gridSize.cellWidth = Math.floor((this.game.width * .8) / this.gridSize.x);
+      this.gridSize.cellHeight = Math.floor((this.game.height * .8) / this.gridSize.y);
+      this.gridSize.width = this.gridSize.x * this.gridSize.cellWidth;
+      this.gridSize.height = this.gridSize.y * this.gridSize.cellHeight;
+      this.gridSize.offsetX = (this.game.width - this.gridSize.width) / 2;
+    }
+
     createGrid(){
       this.game.enemies = this.game.add.physicsGroup();
-      this.game.add.sprite(0,0,'grid');
-      this.cellWidth = (this.game.world.width * .8) / this.gridSize.x;
-      this.cellHeight = (this.game.world.height * .8) / this.gridSize.y;
+      this.game.add.sprite(this.gridSize.offsetX, 0,'grid');
       this.setupGrid();
     }
 
@@ -34,7 +40,7 @@ export default class Mission {
 
         this.game.gameData.placedItems.forEach((it) => {
           grid[it.y][it.x] = 1;
-          new gameObjects[it.type](this.game, it.x * this.cellWidth, it.y * this.cellHeight);
+          new gameObjects[it.type](this.game, it.x * this.gridSize.cellWidth, it.y * this.gridSize.cellHeight);
         });
 
         easystar.setGrid(grid);

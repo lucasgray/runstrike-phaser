@@ -5,10 +5,9 @@ export default class Skirmish extends Mission {
     constructor(game) {
       super(game);
       this.game.stage.backgroundColor = 0x002200;
-      this.gridSize = {x: 20, y:30, width: this.game.width * .8, height: this.game.height * .8};
-      this.gridSize.cellWidth = this.gridSize.width / this.gridSize.x;
-      this.gridSize.cellHeight = this.gridSize.height / this.gridSize.y;
-      this.game.create.grid('grid', this.gridSize.width, this.gridSize.height, this.gridSize.cellWidth, this.gridSize.cellHeight, '#ffffff');
+      this.gridSize = {x: 20, y:30};
+      this.calculateGridSize();
+      this.game.create.grid('grid', this.gridSize.width + 1, this.gridSize.height + 1, this.gridSize.cellWidth, this.gridSize.cellHeight, '#ffffff');
       this.enemies = [
         { type: 'Intro', delay: 0, showFor: 1000, size: 'large', at: 100, image: 'clock', imageSrc:'img/clock.png', imageSize: {x:128,y:128}, messages: ['','The','Droids','Are','Coming!']},
         { type: 'Drone', delay: 1000, size: 'large', at: 100},
