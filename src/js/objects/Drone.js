@@ -4,10 +4,13 @@ export default class Turret extends EnemyObject {
 
     constructor(game, x, y, groups) {
         super();
+        let defaultSize = {width: 128, height: 128};
+        let scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
+        let scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
         let sprite = game.add.sprite(x + game.mission.gridSize.offsetX, y, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
-        sprite.scale.setTo(0.25, 0.25);
+        sprite.scale.setTo(scaleX, scaleY);
         sprite.anchor.setTo(0.5, 0.5);
         sprite.inputEnabled = true;
         //TODO: Fix events
