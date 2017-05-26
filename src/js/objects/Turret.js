@@ -5,12 +5,16 @@ export default class Turret extends MapObject {
 
     constructor(game, x, y, groups) {
         super();
-        let base = game.add.sprite(x+35, y+33, 'turret-bottom');
+        let defaultSize = {width: 64, height: 64};
+        let scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
+        let scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
+        let base = game.add.sprite(x + ((defaultSize.width * scaleX) / 2), y + ((defaultSize.height * scaleY) / 2), 'turret-bottom');
         // g.anchor.y = -.1;
         base.inputEnabled = true;
-        base.anchor.setTo(0.5);
+        base.anchor.setTo(0.5, 0.5);
+        base.scale.setTo(scaleX, scaleY);
 
-        let gun = game.add.sprite(0, -15, 'turret-top');
+        let gun = game.add.sprite(0, -(game.mission.gridSize.cellHeight / 8), 'turret-top');
         gun.anchor.setTo(0.5);
         gun.inputEnabled = true;
         base.addChild(gun);
