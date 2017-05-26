@@ -29,7 +29,7 @@ export default class Menu extends Phaser.State {
               this.btnDownSound,
               mission, ()=>{
                   console.log("asking to play a mission!");
-                  this.game.mission = mission;
+                  this.game.mission = new missions[mission](this.game);
                   this.state.start('Setup');
               }
           );
