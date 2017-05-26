@@ -35,7 +35,7 @@ export default class Setup extends Phaser.State {
           this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
         }, this);
         this.drawColor(0x0000FF, 0, 64, () => {
-            this.curWall = this.drawColor(0x0000FF, this.game.input.x - 32, this.game.input.y - (64+32));
+            this.curWall = this.drawColor(0x0000FF, this.game.input.x - (this.game.mission.gridSize.cellWidth / 2), this.game.input.y - (this.game.mission.gridSize.cellheight * 1.5));
         });
 
         Buttons.makeButton(
@@ -69,7 +69,7 @@ export default class Setup extends Phaser.State {
         var g = this.game.add.graphics(0, 0);
         g.lineStyle(2, color, 0.5);
         g.beginFill(color, 1);
-        g.drawRect(x, y, 64, 64); //no anchor, need to move it!
+        g.drawRect(x, y, this.game.mission.gridSize.cellWidth, this.game.mission.gridSize.cellHeight); //no anchor, need to move it!
         g.endFill();
 
         g.inputEnabled = true;
@@ -91,8 +91,8 @@ export default class Setup extends Phaser.State {
                 this.curTurret.x = this.game.input.x;
                 this.curTurret.y = this.game.input.y;
             } else if (this.curWall) {
-                this.curWall.x = this.game.input.x - 32;
-                this.curWall.y = this.game.input.y - 32;
+                this.curWall.x = this.game.input.x - (this.game.mission.gridSize.cellWidth / 2);
+                this.curWall.y = this.game.input.y - (this.game.mission.gridSize.cellWidth / 2);
             }
         } else {
             if (this.curTurret) {
@@ -169,7 +169,7 @@ export default class Setup extends Phaser.State {
 
                 console.log(this.game.gameData.placedItems);
 
-                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellheight, [this.objects]);
+                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellHeight, [this.objects]);
             }
         }
 
