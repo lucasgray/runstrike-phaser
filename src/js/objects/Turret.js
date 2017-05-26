@@ -27,10 +27,8 @@ export default class Turret extends MapObject {
     }
 
     update(){
-      console.log(this.lastCheck);
       let center = {x: this.x - 2, y: this.y - 1};
       if(this.lastCheck && Date.now() - this.lastCheck >= 20){
-        console.log('now!');
         let spriteDistances = this.game.enemies.hash.map((sprite) => {
             return {
                 distance: Math.abs(sprite.x - center.x) + Math.abs(sprite.y - center.y),
