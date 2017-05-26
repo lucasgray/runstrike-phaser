@@ -84,8 +84,10 @@ export default class Turret extends EnemyObject {
             this.game.physics.arcade.rotateToXY(this, this.game.mission.gridSize.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
-            if(this.body.y > this.game.mission.gridSize.height - (this.game.mission.gridSize.cellHeight / 2)){
-              this.game.state.start('Defeat');
+            if(this.alive){
+              if(this.body.y > this.game.mission.gridSize.height - (this.game.mission.gridSize.cellHeight / 2)){
+                this.game.state.start('Defeat');
+              }
             }
         }
     }
