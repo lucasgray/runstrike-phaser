@@ -101,27 +101,15 @@ export default class Setup extends Phaser.State {
                 this.curTurret.destroy();
                 this.curTurret = null;
 
-                let gridX = Math.floor((this.game.input.x - this.game.mission.gridSize.offsetX) / this.game.mission.gridSize.cellWidth);
-                if(gridX < 0){
-                  gridX = 0;
-                }
-                if(gridX >= this.game.mission.gridSize.x){
-                  gridX = this.game.mission.gridSize.x-1;
-                }
-                let gridY = Math.floor(this.game.input.y / this.game.mission.gridSize.cellHeight);
-                if(gridY < 0){
-                  gridY = 0;
-                }
-                if(gridY >= this.game.mission.gridSize.y){
-                  gridY = this.game.mission.gridSize.y -1;
-                }
+                let gridLoc = this.getGridLocation(this.game.input);
 
-                console.log("placing turret at " + gridX + "," + gridY);
+                console.log("placing turret at: " );
+                console.log(gridLoc);
 
                 let turretPayload = {
                     type: 'Turret',
-                    x: gridX,
-                    y: gridY,
+                    x: gridLoc.x,
+                    y: gridLoc.y,
                     mission: this.game.mission.constructor.name
                 };
 
@@ -136,42 +124,48 @@ export default class Setup extends Phaser.State {
                     }))
                 }
 
-                var turret = new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellHeight, [this.objects]);
+                var turret = new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
                 this.curWall.destroy();
                 this.curWall = null;
 
-                let gridX = Math.floor((this.game.input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
-                if(gridX < 0){
-                  gridX = 0;
-                }
-                if(gridX >= this.game.mission.gridSize.x){
-                  gridX = this.game.mission.gridSize.x-1;
-                }
-                let gridY = Math.floor(this.game.input.y / this.game.mission.gridSize.cellHeight);
-                if(gridY < 0){
-                  gridY = 0;
-                }
-                if(gridY >= this.game.mission.gridSize.y){
-                  gridY = this.game.mission.gridSize.y -1;
-                }
+                let gridLoc = this.getGridLocation(this.game.input);
 
-                console.log("placing wall at " + gridX + "," + gridY);
+                console.log("placing wall at: " );
+                console.log(gridLoc);
 
                 this.game.gameData.placedItems.push({
                     type: 'Wall',
-                    x: gridX,
-                    y: gridY,
+                    x: gridLoc.x,
+                    y: gridLoc.y,
                     mission: this.game.mission
                 });
 
                 console.log(this.game.gameData.placedItems);
 
-                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridX * this.game.mission.gridSize.cellWidth)), gridY * this.game.mission.gridSize.cellHeight, [this.objects]);
+                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
             }
         }
 
+    }
+
+    getGridLocation(input){
+      let gridX = Math.floor((input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
+      if(gridX < 0){
+        gridX = 0;
+      }
+      if(gridX >= this.game.mission.gridSize.x){
+        gridX = this.game.mission.gridSize.x-1;
+      }
+      let gridY = Math.floor(input.y / this.game.mission.gridSize.cellHeight);
+      if(gridY < 0){
+        gridY = 0;
+      }
+      if(gridY >= this.game.mission.gridSize.y){
+        gridY = this.game.mission.gridSize.y -1;
+      }
+      return {x: gridX, y: gridY};
     }
 }
