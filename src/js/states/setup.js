@@ -5,7 +5,6 @@ import * as gameObjects from "../objects";
 export default class Setup extends Phaser.State {
 
     preload() {
-        this.game.create.grid('grid', this.game.width, this.game.height, 64, 64, '#ffffff');
     }
 
     create() {
