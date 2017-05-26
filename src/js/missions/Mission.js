@@ -40,7 +40,7 @@ export default class Mission {
 
         this.game.gameData.placedItems.forEach((it) => {
           grid[it.y][it.x] = 1;
-          new gameObjects[it.type](this.game, it.x * this.gridSize.cellWidth, it.y * this.gridSize.cellHeight);
+          new gameObjects[it.type](this.game, this.gridSize.offsetX + (it.x * this.gridSize.cellWidth), it.y * this.gridSize.cellHeight);
         });
 
         easystar.setGrid(grid);
