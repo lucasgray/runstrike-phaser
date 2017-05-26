@@ -4,7 +4,7 @@ export default class Turret extends EnemyObject {
 
     constructor(game, x, y, groups) {
         super();
-        let sprite = game.add.sprite(x, y, 'drone');
+        let sprite = game.add.sprite(x + game.mission.gridSize.offsetX, y, 'drone');
         sprite.animations.add('fly');
         sprite.animations.play('fly', 30, true);
         sprite.scale.setTo(0.25, 0.25);
@@ -22,16 +22,14 @@ export default class Turret extends EnemyObject {
           this.addToGroup(groups);
         }
 
-        let curXCell = Math.floor((sprite.x / 640) * 10);
-        let curYCell = Math.floor((sprite.y / 960) * 15);
-
-        console.log(curXCell + ' | ' + curYCell);
+        let curXCell = Math.floor(((sprite.x - sprite.game.mission.gridSize.offsetX) / sprite.game.mission.gridSize.width) * sprite.game.mission.gridSize.x) - 1;
+        let curYCell = Math.floor((sprite.y / sprite.game.mission.gridSize.height) * sprite.game.mission.gridSize.y);
 
         if(curYCell > 14){
             console.log('out of bounds!');
         } else {
-            //640x960 find path to bottom left of the screen
-            sprite.game.easystar.findPath(curXCell, curYCell, 5, 14, (path) => {
+            //sprite.game.mission.gridSize.cellWidthxsprite.game.mission.gridSize.cellHeight find path to bottom left of the screen
+            sprite.game.easystar.findPath(curXCell, curYCell, ((sprite.game.mission.gridSize.x) / 2), (sprite.game.mission.gridSize.y - 1), (path) => {
                 if (!path) {
                     console.log("The path to the destination point was not found.");
                 } else {
@@ -57,11 +55,8 @@ export default class Turret extends EnemyObject {
             var first = path[0];
             var second = path[1];
 
-            //negative is left, positive is right.
-            var xDirection = second.x - first.x;
-
-            //second.y * 64 to convert to cells
-            if (this.body.y >= (second.y * 64)) {
+            //second.y * sprite.game.mission.gridSize.cellHeight to convert to cells
+            if (this.y >= (second.y * this.game.mission.gridSize.cellHeight)) {
                 // console.log("we made it! altering path");
 
                 path = path.slice(1);
@@ -72,22 +67,24 @@ export default class Turret extends EnemyObject {
             }
 
             //we want to move towards the CENTER of the next cell.. plus a little randomness
-            let xToGo = (second.x * 64 + 32) ;//+ (Math.random() * 20);
-            let yToGo = (second.y * 64 + 32) ;//+ (Math.random() * 20);
+            let xToGo = (second.x * this.game.mission.gridSize.cellWidth +  Math.floor(this.game.mission.gridSize.cellWidth / 2)) ;
+            let yToGo = (second.y * this.game.mission.gridSize.cellHeight +  Math.floor(this.game.mission.gridSize.cellHeight / 2));
 
+            console.log(this.x + ' | ' + this.y);
+            console.log(xToGo + ' | ' + yToGo);
 
             let velocity = this.randomVelocity;
 
-            if (yToGo >= this.game.height - 64) {
+            if (yToGo >= this.game.mission.gridSize.height - this.game.mission.gridSize.cellHeight) {
                 this.lastMove = true;
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this, xToGo, yToGo, velocity);
-            this.game.physics.arcade.rotateToXY(this, xToGo, yToGo, 90); //rotate with a 90 deg offset
+            this.game.physics.arcade.moveToXY(this, this.game.mission.gridSize.offsetX + xToGo, yToGo, velocity);
+            this.game.physics.arcade.rotateToXY(this, this.game.mission.gridSize.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
-            if(this.body.y > this.game.height){
+            if(this.body.y > this.game.mission.gridSize.height - (this.game.mission.gridSize.cellHeight / 2)){
               this.game.state.start('Defeat');
             }
         }
