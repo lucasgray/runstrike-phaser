@@ -45,7 +45,9 @@ export default class Play extends Phaser.State {
     }
 
     drawInput() {
-        Object.keys(inputHandlers).forEach((ih,index) => new inputHandlers[ih](this.game, 5, 300 + (90 * index)));
+        Object.keys(inputHandlers).forEach((ih,index) => {
+            new inputHandlers[ih](this.game, 5, 300 + (90 * index));
+        });
 
         this.btnDownSound = this.add.sound('menuDown');
         Buttons.makeButton(

@@ -1,4 +1,5 @@
 import Buttons from "../extensions/Buttons";
+
 export default class Menu extends Phaser.State {
 
     create() {
@@ -10,7 +11,7 @@ export default class Menu extends Phaser.State {
         this.title = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY-200,
-            "Your hideout", {
+            "WAR ROOM", {
             font: '50px Joystix',
             fill: 'white',
             align: 'center'
@@ -29,20 +30,6 @@ export default class Menu extends Phaser.State {
             this.debug.anchor.setTo(0.5);
         }
 
-
-        Buttons.makeButton(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY,
-            this.game.width * 0.8,
-            60,
-            this.btnDownSound,
-            'setup defenses', ()=>{
-                console.log("asking to setup");
-                this.state.start('Setup');
-            }
-        );
-
         Buttons.makeButton(
             this.game,
             this.game.world.centerX,
@@ -50,7 +37,7 @@ export default class Menu extends Phaser.State {
             this.game.width * 0.8,
             60,
             this.btnDownSound,
-            'defend', ()=>{
+            'missions', ()=>{
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
             }

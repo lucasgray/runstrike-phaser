@@ -17,7 +17,6 @@ export default class Setup extends Phaser.State {
 
         this.game.stage.backgroundColor = 0x000000;
 
-
         console.log(this.game.gameData.placedItems);
         this.game.gameData.placedItems.filter(it => it.mission === this.game.mission.constructor.name).forEach((it) => {
           new gameObjects[it.type](this.game, (this.game.mission.gridSize.offsetX + (it.x * this.game.mission.gridSize.cellWidth)), it.y * this.game.mission.gridSize.cellHeight, [this.objects]);
@@ -103,28 +102,9 @@ export default class Setup extends Phaser.State {
 
                 let gridLoc = this.getGridLocation(this.game.input);
 
-                console.log("placing turret at: " );
-                console.log(gridLoc);
+                this.game.dao.placeItem('Turret',  this.game.mission.constructor.name, gridLoc.x, gridLoc.y);
 
-                let turretPayload = {
-                    type: 'Turret',
-                    x: gridLoc.x,
-                    y: gridLoc.y,
-                    mission: this.game.mission.constructor.name
-                };
-
-                this.game.gameData.placedItems.push(turretPayload);
-
-                console.log(this.game.gameData.placedItems);
-
-                if (this.game.gameData.isReactNative) {
-                    window.postMessage(JSON.stringify({
-                        type: "PLACE_ITEM",
-                        payload: turretPayload
-                    }))
-                }
-
-                var turret = new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
+                new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
 
             } else if (this.curWall) {
                 console.log("placing wall!");
@@ -133,19 +113,9 @@ export default class Setup extends Phaser.State {
 
                 let gridLoc = this.getGridLocation(this.game.input);
 
-                console.log("placing wall at: " );
-                console.log(gridLoc);
+                this.game.dao.placeItem('Wall',  this.game.mission.constructor.name, gridLoc.x, gridLoc.y);
 
-                this.game.gameData.placedItems.push({
-                    type: 'Wall',
-                    x: gridLoc.x,
-                    y: gridLoc.y,
-                    mission: this.game.mission
-                });
-
-                console.log(this.game.gameData.placedItems);
-
-                var wall = new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
+                new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
             }
         }
 

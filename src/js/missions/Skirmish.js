@@ -5,7 +5,7 @@ export default class Skirmish extends Mission {
     constructor(game) {
       super(game);
       this.game.stage.backgroundColor = 0x002200;
-      this.gridSize = {x: 20, y:30};
+      this.gridSize = {x: 15, y:20};
       this.calculateGridSize();
       this.game.create.grid('grid', this.gridSize.width + 1, this.gridSize.height + 1, this.gridSize.cellWidth, this.gridSize.cellHeight, '#ffffff');
       this.enemies = [

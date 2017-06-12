@@ -2,5 +2,5 @@
 //export {default as InputHandler} from './InputHandler';
 
 //Game Objects, inherits from InputHandler
-export {default as BombHandler} from './BombHandler';
-export {default as HackHandler} from './HackHandler';
+export {default as CocktailHandler} from './CocktailHandler';
+export {default as GrenadeHandler} from './GrenadeHandler';

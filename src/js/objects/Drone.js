@@ -28,22 +28,16 @@ export default class Turret extends EnemyObject {
         let curXCell = Math.floor(((sprite.x - sprite.game.mission.gridSize.offsetX) / sprite.game.mission.gridSize.width) * sprite.game.mission.gridSize.x) - 1;
         let curYCell = Math.floor((sprite.y / sprite.game.mission.gridSize.height) * sprite.game.mission.gridSize.y);
 
-        if(curYCell > 14){
-            console.log('out of bounds!');
-        } else {
-            //sprite.game.mission.gridSize.cellWidthxsprite.game.mission.gridSize.cellHeight find path to bottom left of the screen
-            sprite.game.easystar.findPath(curXCell, curYCell, ((sprite.game.mission.gridSize.x) / 2), (sprite.game.mission.gridSize.y - 1), (path) => {
-                if (!path) {
-                    console.log("The path to the destination point was not found.");
-                } else {
-                    console.log("easystar success. ");
-                    path.forEach((p) => console.log(JSON.stringify(p)));
-                    sprite.path = path;
-                }
-                sprite.lastCalculation = Date.now();
-            });
-        }
-
+        sprite.game.easystar.findPath(curXCell, curYCell, Math.floor(sprite.game.mission.gridSize.x / 2), (sprite.game.mission.gridSize.y - 1), (path) => {
+            if (!path) {
+                console.log("The path to the destination point was not found.");
+            } else {
+                console.log("easystar success. ");
+                path.forEach((p) => console.log(JSON.stringify(p)));
+                sprite.path = path;
+            }
+            sprite.lastCalculation = Date.now();
+        });
         sprite.update = this.update;
 
         return sprite;
