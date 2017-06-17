@@ -10,7 +10,7 @@
     "build": "gulp build",
     "dev": "gulp",
     "postinstall": "bower install",
-    "heroku-postbuild": "`npm run build` && `node node_modules/http-server/bin/http-server ./builds/prod`"
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "babel-core": "^6.3.21",
