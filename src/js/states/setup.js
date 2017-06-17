@@ -40,7 +40,7 @@ export default class Setup extends Phaser.State {
         Buttons.makeButton(
             this.game,
             100,
-            this.game.height - 120,
+            this.game.height - 40,
             100,
             30,
             this.btnDownSound,
@@ -53,7 +53,7 @@ export default class Setup extends Phaser.State {
         Buttons.makeButton(
             this.game,
             this.game.width - 80,
-            this.game.height - 120,
+            this.game.height - 40,
             100,
             30,
             this.btnDownSound,

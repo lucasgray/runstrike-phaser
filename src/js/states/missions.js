@@ -38,7 +38,7 @@ export default class Menu extends Phaser.State {
         Buttons.makeButton(
             this.game,
             100,
-            this.game.height - 120,
+            this.game.height - 40,
             100,
             30,
             this.btnDownSound,
