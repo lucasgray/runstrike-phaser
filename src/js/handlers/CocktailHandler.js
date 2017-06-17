@@ -4,35 +4,47 @@ export default class CocktailHandler extends InputHandler {
     constructor(game, x, y) {
         super(game);
 
-        var graphics = game.add.graphics(x + 25,  y + 25);
-
+        var graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
         graphics.lineStyle(3, 0xF1235B);
+        graphics.drawCircle(0, 0, 60);
 
-        var whiteCircle = graphics.drawCircle(0, 0, 50);
-        var itemCircle = graphics.drawCircle(20, 20, 25);
+        var parentSprite = game.add.sprite(x, y, graphics.generateTexture());
+        parentSprite.anchor.set(.5);
+        graphics.destroy();
 
-        // whiteCircle.addChild(itemCircle);
-        // graphics.endFill();
-        // graphics.lineStyle(2, 0xF1235B);
-        // var circle = graphics.drawCircle(x + 40, y + 40, 25);
+        var cocktailIcon = game.add.sprite(0, 0, 'cocktail_icon');
+        cocktailIcon.anchor.set(0.5);
+        cocktailIcon.scale.setTo(.25, .25);
 
-        var text = game.add.text(20, 20, this.num(), {
+        parentSprite.addChild(cocktailIcon);
+
+        var graphics = game.add.graphics(x, y);
+        graphics.beginFill(0xffffff, 1);
+        graphics.lineStyle(3, 0xF1235B);
+        graphics.drawCircle(0, 0, 25);
+
+        var itemSprite = game.add.sprite(0, 0, graphics.generateTexture());
+        graphics.destroy();
+        itemSprite.anchor.set(.5);
+        parentSprite.addChild(itemSprite);
+        itemSprite.alignInParent(Phaser.BOTTOM_RIGHT);
+
+        var text = game.add.text(0, 0, this.num(), {
             font: '12px Joystix',
-            fill: "#F1235B"
+            fill: "#F1235B",
+            align: "center"
         });
-        itemCircle.addChild(text);
-        text.anchor.set(0.5);
+        text.anchor.set(.5);
+        itemSprite.addChild(text);
 
-        var cocktailIcon = game.add.sprite(x + 5, y, 'cocktail_icon');
-        cocktailIcon.scale.setTo(.2, .2);
-        cocktailIcon.inputEnabled = true;
-        cocktailIcon.events.onInputDown.add(this.inputListener, cocktailIcon);
+        parentSprite.inputEnabled = true;
+        parentSprite.events.onInputDown.add(this.inputListener, parentSprite);
 
-        cocktailIcon.inputListener = this.inputListener;
-        cocktailIcon.action = this.action;
-        cocktailIcon.text = text;
-        cocktailIcon.num = this.num;
+        parentSprite.inputListener = this.inputListener;
+        parentSprite.action = this.action;
+        parentSprite.text = text;
+        parentSprite.num = this.num;
     }
 
     update() {
@@ -42,20 +54,18 @@ export default class CocktailHandler extends InputHandler {
         this.firstEvent = true;
         this.game.input.onTap.removeAll();
         if (this.game.activeInputHandler) {
-            this.game.activeInputHandler.border.kill();
+            this.game.add.tween(this.game.activeInputHandler.scale)
+                .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
         }
         this.game.input.onTap.add(this.action, this);
+        this.game.add.tween(this.scale).to({ x: 1.2, y: 1.2}, 600, Phaser.Easing.Bounce.Out).start();
+        this.game.activeInputHandler = this;
     }
 
-    action(pointer, doubleTap, sprite) {
+    action(pointer, doubleTap) {
         if (this.firstEvent) {
             this.firstEvent = false;
             this.game.activeInputHandler = this;
-            this.border = this.game.add.graphics(0, 0);
-            this.border.lineStyle(3, 0xFF69B4);
-            this.border.beginFill(0xA4E1FD, 1);
-            this.border.drawCircle(25, 25, 50);
-            this.addChild(this.border);
             return;
         }
         let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');

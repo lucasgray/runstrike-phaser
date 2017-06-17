@@ -6,6 +6,19 @@ export default class Preload extends Phaser.State {
     create() {
         this.ready = false;
         this.game.renderer.renderSession.roundPixels = true;
+
+        Phaser.Sprite.prototype.alignInParent = function(position, offsetX, offsetY){
+            if(this.parent.name == "__world")return;
+
+            var s = this.parent.scale;
+            this.parent.scale.setTo(1);
+            this.alignIn(this.parent, position, offsetX, offsetY);
+
+            this.left -= this.parent.left + (this.parent.width*this.parent.anchor.x);
+            this.top -= this.parent.top + (this.parent.height*this.parent.anchor.y);
+
+            this.parent.scale = s;
+        };
     }
 
     preload() {
@@ -113,7 +126,7 @@ export default class Preload extends Phaser.State {
 
             let asMissionArray = _.values(this.game.gameData.placed_loot);
 
-            var flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
+            let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
 
             this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot,this.game.gameData.caps);
             this.game.gameData.placedItems = flat;
@@ -150,5 +163,7 @@ export default class Preload extends Phaser.State {
             return [];
         }
     }
+
+
 
 }

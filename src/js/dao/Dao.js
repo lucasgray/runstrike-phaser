@@ -41,8 +41,11 @@ export default class Dao {
             }))
         }
 
-        let i = _.find(this.game.gameData.inventoryItems, it => it.type = itemType.toLowerCase());
-        i.amount = i.amount - 1;
+        let i = _.find(this.game.gameData.inventoryItems, it => it.type === itemType.toLowerCase());
+
+        if (i) {
+            i.amount = i.amount - 1;
+        }
     }
 
     markMissionAsWon(missionName) {
