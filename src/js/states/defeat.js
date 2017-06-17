@@ -23,7 +23,7 @@ export default class Defeat extends Phaser.State {
             100,
             this.game.height - 40,
             100,
-            20,
+            40,
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");

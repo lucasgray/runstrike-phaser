@@ -42,7 +42,7 @@ export default class Setup extends Phaser.State {
             100,
             this.game.height - 40,
             100,
-            30,
+            40,
             this.btnDownSound,
             'Back', ()=>{
                 console.log("asking to go back");
@@ -55,7 +55,7 @@ export default class Setup extends Phaser.State {
             this.game.width - 80,
             this.game.height - 40,
             100,
-            30,
+            40,
             this.btnDownSound,
             'Defend', ()=>{
                 console.log("asking to defend");

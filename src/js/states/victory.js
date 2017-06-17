@@ -23,9 +23,9 @@ export default class Victory extends Phaser.State {
         Buttons.makeButton(
             this.game,
             100,
-            this.game.height - 120,
+            this.game.height - 40,
             100,
-            30,
+            40,
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");
