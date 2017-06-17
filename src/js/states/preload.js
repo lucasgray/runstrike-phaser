@@ -30,15 +30,7 @@ export default class Preload extends Phaser.State {
 
         this.load.setPreloadSprite(this.loaderBar);
 
-        this.load.audio('futureMusic', ['audio/music/baws-responder.ogg']);
-
-        this.load.atlasJSONArray('button', 'img/spritesheet/button.png', 'data/spritesheet/button.json');
-
-        this.load.spritesheet('walls', 'img/spritesheet/wall2.png', 16, 16);
-
-        this.load.audio('menuOver', ['audio/sound/menu-over.mp3']);
-        this.load.audio('menuOut', ['audio/sound/menu-out.mp3']);
-        this.load.audio('menuDown', ['audio/sound/menu-click.mp3']);
+        // this.load.audio('futureMusic', ['audio/music/baws-responder.ogg']);
 
         //new stuff
         this.game.load.image('cocktail_icon', 'img/cocktail.png', 200, 200); //128x128
