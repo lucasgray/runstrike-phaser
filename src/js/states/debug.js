@@ -47,9 +47,9 @@ export default class Debug extends Phaser.State {
         Buttons.makeButton(
             this.game,
             100,
-            this.game.height - 40,
+            this.game.height - 120,
             100,
-            20,
+            30,
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");

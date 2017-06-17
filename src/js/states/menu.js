@@ -43,17 +43,17 @@ export default class Menu extends Phaser.State {
             }
         );
 
-        Buttons.makeButton(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY+140,
-            this.game.width * .8,
-            60,
-            this.btnDownSound,
-            'debug data', ()=>{
-                console.log("going to data!");
-                this.state.start('Debug');
-            }
-        );
+        // Buttons.makeButton(
+        //     this.game,
+        //     this.game.world.centerX,
+        //     this.game.world.centerY+140,
+        //     this.game.width * .8,
+        //     60,
+        //     this.btnDownSound,
+        //     'debug data', ()=>{
+        //         console.log("going to data!");
+        //         this.state.start('Debug');
+        //     }
+        // );
     }
 }

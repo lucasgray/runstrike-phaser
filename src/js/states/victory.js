@@ -8,7 +8,7 @@ export default class Victory extends Phaser.State {
         this.graphics = this.game.add.graphics(0, 0);
         this.btnDownSound = this.add.sound('menuDown');
 
-        this.title = this.game.add.text(
+        let title = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY-200,
             "Victory!", {
@@ -16,14 +16,16 @@ export default class Victory extends Phaser.State {
             fill: 'white',
             align: 'center'
         });
-        this.title.anchor.setTo(0.5);
+        title.anchor.setTo(0.5);
+
+        let tweenDown = this.game.add.tween(title.scale).to({ x: 0.4, y: 0.8}, 200, Phaser.Easing.Exponential.Out);
 
         Buttons.makeButton(
             this.game,
             100,
-            this.game.height - 40,
+            this.game.height - 120,
             100,
-            20,
+            30,
             this.btnDownSound,
             'back', ()=>{
                 console.log("asking to go to menu");
