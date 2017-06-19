@@ -4,9 +4,11 @@ export default class Victory extends Phaser.State {
 
     create() {
 
-        this.game.music = this.game.add.audio('futureMusic');
-        this.graphics = this.game.add.graphics(0, 0);
-        this.btnDownSound = this.add.sound('menuDown');
+        this.game.backgroundMusic.pause();
+        this.game.musicPause = true;
+
+        let win = this.game.add.audio('win');
+        win.play();
 
         let title = this.game.add.text(
             this.game.world.centerX,
@@ -18,15 +20,13 @@ export default class Victory extends Phaser.State {
         });
         title.anchor.setTo(0.5);
 
-        let tweenDown = this.game.add.tween(title.scale).to({ x: 0.4, y: 0.8}, 200, Phaser.Easing.Exponential.Out);
-
         Buttons.makeButton(
             this.game,
             100,
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
+            null,
             'back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Menu');

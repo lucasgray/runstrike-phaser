@@ -13,7 +13,7 @@ export default class Menu extends Phaser.State {
             this.game.world.centerX,
             this.game.world.centerY-200,
             "Select Mission", {
-            font: '50px Joystix',
+            font: '60px Righteous',
             fill: 'white',
             align: 'center'
         });
@@ -42,7 +42,7 @@ export default class Menu extends Phaser.State {
             100,
             40,
             this.btnDownSound,
-            'back', ()=>{
+            'Back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Menu');
             }

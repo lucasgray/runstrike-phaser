@@ -57,7 +57,7 @@ export default class Play extends Phaser.State {
             100,
             40,
             this.btnDownSound,
-            'back', ()=>{
+            'Back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Missions');
             }

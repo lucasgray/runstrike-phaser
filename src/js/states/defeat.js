@@ -4,9 +4,11 @@ export default class Defeat extends Phaser.State {
 
     create() {
 
-        this.game.music = this.game.add.audio('futureMusic');
-        this.graphics = this.game.add.graphics(0, 0);
-        this.btnDownSound = this.add.sound('menuDown');
+        this.game.backgroundMusic.pause();
+        this.game.musicPause = true;
+
+        let lose = this.game.add.audio('lose');
+        lose.play();
 
         this.title = this.game.add.text(
             this.game.world.centerX,
@@ -24,7 +26,7 @@ export default class Defeat extends Phaser.State {
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
+            null,
             'back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Menu');

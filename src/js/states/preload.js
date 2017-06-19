@@ -30,7 +30,13 @@ export default class Preload extends Phaser.State {
 
         this.load.setPreloadSprite(this.loaderBar);
 
-        // this.load.audio('futureMusic', ['audio/music/baws-responder.ogg']);
+        this.load.audio('backgroundMusic', ['audio/music/chiptune-dance.mp3']);
+        this.load.audio('crash-1', ['audio/sounds/crash-1.wav']);
+        this.load.audio('crash-2', ['audio/sounds/crash-2.wav']);
+        this.load.audio('shoot', ['audio/sounds/shoot-9.wav']);
+        this.load.audio('button', ['audio/sounds/button.wav']);
+        this.load.audio('win', ['audio/sounds/win.mp3']);
+        this.load.audio('lose', ['audio/sounds/lose.mp3']);
 
         //new stuff
         this.game.load.image('cocktail_icon', 'img/cocktail.png', 200, 200); //128x128
@@ -41,6 +47,7 @@ export default class Preload extends Phaser.State {
         this.game.load.image('bullet', 'img/orange_bullet.png', 17, 17);
         this.game.load.image('turret-top', 'img/turret-top.png', 64, 64);
         this.game.load.image('turret-bottom', 'img/turret-bottom.png', 64, 64);
+        this.game.load.image('retro-background', 'img/retro-background.jpg', 640, 960);
 
         this.game.physics.arcade.rotateToXY = function(sprite, x, y, offset){
           let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(sprite.x, sprite.y, x, y);
@@ -110,8 +117,13 @@ export default class Preload extends Phaser.State {
 
     update() {
 
-        //if not react native, comment this out!
-        // if (typeof(window.DATA) !== "undefined") {
+        if (this.cache.isSoundDecoded("backgroundMusic") && this.ready === false) {
+            //     this.ready = true;
+            //     this.state.start('Menu');
+
+
+            //if not react native, comment this out!
+            // if (typeof(window.DATA) !== "undefined") {
 
             // this.game.gameData = window.DATA;
             this.game.gameData.isReactNative = false;
@@ -128,13 +140,13 @@ export default class Preload extends Phaser.State {
             this.state.start('Menu');
         // }
 
-        // if (this.cache.isSoundDecoded("futureMusic") && this.ready === false) {
+        //
         //     console.log('decoded!');
-        //     this.ready = true;
-        //     this.state.start('Menu');
+
         // } else {
         //     console.log('not decoded yet!');
         // }
+        }
     }
 
     groupItems(items, caps) {

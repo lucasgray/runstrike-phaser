@@ -27,6 +27,9 @@ export default class Turret extends MapObject {
         base.update = this.update;
         base.shootBulletFromTo = this.shootBulletFromTo;
 
+        let shoot = game.add.audio('shoot');
+        base.shoot = shoot;
+
         return base;
     }
 
@@ -75,5 +78,7 @@ export default class Turret extends MapObject {
         this.bulletsGroup.add(bullet);
 
         this.game.physics.arcade.moveToXY(bullet, sprite.x, sprite.y+fudge, 300);
+
+        this.shoot.play();
     }
 }

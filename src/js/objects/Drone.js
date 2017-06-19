@@ -40,6 +40,18 @@ export default class Turret extends EnemyObject {
         });
         sprite.update = this.update;
 
+        sprite.explodeSound = () => {
+
+            let sound = null;
+            if (Math.random() > .5) {
+                sound = game.add.audio('crash-1');
+            } else {
+                sound = game.add.audio('crash-2');
+            }
+
+            return sound;
+        };
+
         return sprite;
     }
 
@@ -91,6 +103,9 @@ export default class Turret extends EnemyObject {
 
     shot(){
         this.alive = false;
+
+        this.explodeSound().play();
+
         this.game.add.tween(this).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         var fall = this.game.add.tween(this.scale).to({
             x: 0,
