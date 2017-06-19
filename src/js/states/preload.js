@@ -121,21 +121,22 @@ export default class Preload extends Phaser.State {
 
             //if not react native, comment this out!
             if (typeof(window.DATA) !== "undefined") {
-
                 this.game.gameData = window.DATA;
                 this.game.gameData.isReactNative = true;
-
-                let asMissionArray = _.values(this.game.gameData.placed_loot);
-
-                let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
-
-                this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot, this.game.gameData.caps);
-                this.game.gameData.placedItems = flat;
-
-                this.game.dao = new Dao(this.game);
-
-                this.state.start('Menu');
+            } else {
+                this.game.gameData.isReactNative = false;
             }
+
+            let asMissionArray = _.values(this.game.gameData.placed_loot);
+
+            let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
+
+            this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot, this.game.gameData.caps);
+            this.game.gameData.placedItems = flat;
+
+            this.game.dao = new Dao(this.game);
+
+            this.state.start('Menu');
         }
     }
 
