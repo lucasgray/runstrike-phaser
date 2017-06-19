@@ -118,34 +118,24 @@ export default class Preload extends Phaser.State {
     update() {
 
         if (this.cache.isSoundDecoded("backgroundMusic") && this.ready === false) {
-            //     this.ready = true;
-            //     this.state.start('Menu');
-
 
             //if not react native, comment this out!
-            // if (typeof(window.DATA) !== "undefined") {
+            if (typeof(window.DATA) !== "undefined") {
 
-            // this.game.gameData = window.DATA;
-            this.game.gameData.isReactNative = false;
+                this.game.gameData = window.DATA;
+                this.game.gameData.isReactNative = true;
 
-            let asMissionArray = _.values(this.game.gameData.placed_loot);
+                let asMissionArray = _.values(this.game.gameData.placed_loot);
 
-            let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
+                let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
 
-            this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot,this.game.gameData.caps);
-            this.game.gameData.placedItems = flat;
+                this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot, this.game.gameData.caps);
+                this.game.gameData.placedItems = flat;
 
-            this.game.dao = new Dao(this.game);
+                this.game.dao = new Dao(this.game);
 
-            this.state.start('Menu');
-        // }
-
-        //
-        //     console.log('decoded!');
-
-        // } else {
-        //     console.log('not decoded yet!');
-        // }
+                this.state.start('Menu');
+            }
         }
     }
 
