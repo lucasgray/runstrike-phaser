@@ -30,9 +30,6 @@ export default class Setup extends Phaser.State {
         turret.events.onInputDown.add((sprite, pointer) => {
           this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
         }, this);
-        turret.gun.events.onInputDown.add((sprite, pointer) => {
-          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
-        }, this);
         this.drawColor(0x0000FF, 0, 64, () => {
             this.curWall = this.drawColor(0x0000FF, this.game.input.x - (this.game.mission.gridSize.cellWidth / 2), this.game.input.y - (this.game.mission.gridSize.cellheight * 1.5));
         });
