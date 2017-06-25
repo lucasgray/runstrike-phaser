@@ -54,7 +54,6 @@ export default class Preload extends Phaser.State {
           if(targetAngle < 0)
               targetAngle += 360;
 
-          //then i think it needs 90 degrees since its left/right instead of top/down
           sprite.angle = targetAngle + offset;
           return targetAngle + offset;
         };

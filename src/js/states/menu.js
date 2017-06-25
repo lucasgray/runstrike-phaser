@@ -21,7 +21,7 @@ export default class Menu extends Phaser.State {
             this.game.world.centerX,
             this.game.world.centerY - 20,
             "WAR ROOM", {
-            font: '60px Righteous',
+            font: '50px Righteous',
             fill: 'white',
             align: 'center'
         });
@@ -34,7 +34,7 @@ export default class Menu extends Phaser.State {
             this.game.width * 0.8,
             60,
             null,
-            'Mission Select', ()=>{
+            'Mission select', ()=>{
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
             }

@@ -1,6 +1,6 @@
 import EnemyObject from './EnemyObject';
 
-export default class Turret extends EnemyObject {
+export default class Drone extends EnemyObject {
 
     constructor(game, x, y, groups) {
         super();

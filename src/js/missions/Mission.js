@@ -26,6 +26,7 @@ export default class Mission {
 
     createGrid(){
       this.game.enemies = this.game.add.physicsGroup();
+      this.game.bullets = this.game.add.physicsGroup();
       this.game.add.sprite(this.gridSize.offsetX, 0,'grid');
       this.setupGrid();
     }

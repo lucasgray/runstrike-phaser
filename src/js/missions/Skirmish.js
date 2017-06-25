@@ -31,31 +31,41 @@ export default class Skirmish extends Mission {
     }
 
     update(){
-      if(!this.allDeployed && Date.now() - this.lastDeployment > this.enemies[this.enemy].delay){
-        console.log(this.enemies[this.enemy].type);
-        console.log(this.game.enemies);
-        if(this.enemies[this.enemy].type == 'Dialogue' || this.enemies[this.enemy].type == 'Intro'){
-          new gameObjects[this.enemies[this.enemy].type]({game: this.game, enemy: this.enemies[this.enemy]});
-        } else {
-          this.game.enemies.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0));
+
+        //deploy
+        if (!this.allDeployed && Date.now() - this.lastDeployment > this.enemies[this.enemy].delay) {
+            console.log(this.enemies[this.enemy].type);
+            console.log(this.game.enemies);
+            if (this.enemies[this.enemy].type == 'Dialogue' || this.enemies[this.enemy].type == 'Intro') {
+                new gameObjects[this.enemies[this.enemy].type]({game: this.game, enemy: this.enemies[this.enemy]});
+            } else {
+                this.game.enemies.add(new gameObjects[this.enemies[this.enemy].type](this.game, this.enemies[this.enemy].at, 0));
+            }
+
+            this.enemy++;
+            if (this.enemy > this.lastEnemy) {
+                this.allDeployed = true;
+            }
+            this.lastDeployment = Date.now();
         }
 
-        this.enemy++;
-        if(this.enemy > this.lastEnemy){
-          this.allDeployed = true;
-        }
-        this.lastDeployment = Date.now();
-      }
+        // Check bullet collisions
+        this.game.physics.arcade.overlap(this.game.bullets, this.game.enemies, (bullet, sprite) => {
+            if(sprite.alive){
+                sprite.shot();
+            }
+            bullet.kill();
+        }, null, this);
 
-      // Check win condition
-      if(this.allDeployed && this.game.enemies.getFirstAlive() === null){
-        if(this.won){
-          if(Date.now() - this.won > 2000){
-            this.game.state.start('Victory');
-          }
-        } else {
-          this.won = Date.now();
+        // Check win condition
+        if (this.allDeployed && this.game.enemies.getFirstAlive() === null) {
+            if (this.won) {
+                if (Date.now() - this.won > 2000) {
+                    this.game.state.start('Victory');
+                }
+            } else {
+                this.won = Date.now();
+            }
         }
-      }
     }
 }

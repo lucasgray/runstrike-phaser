@@ -20,15 +20,41 @@ export default class Turret extends MapObject {
 
         base.update = this.update;
         base.shootBulletFromTo = this.shootBulletFromTo;
+        base.maybeShoot = this.maybeShoot;
+        base.doRotation = this.doRotation;
+        base.closestSprite = this.closestSprite;
+        base.calcRotationAngle = this.calcRotationAngle;
+        base.shoot = this.shoot;
+        base.getRotationVectorForSprite = this.getRotationVectorForSprite;
 
-        let shoot = game.add.audio('shoot');
-        base.shoot = shoot;
+        base.shootSound = game.add.audio('shoot');
+        game.physics.arcade.enable(base);
 
         return base;
     }
 
     update(){
-      if(this.lastCheck && Date.now() - this.lastCheck >= 20){
+
+        //turrets should always be aiming (rotating) towards the current enemy,
+        //then when the timer is up it shoots!
+
+        //we either have a current enemy or we dont. if we do, and its alive,
+        //rotate with it
+
+        //if we dont. and there are others alive, start moving towards that one (slowly)
+        //that means start angular velocity (left or right?) until we == or >= the angle we need
+        //then keep rotating
+
+        //just periodically shoot on a timer
+
+        this.doRotation();
+        this.maybeShoot();
+    }
+
+
+
+    closestSprite() {
+
         let spriteDistances = this.game.enemies.hash.map((sprite) => {
             return {
                 distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
@@ -38,42 +64,100 @@ export default class Turret extends MapObject {
 
         let spritesInRange = spriteDistances.filter(s => s.sprite.alive);
 
-        let rslt = _.minBy(spritesInRange, (s) => s.distance);
-
-        if (rslt) {
-            //TODO properly figure out where that sprite was going
-            let fudge = 50;
-            //stolen from https://gist.github.com/jnsdbr/7f349c6a8e7f32a63f21
-            let angle = this.game.physics.arcade.rotateToXY(this, rslt.sprite.x, rslt.sprite.y+fudge, 90); //rotate with a 90 deg offset
-
-            if (Date.now() - this.lastShot > 1000 && rslt.distance <= 300) {
-              console.log('fire!' + rslt.distance);
-                this.shootBulletFromTo(this, rslt.sprite, fudge, angle);
-                this.lastShot = Date.now();
-            } else {
-              console.log('dont fire!' + rslt.distance);
+        if (spritesInRange) {
+            let rslt = _.minBy(spritesInRange, (s) => s.distance);
+            if (rslt) {
+                return rslt.sprite;
             }
         }
-      }
-      this.lastCheck = Date.now();
 
-      this.game.physics.arcade.overlap(this.bulletsGroup, this.game.enemies, (bullet, sprite) => {
-          if(sprite.alive){
-            sprite.shot();
-          }
-          bullet.kill();
-      }, null, this);
+        return null;
     }
 
-    shootBulletFromTo(from, to, fudge, rotation) {
-        let bullet = this.game.add.sprite(from.x, from.y, 'bullet');
+    calcRotationAngle(centerPt, targetPt, degrees = true) {
+        let theta = Math.atan2(targetPt.y - centerPt.y, targetPt.x - centerPt.x);
+
+        theta += Math.PI / 2.0;
+
+        if (!degrees) return theta;
+
+        let angle = Phaser.Math.radToDeg(theta);
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+    doRotation() {
+
+        //if we're rotating to a tween do nothing
+        if (this.rotationTween && this.rotationTween.isRunning) return;
+
+        let sprite = this.closestSprite();
+
+        if (!sprite) return;
+
+        //if its a new sprite tween the rotation to it
+        if (sprite !== this.tracking) {
+            this.tracking = sprite;
+
+            //where we need to be
+            let angle = this.calcRotationAngle(this,sprite, false);
+
+            //figure out the best rotation (do we go negative or positive?)
+            let bestRotation = this.getRotationVectorForSprite(this, angle);
+            bestRotation.start();
+
+            this.rotationTween = bestRotation;
+        //else keep tracking it
+        } else {
+            this.body.rotation = this.calcRotationAngle(this,sprite);
+        }
+    }
+
+    maybeShoot() {
+        if (Date.now() - this.lastShot > 1000 && this.tracking && this.tracking.alive && this.tracking.body.velocity) {
+            this.shoot();
+            this.lastShot = Date.now();
+        }
+    }
+
+    shoot() {
+        let bullet = this.game.add.sprite(this.x, this.y, 'bullet');
         bullet.anchor.setTo(0.5);
-        bullet.angle = rotation;
+        bullet.angle = this.angle;
         this.game.physics.arcade.enable(bullet);
-        this.bulletsGroup.add(bullet);
+        this.game.bullets.add(bullet);
 
-        this.game.physics.arcade.moveToXY(bullet, to.x, to.y+fudge, 300);
+        let halfXVelocity = this.tracking.body.velocity.x / 2;
+        let halfYVelocity = this.tracking.body.velocity.y / 2;
 
-        this.shoot.play();
+        this.game.physics.arcade.moveToXY(bullet, this.tracking.x + halfXVelocity, this.tracking.y + halfYVelocity, 300);
+
+        this.shootSound.play();
     }
+
+    getRotationVectorForSprite(sprite, desiredRotation) {
+        var rotation = 0;
+        var turnNegative = -((Math.PI * 2) - (desiredRotation));
+        var turnPositive = ((Math.PI * 2) - (desiredRotation));
+
+        var diffDistance = Math.abs(sprite.rotation - turnNegative)
+
+        // math.pi is the center
+        if (diffDistance >= Math.PI) {
+            rotation = (Math.PI * 2) - turnPositive;
+            console.log('positive')
+        } else {
+            rotation = turnNegative - sprite.rotation;
+            console.log('negative')
+        }
+
+        console.log(rotation);
+
+        return this.game.add.tween(sprite).to({'rotation': rotation}, 600, Phaser.Easing.Linear.None);
+    }
+
 }
