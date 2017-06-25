@@ -51,15 +51,18 @@ export default class TurretHandler extends InputHandler {
     }
 
     inputListener() {
-        // this.firstEvent = true;
-        // this.game.input.onTap.removeAll();
-        // if (this.game.activeInputHandler) {
-        //     this.game.add.tween(this.game.activeInputHandler.scale)
-        //         .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
-        // }
-        // this.game.input.onTap.add(this.action, this);
-        this.game.add.tween(this.scale).to({ x: 1.2, y: 1.2}, 600, Phaser.Easing.Bounce.Out).start();
+        this.firstEvent = true;
+        this.game.input.onTap.removeAll();
+        if (this.game.activeInputHandler) {
+            this.game.add.tween(this.game.activeInputHandler.scale)
+                .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
+        }
+        this.game.input.onTap.add(this.action, this);
+        this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Phaser.Easing.Bounce.Out).start();
         this.game.activeInputHandler = this;
+
+        let button = this.game.add.audio('button');
+        button.play();
     }
 
     action(pointer, doubleTap, sprite) {
