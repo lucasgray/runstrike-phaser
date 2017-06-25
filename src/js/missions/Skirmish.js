@@ -50,12 +50,7 @@ export default class Skirmish extends Mission {
         }
 
         // Check bullet collisions
-        this.game.physics.arcade.overlap(this.game.bullets, this.game.enemies, (bullet, sprite) => {
-            if(sprite.alive){
-                sprite.shot();
-            }
-            bullet.kill();
-        }, null, this);
+        this.checkBulletCollisions();
 
         // Check win condition
         if (this.allDeployed && this.game.enemies.getFirstAlive() === null) {
@@ -67,5 +62,21 @@ export default class Skirmish extends Mission {
                 this.won = Date.now();
             }
         }
+    }
+
+    //every bullet can kill one drone.
+    checkBulletCollisions() {
+
+        let bulletsThatCollided = [];
+
+        //this is NOT an observer!  It fires once in the update loop.
+        this.game.physics.arcade.overlap(this.game.bullets, this.game.enemies, (bullet, sprite) => {
+            if(sprite.alive && !bulletsThatCollided.includes(bullet)){
+                sprite.shot();
+                bulletsThatCollided.push(bullet);
+                bullet.kill();
+            }
+        }, null, this);
+
     }
 }

@@ -50,8 +50,6 @@ export default class Turret extends MapObject {
         this.maybeShoot();
     }
 
-
-
     closestSprite() {
 
         let spriteDistances = this.game.enemies.hash.map((sprite) => {
@@ -71,22 +69,6 @@ export default class Turret extends MapObject {
         }
 
         return null;
-    }
-
-    calcRotationAngle(centerPt, targetPt, degrees = true) {
-        let theta = Math.atan2(targetPt.y - centerPt.y, targetPt.x - centerPt.x);
-
-        theta += Math.PI / 2.0;
-
-        if (!degrees) return theta;
-
-        let angle = Phaser.Math.radToDeg(theta);
-
-        if (angle < 0) {
-            angle += 360;
-        }
-
-        return angle;
     }
 
     doRotation() {
@@ -117,10 +99,33 @@ export default class Turret extends MapObject {
     }
 
     maybeShoot() {
-        if (Date.now() - this.lastShot > (1000 + (Math.random() * 100)) && this.tracking && this.tracking.alive && this.tracking.body.velocity) {
+        //shoot if we havent shot in over a second (give or take some randomness,
+        //and we're tracking a body,
+        //and that body is relatively close to us
+        if (Date.now() - this.lastShot > (1000 + (Math.random() * 200))
+            && this.tracking && this.tracking.alive && this.tracking.body.velocity
+            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < 100) {
             new Bullet(this.game, this, this.tracking);
             this.lastShot = Date.now();
         }
+    }
+
+    //TODO maybe this stuff should move into a local math lib?
+
+    calcRotationAngle(centerPt, targetPt, degrees = true) {
+        let theta = Math.atan2(targetPt.y - centerPt.y, targetPt.x - centerPt.x);
+
+        theta += Math.PI / 2.0;
+
+        if (!degrees) return theta;
+
+        let angle = Phaser.Math.radToDeg(theta);
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        return angle;
     }
 
     getRotationVectorForSprite(sprite, desiredRotation) {
