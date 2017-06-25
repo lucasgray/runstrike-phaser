@@ -118,7 +118,7 @@ export default class Turret extends MapObject {
     }
 
     maybeShoot() {
-        if (Date.now() - this.lastShot > 1000 && this.tracking && this.tracking.alive && this.tracking.body.velocity) {
+        if (Date.now() - this.lastShot > (1000 + (Math.random() * 100)) && this.tracking && this.tracking.alive && this.tracking.body.velocity) {
             this.shoot();
             this.lastShot = Date.now();
         }
