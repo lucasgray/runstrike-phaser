@@ -1,6 +1,6 @@
-import * as easystar from "easystarjs";
 import Buttons from "../extensions/Buttons";
 import * as gameObjects from "../objects";
+import * as setupInputHandlers from "../handlers/setup"
 
 export default class Setup extends Phaser.State {
 
@@ -12,7 +12,10 @@ export default class Setup extends Phaser.State {
         this.objects = [];
         this.game.enemies = this.game.add.physicsGroup();
 
-        this.game.add.sprite(this.game.mission.gridSize.offsetX,0,'grid');
+        let background = this.game.add.sprite(this.game.mission.gridSize.offsetX,0,'skirmish-background');
+        background.width = this.game.mission.gridSize.width;
+        background.height = this.game.mission.gridSize.height;
+        this.game.world.sendToBack(background);
 
         console.log(this.game.gameData.placedItems);
 
@@ -24,12 +27,9 @@ export default class Setup extends Phaser.State {
     }
 
     drawInputs() {
-        var turret = new gameObjects["Turret"](this.game, 0, 0, [this.objects]);
-        turret.events.onInputDown.add((sprite, pointer) => {
-          this.curTurret = new gameObjects["Turret"](this.game, pointer.x, pointer.y, [this.objects]);
-        }, this);
-        this.drawColor(0x0000FF, 0, 64, () => {
-            this.curWall = this.drawColor(0x0000FF, this.game.input.x - (this.game.mission.gridSize.cellWidth / 2), this.game.input.y - (this.game.mission.gridSize.cellheight * 1.5));
+
+        Object.keys(setupInputHandlers).forEach((ih,index) => {
+            new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
         });
 
         Buttons.makeButton(

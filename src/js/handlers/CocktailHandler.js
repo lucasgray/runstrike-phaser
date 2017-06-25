@@ -19,7 +19,7 @@ export default class CocktailHandler extends InputHandler {
 
         parentSprite.addChild(cocktailIcon);
 
-        var graphics = game.add.graphics(x, y);
+        graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
         graphics.lineStyle(3, 0xF1235B);
         graphics.drawCircle(0, 0, 25);

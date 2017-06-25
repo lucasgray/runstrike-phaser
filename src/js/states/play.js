@@ -1,8 +1,4 @@
-import * as easystar from "easystarjs";
-import _ from 'lodash';
 import Buttons from "../extensions/Buttons";
-import * as gameObjects from "../objects";
-import * as missions from "../missions";
 import * as inputHandlers from "../handlers";
 
 export default class Play extends Phaser.State {

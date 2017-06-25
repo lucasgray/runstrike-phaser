@@ -13,7 +13,7 @@ export default class TurretHandler extends InputHandler {
         parentSprite.anchor.set(.5);
         graphics.destroy();
 
-        var turretIcon = game.add.sprite(0, 0, 'turret');
+        var turretIcon = game.add.sprite(0, 0, 'red-turret');
         turretIcon.anchor.set(0.5);
         // turretIcon.scale.setTo(.25, .25);
 
