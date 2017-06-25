@@ -4,6 +4,9 @@ import Mission from './Mission';
 export default class Skirmish extends Mission {
     constructor(game) {
       super(game);
+
+      this.name = 'Skirmish';
+
       this.game.stage.backgroundColor = 0x002200;
       this.gridSize = {x: 15, y:20};
       this.calculateGridSize();
@@ -30,9 +33,16 @@ export default class Skirmish extends Mission {
       }
     }
 
-    update(){
+    update() {
 
-        //deploy
+        this.deploy();
+
+        this.checkBulletCollisions();
+
+        this.checkWinCondition();
+    }
+
+    deploy() {
         if (!this.allDeployed && Date.now() - this.lastDeployment > this.enemies[this.enemy].delay) {
             console.log(this.enemies[this.enemy].type);
             console.log(this.game.enemies);
@@ -47,20 +57,6 @@ export default class Skirmish extends Mission {
                 this.allDeployed = true;
             }
             this.lastDeployment = Date.now();
-        }
-
-        // Check bullet collisions
-        this.checkBulletCollisions();
-
-        // Check win condition
-        if (this.allDeployed && this.game.enemies.getFirstAlive() === null) {
-            if (this.won) {
-                if (Date.now() - this.won > 2000) {
-                    this.game.state.start('Victory');
-                }
-            } else {
-                this.won = Date.now();
-            }
         }
     }
 
@@ -78,5 +74,17 @@ export default class Skirmish extends Mission {
             }
         }, null, this);
 
+    }
+
+    checkWinCondition() {
+        if (this.allDeployed && this.game.enemies.getFirstAlive() === null) {
+            if (this.won) {
+                if (Date.now() - this.won > 2000) {
+                    this.game.state.start('Victory');
+                }
+            } else {
+                this.won = Date.now();
+            }
+        }
     }
 }

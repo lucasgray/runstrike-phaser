@@ -13,12 +13,10 @@ export default class Setup extends Phaser.State {
         this.game.enemies = this.game.add.physicsGroup();
 
         this.game.add.sprite(this.game.mission.gridSize.offsetX,0,'grid');
-        this.btnDownSound = this.add.sound('menuDown');
-
-        this.game.stage.backgroundColor = 0x000000;
 
         console.log(this.game.gameData.placedItems);
-        this.game.gameData.placedItems.filter(it => it.mission === this.game.mission.constructor.name).forEach((it) => {
+
+        this.game.gameData.placedItems.filter(it => it.mission === this.game.mission.name).forEach((it) => {
           new gameObjects[it.type](this.game, (this.game.mission.gridSize.offsetX + (it.x * this.game.mission.gridSize.cellWidth)), it.y * this.game.mission.gridSize.cellHeight, [this.objects]);
         });
 
@@ -99,7 +97,7 @@ export default class Setup extends Phaser.State {
 
                 let gridLoc = this.getGridLocation(this.game.input);
 
-                this.game.dao.placeItem('Turret',  this.game.mission.constructor.name, gridLoc.x, gridLoc.y);
+                this.game.dao.placeItem('Turret',  this.game.mission.name, gridLoc.x, gridLoc.y);
 
                 new gameObjects["Turret"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
 
@@ -110,7 +108,7 @@ export default class Setup extends Phaser.State {
 
                 let gridLoc = this.getGridLocation(this.game.input);
 
-                this.game.dao.placeItem('Wall',  this.game.mission.constructor.name, gridLoc.x, gridLoc.y);
+                this.game.dao.placeItem('Wall',  this.game.mission.name, gridLoc.x, gridLoc.y);
 
                 new gameObjects["Wall"](this.game, (this.game.mission.gridSize.offsetX + (gridLoc.x * this.game.mission.gridSize.cellWidth)), gridLoc.y * this.game.mission.gridSize.cellHeight, [this.objects]);
             }

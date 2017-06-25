@@ -21,7 +21,7 @@ export default class Intro extends StoryObject {
 
         g.showLineFor = options.enemy.showFor / g.messages.length;
 
-        let text = g.options.game.add.text(32, 380, g.messages[0], { font: "30pt Courier", fill: "#19cb65", stroke: "#119f4e", strokeThickness: 2 });
+        let text = g.options.game.add.text(32, 380, g.messages[0], { font: "30pt Righteous", fill: "#19cb65", stroke: "#119f4e", strokeThickness: 2 });
         g.text = text;
         g.addChild(text);
         g.update = this.update;
