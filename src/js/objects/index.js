@@ -9,6 +9,7 @@ export {default as StoryObject} from './StoryObject';
 //Map Objects, inherits from MapObject
 export {default as Turret} from './Turret';
 export {default as Wall} from './Wall';
+export {default as Bullet} from './Bullet';
 
 //Enemy Objects, inherits from EnemyObject
 export {default as Drone} from './Drone';

@@ -1,5 +1,6 @@
 import MapObject from './MapObject';
 import _ from 'lodash';
+import Bullet from './Bullet';
 
 export default class Turret extends MapObject {
 
@@ -24,10 +25,8 @@ export default class Turret extends MapObject {
         base.doRotation = this.doRotation;
         base.closestSprite = this.closestSprite;
         base.calcRotationAngle = this.calcRotationAngle;
-        base.shoot = this.shoot;
         base.getRotationVectorForSprite = this.getRotationVectorForSprite;
 
-        base.shootSound = game.add.audio('shoot');
         game.physics.arcade.enable(base);
 
         return base;
@@ -119,24 +118,9 @@ export default class Turret extends MapObject {
 
     maybeShoot() {
         if (Date.now() - this.lastShot > (1000 + (Math.random() * 100)) && this.tracking && this.tracking.alive && this.tracking.body.velocity) {
-            this.shoot();
+            new Bullet(this.game, this, this.tracking);
             this.lastShot = Date.now();
         }
-    }
-
-    shoot() {
-        let bullet = this.game.add.sprite(this.x, this.y, 'bullet');
-        bullet.anchor.setTo(0.5);
-        bullet.angle = this.angle;
-        this.game.physics.arcade.enable(bullet);
-        this.game.bullets.add(bullet);
-
-        let halfXVelocity = this.tracking.body.velocity.x / 2;
-        let halfYVelocity = this.tracking.body.velocity.y / 2;
-
-        this.game.physics.arcade.moveToXY(bullet, this.tracking.x + halfXVelocity, this.tracking.y + halfYVelocity, 300);
-
-        this.shootSound.play();
     }
 
     getRotationVectorForSprite(sprite, desiredRotation) {
