@@ -30,6 +30,12 @@ export default class Dao {
                 payload: payload
             }))
         }
+
+        let i = _.find(this.game.gameData.inventoryItems, it => it.type === itemType);
+
+        if (i) {
+            i.amount = i.amount - 1;
+        }
     }
 
     useItem(itemType) {

@@ -1,4 +1,5 @@
 import InputHandler from './../InputHandler';
+import Turret from "../../objects/Turret";
 
 export default class TurretHandler extends InputHandler {
     constructor(game, x, y) {
@@ -30,8 +31,8 @@ export default class TurretHandler extends InputHandler {
         parentSprite.addChild(itemSprite);
         itemSprite.alignInParent(Phaser.BOTTOM_RIGHT);
 
-        var text = game.add.text(0, 0, this.num(), {
-            font: '12px Joystix',
+        var text = game.add.text(1, 2, this.num(), {
+            font: '12px Righteous',
             fill: "#F1235B",
             align: "center"
         });
@@ -45,6 +46,9 @@ export default class TurretHandler extends InputHandler {
         parentSprite.action = this.action;
         parentSprite.text = text;
         parentSprite.num = this.num;
+        parentSprite.getGridLocation = this.getGridLocation;
+
+        return parentSprite;
     }
 
     update() {
@@ -66,35 +70,54 @@ export default class TurretHandler extends InputHandler {
     }
 
     action(pointer, doubleTap, sprite) {
-        // if (this.firstEvent) {
-        //     this.firstEvent = false;
-        //     this.game.activeInputHandler = this;
-        //     return;
-        // }
-        // if (sprite && sprite.alive) {
-        //     sprite.shot();
-        //     let hack = this.game.add.sprite(sprite.x, sprite.y, 'hack');
-        //     hack.anchor.setTo(0.5, 0.5);
-        //     hack.scale.setTo(0.6, 0.6);
-        //     let hackAnimation = hack.animations.add('fly');
-        //     hack.animations.play('fly', 30, false);
-        //     hackAnimation.onComplete.add(() => {
-        //         hack.destroy();
-        //     });
-        //
-        //     this.game.dao.useItem("Grenade");
-        //     this.text.setText(this.num());
-        // }
+        if (this.firstEvent) {
+            this.firstEvent = false;
+            this.game.activeInputHandler = this;
+            return;
+        }
+
+        let grid = this.getGridLocation(pointer);
+
+        //check if currently there is a turret there.
+        //if so, were we closer to the top/down/left/right of current,
+        //and is there a problem placing there?
+        //if not, use one of those
+
+        //make turret
+        new Turret(this.game, (this.game.mission.gridSize.offsetX + (grid.x * this.game.mission.gridSize.cellWidth)), grid.y * this.game.mission.gridSize.cellHeight, null);
+        this.game.dao.placeItem("Turret", this.game.mission.name, grid.x, grid.y);
+        this.text.setText(this.num());
+
+        let place = this.game.add.audio('place-item');
+        place.play();
     }
 
     num() {
-        let turrets = this.game.gameData.inventoryItems.find(it => it.type === 'turret');
+        let turrets = this.game.gameData.inventoryItems.find(it => it.type === 'Turret');
 
         if (turrets) {
             return turrets.amount + "";
         } else {
             return "0";
         }
+    }
+
+    getGridLocation(input){
+        let gridX = Math.floor((input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
+        if(gridX < 0){
+            gridX = 0;
+        }
+        if(gridX >= this.game.mission.gridSize.x){
+            gridX = this.game.mission.gridSize.x-1;
+        }
+        let gridY = Math.floor(input.y / this.game.mission.gridSize.cellHeight);
+        if(gridY < 0){
+            gridY = 0;
+        }
+        if(gridY >= this.game.mission.gridSize.y){
+            gridY = this.game.mission.gridSize.y -1;
+        }
+        return {x: gridX, y: gridY};
     }
 
 }

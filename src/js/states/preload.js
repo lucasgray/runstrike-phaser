@@ -35,6 +35,7 @@ export default class Preload extends Phaser.State {
         this.load.audio('crash-2', ['audio/sounds/crash-2.wav']);
         this.load.audio('shoot', ['audio/sounds/shoot-9.wav']);
         this.load.audio('button', ['audio/sounds/button.wav']);
+        this.load.audio('place-item', ['audio/sounds/points-06.mp3']);
         this.load.audio('win', ['audio/sounds/win.mp3']);
         this.load.audio('lose', ['audio/sounds/lose.mp3']);
 
@@ -113,6 +114,24 @@ export default class Preload extends Phaser.State {
                         "longitude": -89.33985730479297
                     },
                     "type": "cocktail"
+                },"-Kj-ezDNFAwbZsdfsdfirmeGOG": {
+                    "foundBy": "TODO!",
+                    "foundOn": "TODO!",
+                    "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
+                    "latLong": {
+                        "latitude": 43.06856735536175,
+                        "longitude": -89.33985730479297
+                    },
+                    "type": "Turret"
+                },"-Kj-ezDNFAwbZsdfsdfirmeGOH": {
+                    "foundBy": "TODO!",
+                    "foundOn": "TODO!",
+                    "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
+                    "latLong": {
+                        "latitude": 43.06856735536175,
+                        "longitude": -89.33985730479297
+                    },
+                    "type": "Turret"
                 }
             }
         }
