@@ -29,7 +29,7 @@ export default class Bullet extends MapObject {
     }
 
     update() {
-        if (Phaser.Math.distance(this.x, this.fromSprite.x, this.y, this.fromSprite.y) > 50) {
+        if (Phaser.Math.distance(this.x, this.y, this.fromSprite.x, this.fromSprite.y) > 50) {
             this.kill();
             this.destroy();
         }

@@ -65,17 +65,12 @@ export default class Preload extends Phaser.State {
             "caps": 395,
             "placed_loot": {
                 "Skirmish": {
-                    "-KivEivrunTm0bGxrfPq": {
-                        "mission": "Skirmish",
-                        "type": "Turret",
-                        "x": 3,
-                        "y": 5
-                    },
+
                     "-Kj57wIvhvgeQG7Xdz3X": {
                         "mission": "Skirmish",
                         "type": "Turret",
-                        "x": 4,
-                        "y": 5
+                        "x": 8,
+                        "y": 10
                     }
                 }
             },
