@@ -1,37 +1,40 @@
+// @flow
+
 import InputHandler from './../InputHandler';
 import Turret from "../../objects/Turret";
+import { Game, Pointer, Easing, Sprite, BOTTOM_RIGHT} from "../../../../bower_components/phaser-ce/build/phaser";
 
 export default class TurretHandler extends InputHandler {
-    constructor(game, x, y) {
+    constructor(game: Game, x: number, y: number) {
         super(game);
 
-        var graphics = game.add.graphics(x, y);
+        let graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
         graphics.lineStyle(3, 0xF1235B);
         graphics.drawCircle(0, 0, 60);
 
-        var parentSprite = game.add.sprite(x, y, graphics.generateTexture());
+        let parentSprite = game.add.sprite(x, y, graphics.generateTexture());
         parentSprite.anchor.set(.5);
         graphics.destroy();
 
-        var turretIcon = game.add.sprite(0, 0, 'orange-turret');
+        let turretIcon = game.add.sprite(0, 0, 'orange-turret');
         turretIcon.anchor.set(0.5);
         // turretIcon.scale.setTo(.25, .25);
 
         parentSprite.addChild(turretIcon);
 
-        var graphics = game.add.graphics(x, y);
+        graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
         graphics.lineStyle(3, 0xF1235B);
         graphics.drawCircle(0, 0, 25);
 
-        var itemSprite = game.add.sprite(0, 0, graphics.generateTexture());
+        let itemSprite = game.add.sprite(0, 0, graphics.generateTexture());
         graphics.destroy();
         itemSprite.anchor.set(.5);
         parentSprite.addChild(itemSprite);
-        itemSprite.alignInParent(Phaser.BOTTOM_RIGHT);
+        itemSprite.alignInParent(BOTTOM_RIGHT);
 
-        var text = game.add.text(1, 2, this.num(), {
+        let text = game.add.text(1, 2, this.num(), {
             font: '12px Righteous',
             fill: "#F1235B",
             align: "center"
@@ -59,17 +62,17 @@ export default class TurretHandler extends InputHandler {
         this.game.input.onTap.removeAll();
         if (this.game.activeInputHandler) {
             this.game.add.tween(this.game.activeInputHandler.scale)
-                .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
+                .to({ x: 1.0, y: 1.0}, 200, Easing.Exponential.In).start();
         }
         this.game.input.onTap.add(this.action, this);
-        this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Phaser.Easing.Bounce.Out).start();
+        this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Easing.Bounce.Out).start();
         this.game.activeInputHandler = this;
 
         let button = this.game.add.audio('button');
         button.play();
     }
 
-    action(pointer, doubleTap, sprite) {
+    action(pointer: Pointer, doubleTap: any, sprite: Sprite) {
         if (this.firstEvent) {
             this.firstEvent = false;
             this.game.activeInputHandler = this;
@@ -102,7 +105,7 @@ export default class TurretHandler extends InputHandler {
         }
     }
 
-    getGridLocation(input){
+    getGridLocation(input: Pointer){
         let gridX = Math.floor((input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
         if(gridX < 0){
             gridX = 0;

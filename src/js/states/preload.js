@@ -52,7 +52,7 @@ export default class Preload extends Phaser.State {
         this.game.load.image('orange-turret', 'img/orange-turret.png', 64, 64);
         this.game.load.image('green-turret', 'img/green-turret.png', 64, 64);
         this.game.load.image('retro-background', 'img/retro-background.jpg', 640, 960);
-        this.game.load.image('skirmish-background', 'img/skirmish-background.jpg');
+        this.game.load.image('skirmish-background', 'img/leigh-map.png');
 
         this.game.physics.arcade.rotateToXY = function(sprite, x, y, offset){
           let targetAngle = (360 / (2 * Math.PI)) * this.game.math.angleBetween(sprite.x, sprite.y, x, y);
