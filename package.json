@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "webpack -p --progress"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

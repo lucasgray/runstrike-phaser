@@ -61,8 +61,7 @@ module.exports = {
             { test: /\.(mp3|wav|ogg)$/,  use: [ 'file-loader' ], include: PATHS.music },
             { test: /\.(mp3|wav|ogg)$/,  use: [ 'file-loader' ], include: PATHS.sounds },
             { test: /\.(png|svg|jpg|gif)$/,  use: [ 'file-loader' ], include: PATHS.img },
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass?sourceMap') },
-            { test: /\.(eot|svg|ttf|woff|woff2)$/, use: [ "file-loader?name=[name].[ext]" ], include: PATHS.styles }
+            { test: /\.(eot|svg|ttf|woff|woff2|css)$/, use: [ "file-loader?name=[name].[ext]" ], include: PATHS.styles }
         ]
     },
     node: {
