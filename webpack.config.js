@@ -17,6 +17,9 @@ const PATHS = {
     js: path.join(__dirname, 'src'),
     game: path.join(__dirname, 'src/js/game.js'),
     img: path.join(__dirname, 'src/img'),
+    audio: path.join(__dirname, 'src/audio'),
+    sounds: path.join(__dirname, 'src/audio/sounds'),
+    music: path.join(__dirname, 'src/audio/music'),
     styles: path.join(__dirname, 'src/css'),
     build: path.join(__dirname, 'dist')
 }
@@ -55,7 +58,11 @@ module.exports = {
             { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
             { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
             { test: /p2\.js/, use: ['expose-loader?p2'] },
-            { test: /\.(png|svg|jpg|gif)$/,  use: [ 'file-loader' ], include: PATHS.img }
+            { test: /\.(mp3|wav|ogg)$/,  use: [ 'file-loader' ], include: PATHS.music },
+            { test: /\.(mp3|wav|ogg)$/,  use: [ 'file-loader' ], include: PATHS.sounds },
+            { test: /\.(png|svg|jpg|gif)$/,  use: [ 'file-loader' ], include: PATHS.img },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass?sourceMap') },
+            { test: /\.(eot|svg|ttf|woff|woff2)$/, use: [ "file-loader?name=[name].[ext]" ], include: PATHS.styles }
         ]
     },
     node: {

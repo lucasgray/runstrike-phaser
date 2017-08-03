@@ -1,5 +1,6 @@
 import Buttons from "../extensions/Buttons";
 import * as inputHandlers from "../handlers";
+import * as Phaser from "phaser-ce";
 
 export default class Play extends Phaser.State {
 

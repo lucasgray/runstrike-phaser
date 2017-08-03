@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "easystarjs": "^0.3.1",
-    "lodash": "^4.17.4",
     "http-server": "^0.10.0",
+    "lodash": "^4.17.4",
     "phaser-ce": "^2.8.3",
     "webfontloader": "^1.6.28"
   }

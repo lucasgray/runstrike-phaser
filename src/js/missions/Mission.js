@@ -1,4 +1,6 @@
 import * as gameObjects from "../objects";
+import * as EasyStar from "easystarjs";
+
 export default class Mission {
     constructor(game) {
       this.game = game;

@@ -21,7 +21,7 @@ export default class Menu extends Phaser.State {
             this.game.world.centerX,
             this.game.world.centerY - 20,
             "WAR ROOM", {
-            font: '50px Righteous',
+            font: '50px Joystix',
             fill: 'white',
             align: 'center'
         });
