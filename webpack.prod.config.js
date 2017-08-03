@@ -39,7 +39,7 @@ module.exports = {
         publicPath: './dist/',
         filename: 'bundle.js'
     },
-    watch: true,
+    watch: false,
     plugins: [
         definePlugin,
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */})
