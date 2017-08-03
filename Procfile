@@ -1,1 +1,1 @@
-web: node node_modules/http-server/bin/http-server ./dist
+web: node node_modules/http-server/bin/http-server ./
