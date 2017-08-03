@@ -1,10 +1,12 @@
+import LoaderBar from '../../img/loader-bar.png';
+import LoaderBg from '../../img/loader-bg.png';
 
 export default class Boot extends Phaser.State {
 
     preload() {
         this.game.stage.backgroundColor = '#000';
-        this.load.image('loaderBg', 'img/loader-bg.png');
-        this.load.image('loaderBar', 'img/loader-bar.png');
+        this.load.image('loaderBg', LoaderBg);
+        this.load.image('loaderBar', LoaderBar);
     }
 
     create() {

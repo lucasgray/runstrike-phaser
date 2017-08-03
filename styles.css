@@ -1,0 +1,7 @@
+@font-face { font-family: 'Joystix'; src: url('joystix-monospace.ttf') format('truetype');}
+@font-face { font-family: 'Righteous'; src: url('righteous-regular.ttf') format('truetype');}
+
+.workaround {
+    font-family: 'Joystix';
+    position: absolute;
+}

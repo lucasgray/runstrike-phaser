@@ -1,4 +1,5 @@
 import * as states from './states';
+import * as Phaser from "phaser-ce";
 
 const GAME = new Phaser.Game(640, 960, Phaser.AUTO);
 
