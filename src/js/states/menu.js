@@ -1,4 +1,5 @@
 import Buttons from "../extensions/Buttons";
+import Foobix from './Foobix';
 
 export default class Menu extends Phaser.State {
 
@@ -11,6 +12,8 @@ export default class Menu extends Phaser.State {
         } else if (this.game.backgroundMusic && this.game.musicPause) {
             this.game.backgroundMusic.resume();
         }
+
+        new Foobix("george");
 
         this.graphics = this.game.add.graphics(0, 0);
 
