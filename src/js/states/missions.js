@@ -1,4 +1,4 @@
-import Buttons from "../extensions/Buttons";
+import Button from "../extensions/Button";
 import * as missions from "../missions";
 
 export default class Menu extends Phaser.State {
@@ -20,13 +20,12 @@ export default class Menu extends Phaser.State {
         this.title.anchor.setTo(0.5);
 
         Object.keys(missions).forEach((mission, index) => {
-          Buttons.makeButton(
+          new Button(
               this.game,
               this.game.world.centerX,
               this.game.world.centerY + (70 * index),
               this.game.width * 0.8,
               60,
-              this.btnDownSound,
               mission, ()=>{
                   console.log("asking to play a mission!");
                   this.game.mission = new missions[mission](this.game);
@@ -35,13 +34,12 @@ export default class Menu extends Phaser.State {
           );
         });
 
-        Buttons.makeButton(
+        new Button(
             this.game,
             100,
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
             'Back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Menu');

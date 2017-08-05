@@ -1,4 +1,4 @@
-import Buttons from "../extensions/Buttons";
+import Buttons from "../extensions/Button";
 import * as inputHandlers from "../handlers";
 import * as Phaser from "phaser-ce";
 
@@ -53,7 +53,6 @@ export default class Play extends Phaser.State {
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
             'Back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Missions');

@@ -1,4 +1,4 @@
-import Buttons from "../extensions/Buttons";
+import Button from "../extensions/Button";
 
 export default class Defeat extends Phaser.State {
 
@@ -20,13 +20,12 @@ export default class Defeat extends Phaser.State {
         });
         this.title.anchor.setTo(0.5);
 
-        Buttons.makeButton(
+        new Button(
             this.game,
             100,
             this.game.height - 40,
             100,
             40,
-            null,
             'back', ()=>{
                 console.log("asking to go to menu");
                 this.state.start('Menu');

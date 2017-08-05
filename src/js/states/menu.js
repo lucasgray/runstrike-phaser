@@ -1,5 +1,4 @@
-import Buttons from "../extensions/Buttons";
-import Foobix from './Foobix';
+import Button from "../extensions/Button";
 
 export default class Menu extends Phaser.State {
 
@@ -12,8 +11,6 @@ export default class Menu extends Phaser.State {
         } else if (this.game.backgroundMusic && this.game.musicPause) {
             this.game.backgroundMusic.resume();
         }
-
-        new Foobix("george");
 
         this.graphics = this.game.add.graphics(0, 0);
 
@@ -30,14 +27,14 @@ export default class Menu extends Phaser.State {
         });
         this.title.anchor.setTo(0.5);
 
-        Buttons.makeButton(
+        new Button(
             this.game,
             this.game.world.centerX,
             this.game.world.centerY + 125,
             this.game.width * 0.8,
             60,
-            null,
-            'Mission select', ()=>{
+            'Mission select',
+            () => {
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
             }

@@ -33,7 +33,7 @@ module.exports = {
         ],
         vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
     },
-    devtool: 'cheap-source-map',
+    devtool:  'cheap-module-eval-source-map',
     output: {
         pathinfo: true,
         path: PATHS.build,

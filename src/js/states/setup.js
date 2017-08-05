@@ -1,4 +1,4 @@
-import Buttons from "../extensions/Buttons";
+import Button from "../extensions/Button";
 import * as gameObjects from "../objects";
 import * as setupInputHandlers from "../handlers/setup"
 
@@ -32,26 +32,24 @@ export default class Setup extends Phaser.State {
             new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
         });
 
-        Buttons.makeButton(
+        new Button(
             this.game,
             100,
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
             'Back', ()=>{
                 console.log("asking to go back");
                 this.state.start('Missions');
             }
         );
 
-        Buttons.makeButton(
+        new Button(
             this.game,
             this.game.width - 80,
             this.game.height - 40,
             100,
             40,
-            this.btnDownSound,
             'Defend', ()=>{
                 console.log("asking to defend");
                 this.state.start('Play');
