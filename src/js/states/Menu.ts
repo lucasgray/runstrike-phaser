@@ -1,23 +1,32 @@
 import Button from "../prefabs/Button";
+import * as GameData from "../objects/GameData";
 
 export default class Menu extends Phaser.State {
 
+    gameState: GameData.GameState;
+
+    constructor(gameState: GameData.GameState) {
+        super();
+
+        this.gameState = gameState;
+    }
+
     create() {
 
-        if (!this.game.backgroundMusic || !this.game.hasStartedMusic) {
-            this.game.backgroundMusic = this.game.add.audio('backgroundMusic');
-            this.game.backgroundMusic.play();
-            this.game.hasStartedMusic = true;
-        } else if (this.game.backgroundMusic && this.game.musicPause) {
-            this.game.backgroundMusic.resume();
-        }
-
-        this.graphics = this.game.add.graphics(0, 0);
+        // if (!this.game.backgroundMusic || !this.game.hasStartedMusic) {
+        //     this.game.backgroundMusic = this.game.add.audio('backgroundMusic');
+        //     this.game.backgroundMusic.play();
+        //     this.game.hasStartedMusic = true;
+        // } else if (this.game.backgroundMusic && this.game.musicPause) {
+        //     this.game.backgroundMusic.resume();
+        // }
+        //
+        // this.graphics = this.game.add.graphics(0, 0);
 
         let bkgrd = this.game.add.image(0, 0, 'retro-background');
         bkgrd.scale.setTo(.25, .5);
 
-        this.title = this.game.add.text(
+        let title = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY - 20,
             "WAR ROOM", {
@@ -25,9 +34,9 @@ export default class Menu extends Phaser.State {
             fill: 'white',
             align: 'center'
         });
-        this.title.anchor.setTo(0.5);
+        title.anchor.setTo(0.5);
 
-        this.game.add.existing(new Button(
+        new Button(
             this.game,
             this.game.world.centerX,
             this.game.world.centerY + 125,
@@ -38,7 +47,7 @@ export default class Menu extends Phaser.State {
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
             }
-        ));
+        );
 
         // Buttons.makeButton(
         //     this.game,
