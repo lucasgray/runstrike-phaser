@@ -15,6 +15,7 @@ var GameData = require("../objects/GameData");
 var GameData_1 = require("../objects/GameData");
 var Preload_1 = require("./Preload");
 var Menu_1 = require("./Menu");
+var Setup_1 = require("./Setup");
 var Boot = (function (_super) {
     __extends(Boot, _super);
     function Boot() {
@@ -100,6 +101,7 @@ var Boot = (function (_super) {
         this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
         this.game.state.add('Preload', new Preload_1["default"]());
         this.game.state.add('Menu', new Menu_1["default"](this.gameState));
+        this.game.state.add('Setup', new Setup_1["default"](this.gameState));
         this.state.start('Preload');
     };
     Boot.prototype.makeGameData = function () {

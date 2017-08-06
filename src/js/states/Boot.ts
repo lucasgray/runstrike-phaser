@@ -3,6 +3,7 @@ import * as GameData from '../objects/GameData'
 import {PlacedLootInfo} from "../objects/GameData";
 import Preload from "./Preload";
 import Menu from "./Menu";
+import Setup from "./Setup";
 
 export default class Boot extends Phaser.State {
 
@@ -28,6 +29,7 @@ export default class Boot extends Phaser.State {
 
         this.game.state.add('Preload', new Preload());
         this.game.state.add('Menu', new Menu(this.gameState));
+        this.game.state.add('Setup', new Setup(this.gameState));
 
         this.state.start('Preload');
     }

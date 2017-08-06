@@ -1,13 +1,19 @@
 import Button from "../prefabs/Button";
 import * as missions from "../missions";
+import {GameState} from "../objects/GameData";
 
 export default class Menu extends Phaser.State {
 
+    gameState: GameState;
+
+    constructor(gameState: GameState) {
+        super();
+        this.gameState = gameState;
+    }
+
     create() {
 
-        this.graphics = this.game.add.graphics(0, 0);
-
-        this.title = this.game.add.text(
+        let title = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY-200,
             "Select Mission", {
@@ -15,7 +21,7 @@ export default class Menu extends Phaser.State {
             fill: 'white',
             align: 'center'
         });
-        this.title.anchor.setTo(0.5);
+        title.anchor.setTo(0.5);
 
         Object.keys(missions).forEach((mission, index) => {
           new Button(
@@ -26,8 +32,7 @@ export default class Menu extends Phaser.State {
               60,
               mission, ()=>{
                   console.log("asking to play a mission!");
-                  this.game.mission = new missions[mission](this.game);
-                  this.state.start('Setup');
+                  this.state.start('Setup', new missions[mission](this.game));
               }
           );
         });
