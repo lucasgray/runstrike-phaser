@@ -1,9 +1,23 @@
-import InputHandler from './../InputHandler';
-import Turret from "../../objects/Turret";
 
-export default class TurretHandler extends InputHandler {
-    constructor(game, x, y) {
-        super(game);
+import Turret from "../../objects/Turret";
+import Mission from "../../missions/Mission";
+import SpriteExtensions from "../../extensions/SpriteExtensions";
+import {GameState} from "../../objects/GameData";
+
+export default class TurretHandler extends Phaser.Sprite {
+
+    mission: Mission;
+    text: Phaser.Text;
+    currentlyActiveHandler: boolean;
+    allHandlers: Array<TurretHandler>;
+    gameState: GameState;
+
+    constructor(mission: Mission, allHandlers: Array<TurretHandler>, gameState: GameState, game: Phaser.Game, x: number, y: number) {
+        super(game, x, y);
+
+        this.mission = mission;
+        this.allHandlers = allHandlers;
+        this.gameState = gameState;
 
         var graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
@@ -14,7 +28,7 @@ export default class TurretHandler extends InputHandler {
         parentSprite.anchor.set(.5);
         graphics.destroy();
 
-        var turretIcon = game.add.sprite(0, 0, 'orange-turret');
+        var turretIcon = game.add.sprite(0, 0, 'turret');
         turretIcon.anchor.set(0.5);
         // turretIcon.scale.setTo(.25, .25);
 
@@ -29,7 +43,8 @@ export default class TurretHandler extends InputHandler {
         graphics.destroy();
         itemSprite.anchor.set(.5);
         parentSprite.addChild(itemSprite);
-        itemSprite.alignInParent(Phaser.BOTTOM_RIGHT);
+
+        SpriteExtensions.alignInParent(itemSprite, parentSprite, Phaser.BOTTOM_RIGHT);
 
         var text = game.add.text(1, 2, this.num(), {
             font: '12px Righteous',
@@ -42,39 +57,30 @@ export default class TurretHandler extends InputHandler {
         parentSprite.inputEnabled = true;
         parentSprite.events.onInputDown.add(this.inputListener, parentSprite);
 
-        parentSprite.inputListener = this.inputListener;
-        parentSprite.action = this.action;
-        parentSprite.text = text;
-        parentSprite.num = this.num;
-        parentSprite.getGridLocation = this.getGridLocation;
-
-        return parentSprite;
+        this.text = text;
     }
 
     update() {
     }
 
     inputListener() {
-        this.firstEvent = true;
+        this.currentlyActiveHandler = true;
         this.game.input.onTap.removeAll();
-        if (this.game.activeInputHandler) {
-            this.game.add.tween(this.game.activeInputHandler.scale)
-                .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
-        }
+
+        this.game.add.tween(this.allHandlers.filter(i => i.currentlyActiveHandler).pop().scale)
+            .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
+        this.allHandlers.map(i => i.currentlyActiveHandler = false);
+
         this.game.input.onTap.add(this.action, this);
         this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Phaser.Easing.Bounce.Out).start();
-        this.game.activeInputHandler = this;
 
         let button = this.game.add.audio('button');
         button.play();
     }
 
     action(pointer, doubleTap, sprite) {
-        if (this.firstEvent) {
-            this.firstEvent = false;
-            this.game.activeInputHandler = this;
-            return;
-        }
+
+        this.currentlyActiveHandler = true;
 
         let grid = this.getGridLocation(pointer);
 
@@ -84,8 +90,8 @@ export default class TurretHandler extends InputHandler {
         //if not, use one of those
 
         //make turret
-        new Turret(this.game, (this.game.mission.gridSize.offsetX + (grid.x * this.game.mission.gridSize.cellWidth)), grid.y * this.game.mission.gridSize.cellHeight, null);
-        this.game.dao.placeItem("Turret", this.game.mission.name, grid.x, grid.y);
+        new Turret(this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight, null);
+        this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);
         this.text.setText(this.num());
 
         let place = this.game.add.audio('place-item');
@@ -93,7 +99,7 @@ export default class TurretHandler extends InputHandler {
     }
 
     num() {
-        let turrets = this.game.gameData.inventoryItems.find(it => it.type === 'Turret');
+        let turrets = this.gameState.inventoryLoot.filter(it => it.type === 'Turret').pop();
 
         if (turrets) {
             return turrets.amount + "";
@@ -103,19 +109,19 @@ export default class TurretHandler extends InputHandler {
     }
 
     getGridLocation(input){
-        let gridX = Math.floor((input.x - this.game.mission.gridSize.offsetX)/ this.game.mission.gridSize.cellWidth);
+        let gridX = Math.floor((input.x - this.mission.gridSize.offsetX)/ this.mission.gridSize.cellWidth);
         if(gridX < 0){
             gridX = 0;
         }
-        if(gridX >= this.game.mission.gridSize.x){
-            gridX = this.game.mission.gridSize.x-1;
+        if(gridX >= this.mission.gridSize.x){
+            gridX = this.mission.gridSize.x-1;
         }
-        let gridY = Math.floor(input.y / this.game.mission.gridSize.cellHeight);
+        let gridY = Math.floor(input.y / this.mission.gridSize.cellHeight);
         if(gridY < 0){
             gridY = 0;
         }
-        if(gridY >= this.game.mission.gridSize.y){
-            gridY = this.game.mission.gridSize.y -1;
+        if(gridY >= this.mission.gridSize.y){
+            gridY = this.mission.gridSize.y -1;
         }
         return {x: gridX, y: gridY};
     }

@@ -4,7 +4,7 @@ import Bullet from './Bullet';
 
 export default class Turret extends MapObject {
 
-    constructor(game, x, y, groups) {
+    constructor(game, x, y) {
         super();
         let defaultSize = {width: 32, height: 32};
         let scaleX = game.mission.gridSize.cellWidth / defaultSize.width;

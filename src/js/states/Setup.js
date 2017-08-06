@@ -11,8 +11,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Button_1 = require("../prefabs/Button");
-var gameObjects = require("../objects");
-var setupInputHandlers = require("../handlers/setup");
+var TurretHandler_1 = require("../handlers/setup/TurretHandler");
+var Turret_1 = require("../objects/Turret");
+var Wall_1 = require("../objects/Wall");
 var Setup = (function (_super) {
     __extends(Setup, _super);
     function Setup(gameState) {
@@ -34,15 +35,22 @@ var Setup = (function (_super) {
         this.game.world.sendToBack(background);
         console.log(this.gameState.placedLoot);
         this.gameState.placedLoot.filter(function (it) { return it.mission === _this.mission.name; }).forEach(function (it) {
-            new gameObjects[it.type](_this.game, (_this.mission.gridSize.offsetX + (it.x * _this.mission.gridSize.cellWidth)), it.y * _this.mission.gridSize.cellHeight, [_this.objects]);
+            //TODO factory or something
+            if (it.type.toLowerCase() == 'turret') {
+                new Turret_1["default"](_this.game, (_this.mission.gridSize.offsetX + (it.x * _this.mission.gridSize.cellWidth)), it.y * _this.mission.gridSize.cellHeight);
+            }
+            else if (it.type.toLowerCase() == 'wall') {
+                new Wall_1["default"](_this.game, (_this.mission.gridSize.offsetX + (it.x * _this.mission.gridSize.cellWidth)), it.y * _this.mission.gridSize.cellHeight);
+            }
         });
         this.drawInputs();
     };
     Setup.prototype.drawInputs = function () {
+        // Object.keys(setupInputHandlers).forEach((ih,index) => {
+        //     new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
+        // });
         var _this = this;
-        Object.keys(setupInputHandlers).forEach(function (ih, index) {
-            new setupInputHandlers[ih](_this.game, 50, 300 + (90 * index));
-        });
+        new TurretHandler_1["default"](this.mission, [], this.gameState, this.game, 50, 300);
         new Button_1["default"](this.game, 100, this.game.height - 40, 100, 40, 'Back', function () {
             console.log("asking to go back");
             _this.state.start('Missions');

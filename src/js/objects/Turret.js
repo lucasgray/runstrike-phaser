@@ -15,7 +15,7 @@ var lodash_1 = require("lodash");
 var Bullet_1 = require("./Bullet");
 var Turret = (function (_super) {
     __extends(Turret, _super);
-    function Turret(game, x, y, groups) {
+    function Turret(game, x, y) {
         var _this = _super.call(this) || this;
         var defaultSize = { width: 32, height: 32 };
         var scaleX = game.mission.gridSize.cellWidth / defaultSize.width;

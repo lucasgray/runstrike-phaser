@@ -1,5 +1,5 @@
 export default class SpriteExtensions {
-    alignInParent = function(sprite: Phaser.Sprite, parent: Phaser.Sprite, position?: number, offsetX?: number, offsetY?: number) {
+    static alignInParent(sprite: Phaser.Sprite, parent: Phaser.Sprite, position?: number, offsetX?: number, offsetY?: number) {
 
         let s = parent.scale;
         parent.scale.setTo(1);

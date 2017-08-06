@@ -1,8 +1,10 @@
 import Button from "../prefabs/Button";
 import * as gameObjects from "../objects";
-import * as setupInputHandlers from "../handlers/setup"
+import TurretHandler from "../handlers/setup/TurretHandler"
 import Mission from "../missions/Mission";
 import {GameState} from "../objects/GameData";
+import Turret from "../objects/Turret";
+import Wall from "../objects/Wall";
 
 export default class Setup extends Phaser.State {
 
@@ -36,7 +38,12 @@ export default class Setup extends Phaser.State {
         console.log(this.gameState.placedLoot);
 
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
-          new gameObjects[it.type](this.game, (this.mission.gridSize.offsetX + (it.x * this.mission.gridSize.cellWidth)), it.y * this.mission.gridSize.cellHeight, [this.objects]);
+            //TODO factory or something
+            if (it.type.toLowerCase() == 'turret') {
+                new Turret(this.game, (this.mission.gridSize.offsetX + (it.x * this.mission.gridSize.cellWidth)), it.y * this.mission.gridSize.cellHeight);
+            } else if (it.type.toLowerCase() == 'wall') {
+                new Wall(this.game, (this.mission.gridSize.offsetX + (it.x * this.mission.gridSize.cellWidth)), it.y * this.mission.gridSize.cellHeight);
+            }
         });
 
         this.drawInputs();
@@ -44,9 +51,11 @@ export default class Setup extends Phaser.State {
 
     drawInputs() {
 
-        Object.keys(setupInputHandlers).forEach((ih,index) => {
-            new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
-        });
+        // Object.keys(setupInputHandlers).forEach((ih,index) => {
+        //     new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
+        // });
+
+        new TurretHandler(this.mission, [], this.gameState, this.game, 50, 300);
 
         new Button(
             this.game,
