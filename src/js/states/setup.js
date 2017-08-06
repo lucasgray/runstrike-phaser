@@ -1,4 +1,4 @@
-import Button from "../extensions/Button";
+import Button from "../prefabs/Button";
 import * as gameObjects from "../objects";
 import * as setupInputHandlers from "../handlers/setup"
 

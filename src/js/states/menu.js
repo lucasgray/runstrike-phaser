@@ -1,4 +1,4 @@
-import Button from "../extensions/Button";
+import Button from "../prefabs/Button";
 
 export default class Menu extends Phaser.State {
 
@@ -27,7 +27,7 @@ export default class Menu extends Phaser.State {
         });
         this.title.anchor.setTo(0.5);
 
-        new Button(
+        this.game.add.existing(new Button(
             this.game,
             this.game.world.centerX,
             this.game.world.centerY + 125,
@@ -38,7 +38,7 @@ export default class Menu extends Phaser.State {
                 console.log("asking to start mission select!");
                 this.state.start('Missions');
             }
-        );
+        ));
 
         // Buttons.makeButton(
         //     this.game,

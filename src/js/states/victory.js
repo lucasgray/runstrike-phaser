@@ -1,4 +1,4 @@
-import Button from "../extensions/Button";
+import Button from "../prefabs/Button";
 
 export default class Victory extends Phaser.State {
 

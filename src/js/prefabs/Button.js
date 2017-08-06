@@ -31,7 +31,7 @@ var Button = (function (_super) {
         graphics.drawRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
         var sprite = this.game.add.sprite(this.x, this.y, graphics.generateTexture());
         graphics.destroy();
-        _super.prototype.addChild.call(this, sprite);
+        this.addChild(sprite);
         //text to go on button
         var text = this.game.add.text(0, 0, this.label, {
             font: 'Righteous',

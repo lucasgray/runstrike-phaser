@@ -1,4 +1,4 @@
-import Buttons from "../extensions/Button";
+import Buttons from "../prefabs/Button";
 import * as inputHandlers from "../handlers";
 import * as Phaser from "phaser-ce";
 

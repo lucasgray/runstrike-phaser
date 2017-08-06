@@ -1,13 +1,11 @@
-import Button from "../extensions/Button";
+import Button from "../prefabs/Button";
 import * as missions from "../missions";
 
 export default class Menu extends Phaser.State {
 
     create() {
 
-        this.game.music = this.game.add.audio('futureMusic');
         this.graphics = this.game.add.graphics(0, 0);
-        this.btnDownSound = this.add.sound('menuDown');
 
         this.title = this.game.add.text(
             this.game.world.centerX,

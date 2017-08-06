@@ -35,7 +35,7 @@ export default class Button extends Phaser.Sprite {
         let sprite = this.game.add.sprite(this.x, this.y, graphics.generateTexture());
         graphics.destroy();
 
-        super.addChild(sprite);
+        this.addChild(sprite);
 
         //text to go on button
 

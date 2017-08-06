@@ -101,123 +101,16 @@ export default class Preload extends Phaser.State {
           sprite.angle = targetAngle + offset;
           return targetAngle + offset;
         };
-
-        //TODO check the bridge for this and default to test data if not
-        //TODO save this to firebase
-        //access this as this.game.gameData
-        this.game.gameData = {
-            "caps": 395,
-            "placed_loot": {
-                "Skirmish": {
-                    "-KivEivrunTm0bGxrfPq": {
-                        "mission": "Skirmish",
-                        "type": "Turret",
-                        "x": 3,
-                        "y": 5
-                    },
-                    "-Kj57wIvhvgeQG7Xdz3X": {
-                        "mission": "Skirmish",
-                        "type": "Turret",
-                        "x": 8,
-                        "y": 10
-                    }
-                }
-            },
-            "unused_loot": {
-                "-Kj-ezDNFAwbZirmeGOE": {
-                    "foundBy": "TODO!",
-                    "foundOn": "TODO!",
-                    "key": "-Kj-bZwrlcIIpPqnf-FQ",
-                    "latLong": {
-                        "latitude": 43.06856735536175,
-                        "longitude": -89.33985730479297
-                    },
-                    "type": "cocktail"
-                },
-                "-Kj-ezDsdfNFAwbZirmeGOE": {
-                    "foundBy": "TODO!",
-                    "foundOn": "TODO!",
-                    "key": "-Kj-bZwrlcIIpPsdfqnf-FQ",
-                    "latLong": {
-                        "latitude": 43.06856735536175,
-                        "longitude": -89.33985730479297
-                    },
-                    "type": "cocktail"
-                },"-Kj-ezDNFAwbZsdfsdfirmeGOE": {
-                    "foundBy": "TODO!",
-                    "foundOn": "TODO!",
-                    "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                    "latLong": {
-                        "latitude": 43.06856735536175,
-                        "longitude": -89.33985730479297
-                    },
-                    "type": "cocktail"
-                },"-Kj-ezDNFAwbZsdfsdfirmeGOG": {
-                    "foundBy": "TODO!",
-                    "foundOn": "TODO!",
-                    "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                    "latLong": {
-                        "latitude": 43.06856735536175,
-                        "longitude": -89.33985730479297
-                    },
-                    "type": "Turret"
-                },"-Kj-ezDNFAwbZsdfsdfirmeGOH": {
-                    "foundBy": "TODO!",
-                    "foundOn": "TODO!",
-                    "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                    "latLong": {
-                        "latitude": 43.06856735536175,
-                        "longitude": -89.33985730479297
-                    },
-                    "type": "Turret"
-                }
-            }
-        }
     }
 
     update() {
 
         if (this.cache.isSoundDecoded("backgroundMusic") && this.ready === false) {
-
-            //if not react native, comment this out!
-            if (typeof(window.DATA) !== "undefined") {
-                this.game.gameData = window.DATA;
-                this.game.gameData.isReactNative = true;
-            } else {
-                this.game.gameData.isReactNative = false;
-            }
-
-            let asMissionArray = _.values(this.game.gameData.placed_loot);
-
-            let flat = _.flatMap(asMissionArray, (obj) => _.values(obj));
-
-            this.game.gameData.inventoryItems = this.groupItems(this.game.gameData.unused_loot, this.game.gameData.caps);
-            this.game.gameData.placedItems = flat;
-
-            this.game.dao = new Dao(this.game);
-
             this.state.start('Menu');
         }
     }
 
-    groupItems(items, caps) {
-        if (items) {
-            let byType = _.countBy(items, i => i.type);
-            console.log("bytype " + JSON.stringify(byType));
-            let final = _.map(Object.keys(byType), it => {
-                console.log(JSON.stringify(it));
-                return {type: it, amount: byType[it]}
-            });
-            if (caps) {
-                final.push({type: 'caps', amount: caps});
-            }
 
-            return final;
-        }
-        else {
-            return [];
-        }
-    }
 
 
 
