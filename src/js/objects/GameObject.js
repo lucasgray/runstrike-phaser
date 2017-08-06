@@ -31,6 +31,6 @@ var GameObject = (function (_super) {
         }
     };
     return GameObject;
-}(PIXI.DisplayObject));
+}(Phaser.Sprite));
 exports["default"] = GameObject;
 //# sourceMappingURL=GameObject.js.map

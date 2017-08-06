@@ -1,4 +1,4 @@
-export default class GameObject extends PIXI.DisplayObject {
+export default class GameObject extends Phaser.Sprite {
     constructor() {
       super();
     }

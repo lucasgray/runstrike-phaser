@@ -16,12 +16,10 @@ export default class Mission {
     }
 
     shutdown(){
-      this.game.stage.backgroundColor = this.previousBackground;
     }
 
     create(){
       this.createGrid();
-      this.game.inputHandler = ()=>'';
     }
 
     calculateGridSize(){

@@ -1,31 +1,31 @@
 import MapObject from './MapObject';
 import _ from 'lodash';
 
-export default class Bullet extends MapObject {
+export default class Bullet extends Phaser.Sprite {
+
+    fromSprite: Phaser.Sprite;
+    toSprite: Phaser.Sprite;
 
     constructor(game, fromSprite, toSprite) {
-        super();
+        super(game, fromSprite.x, fromSprite.y, 'bullet');
 
-        let bullet = game.add.sprite(fromSprite.x, fromSprite.y, 'bullet');
-        bullet.anchor.setTo(0.5);
-        bullet.angle = fromSprite.angle;
-        game.physics.arcade.enable(bullet);
-        game.bullets.add(bullet);
+        this.anchor.setTo(0.5);
+        this.angle = fromSprite.angle;
+        game.physics.arcade.enable(this);
+        game.bullets.add(this);
 
         let halfXVelocity = toSprite.body.velocity.x / 2;
         let halfYVelocity = toSprite.body.velocity.y / 2;
 
-        game.physics.arcade.moveToXY(bullet, toSprite.x + halfXVelocity, toSprite.y + halfYVelocity, 300);
+        game.physics.arcade.moveToXY(this, toSprite.x + halfXVelocity, toSprite.y + halfYVelocity, 300);
 
         let shootSound = game.add.audio('shoot');
         shootSound.play();
 
-        bullet.game = game;
-        bullet.fromSprite = fromSprite;
-        bullet.toSprite = toSprite;
-        bullet.update = this.update;
+        this.game = game;
 
-        return bullet;
+        this.fromSprite = fromSprite;
+        this.toSprite = toSprite;
     }
 
     update() {

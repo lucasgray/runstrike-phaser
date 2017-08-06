@@ -10,26 +10,23 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var MapObject_1 = require("./MapObject");
 var Bullet = (function (_super) {
     __extends(Bullet, _super);
     function Bullet(game, fromSprite, toSprite) {
-        var _this = _super.call(this) || this;
-        var bullet = game.add.sprite(fromSprite.x, fromSprite.y, 'bullet');
-        bullet.anchor.setTo(0.5);
-        bullet.angle = fromSprite.angle;
-        game.physics.arcade.enable(bullet);
-        game.bullets.add(bullet);
+        var _this = _super.call(this, game, fromSprite.x, fromSprite.y, 'bullet') || this;
+        _this.anchor.setTo(0.5);
+        _this.angle = fromSprite.angle;
+        game.physics.arcade.enable(_this);
+        game.bullets.add(_this);
         var halfXVelocity = toSprite.body.velocity.x / 2;
         var halfYVelocity = toSprite.body.velocity.y / 2;
-        game.physics.arcade.moveToXY(bullet, toSprite.x + halfXVelocity, toSprite.y + halfYVelocity, 300);
+        game.physics.arcade.moveToXY(_this, toSprite.x + halfXVelocity, toSprite.y + halfYVelocity, 300);
         var shootSound = game.add.audio('shoot');
         shootSound.play();
-        bullet.game = game;
-        bullet.fromSprite = fromSprite;
-        bullet.toSprite = toSprite;
-        bullet.update = _this.update;
-        return bullet;
+        _this.game = game;
+        _this.fromSprite = fromSprite;
+        _this.toSprite = toSprite;
+        return _this;
     }
     Bullet.prototype.update = function () {
         if (Phaser.Math.distance(this.x, this.y, this.fromSprite.x, this.fromSprite.y) > 50) {
@@ -38,6 +35,6 @@ var Bullet = (function (_super) {
         }
     };
     return Bullet;
-}(MapObject_1["default"]));
+}(Phaser.Sprite));
 exports["default"] = Bullet;
 //# sourceMappingURL=Bullet.js.map

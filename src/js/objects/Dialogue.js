@@ -15,23 +15,16 @@ var StoryObject_1 = require("./StoryObject");
 var Dialogue = (function (_super) {
     __extends(Dialogue, _super);
     function Dialogue(options) {
-        var _this = _super.call(this) || this;
-        //buid caption box
-        //image
-        var image = options.game.add.sprite(options.enemy.x, options.enemy.y, options.enemy.image);
-        image.options = options;
-        image.showUntil = Date.now() + options.enemy.showFor;
-        //text
-        image.update = _this.update;
-        return image;
+        return _super.call(this) || this;
+        // //buid caption box
+        // //image
+        // let image = options.game.add.sprite(options.enemy.x, options.enemy.y, options.enemy.image);
+        // image.options = options;
+        // image.showUntil = Date.now() + options.enemy.showFor;
+        // //text
+        // image.update = this.update;
+        // return image;
     }
-    Dialogue.prototype.update = function () {
-        if (this.alive) {
-            if (Date.now() >= this.showUntil) {
-                this.destroy();
-            }
-        }
-    };
     return Dialogue;
 }(StoryObject_1["default"]));
 exports["default"] = Dialogue;

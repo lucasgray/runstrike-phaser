@@ -4,7 +4,7 @@ var Phaser = require("phaser-ce");
 var PhysicsExtensions = (function () {
     function PhysicsExtensions() {
     }
-    PhysicsExtensions.prototype.rotateToXY = function (sprite, x, y, offset) {
+    PhysicsExtensions.rotateToXY = function (sprite, x, y, offset) {
         var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.angleBetween(sprite.x, sprite.y, x, y);
         if (targetAngle < 0)
             targetAngle += 360;

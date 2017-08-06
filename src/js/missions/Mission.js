@@ -9,11 +9,9 @@ var Mission = (function () {
     Mission.prototype.update = function () {
     };
     Mission.prototype.shutdown = function () {
-        this.game.stage.backgroundColor = this.previousBackground;
     };
     Mission.prototype.create = function () {
         this.createGrid();
-        this.game.inputHandler = function () { return ''; };
     };
     Mission.prototype.calculateGridSize = function () {
         this.gridSize.cellWidth = Math.floor((this.game.width * .8) / this.gridSize.x);

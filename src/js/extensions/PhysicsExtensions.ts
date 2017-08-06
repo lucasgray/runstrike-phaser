@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser-ce'
 
 export default class PhysicsExtensions {
-    rotateToXY(sprite: Phaser.Sprite, x: number, y: number, offset: number){
+    static rotateToXY(sprite: Phaser.Sprite, x: number, y: number, offset: number){
 
         let targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.angleBetween(sprite.x, sprite.y, x, y);
 
