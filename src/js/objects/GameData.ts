@@ -1,7 +1,7 @@
 
 import * as Phaser from 'phaser-ce';
 import * as _ from 'lodash';
-import * as EasyStar from "easystarjs";
+
 //everybody has this?
 export class GameState {
 
@@ -10,10 +10,10 @@ export class GameState {
 
     backgroundMusic: Phaser.Sound;
     isPlayingMusic: boolean;
+    hasStartedMusic: boolean;
+    musicPause: boolean;
 
     isReactNative: boolean;
-
-    easystar = new EasyStar.js();
 
     constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, isReactNative: boolean) {
         this.placedLoot = placedLoot;

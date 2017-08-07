@@ -1,9 +1,7 @@
-import StoryObject from './StoryObject';
-
-export default class Caption extends StoryObject {
+export default class Caption {
 
     constructor(game, x, y, groups) {
-        super();
+
         //buid caption
         //image? y/n
         //text

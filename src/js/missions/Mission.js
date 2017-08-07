@@ -1,10 +1,22 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
-var gameObjects = require("../objects");
-var EasyStar = require("easystarjs");
-var Mission = (function () {
-    function Mission(game) {
-        this.game = game;
+var GridDescriptor_1 = require("../extensions/GridDescriptor");
+var Mission = (function (_super) {
+    __extends(Mission, _super);
+    function Mission() {
+        var _this = _super.call(this) || this;
+        _this.gridSize = new GridDescriptor_1["default"]();
+        return _this;
     }
     Mission.prototype.update = function () {
     };
@@ -21,34 +33,15 @@ var Mission = (function () {
         this.gridSize.offsetX = (this.game.width - this.gridSize.width) / 2;
     };
     Mission.prototype.createGrid = function () {
-        this.game.enemies = this.game.add.physicsGroup();
-        this.game.bullets = this.game.add.physicsGroup();
+        // this.game.enemies = this.game.add.physicsGroup();
+        // this.game.bullets = this.game.add.physicsGroup();
         var background = this.game.add.sprite(this.gridSize.offsetX, 0, 'skirmish-background');
         background.width = this.gridSize.width;
         background.height = this.gridSize.height;
         this.game.world.sendToBack(background);
-        this.setupGrid();
-    };
-    Mission.prototype.setupGrid = function () {
-        var _this = this;
-        var easystar = new EasyStar.js();
-        var grid = [];
-        Array.from(new Array(this.gridSize.y)).forEach(function () {
-            grid.push(new Array(_this.gridSize.x).fill(0));
-        });
-        this.game.gameData.placedItems.forEach(function (it) {
-            grid[it.y][it.x] = 1;
-            new gameObjects[it.type](_this.game, _this.gridSize.offsetX + (it.x * _this.gridSize.cellWidth), it.y * _this.gridSize.cellHeight);
-        });
-        easystar.setGrid(grid);
-        easystar.setAcceptableTiles([0]);
-        easystar.calculate();
-        easystar.enableDiagonals();
-        easystar.disableCornerCutting();
-        this.game.easystar = easystar;
-        this.game.easystar.calculate();
+        // this.setupGrid();
     };
     return Mission;
-}());
+}(Phaser.State));
 exports["default"] = Mission;
 //# sourceMappingURL=Mission.js.map

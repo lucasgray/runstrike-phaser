@@ -1,10 +1,9 @@
 //http://www.quickanddirtytips.com/education/grammar/dialog-or-dialogue
-import StoryObject from './StoryObject';
 
-export default class Dialogue extends StoryObject {
+export default class Dialogue {
 
-    constructor(options) {
-        super();
+    constructor() {
+
         // //buid caption box
         // //image
         // let image = options.game.add.sprite(options.enemy.x, options.enemy.y, options.enemy.image);

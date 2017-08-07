@@ -1,4 +1,4 @@
-import Button from "../prefabs/Button";
+import Button from "../objects/Button";
 import * as GameData from "../objects/GameData";
 
 export default class Menu extends Phaser.State {
@@ -13,16 +13,14 @@ export default class Menu extends Phaser.State {
 
     create() {
 
-        // if (!this.game.backgroundMusic || !this.game.hasStartedMusic) {
-        //     this.game.backgroundMusic = this.game.add.audio('backgroundMusic');
-        //     this.game.backgroundMusic.play();
-        //     this.game.hasStartedMusic = true;
-        // } else if (this.game.backgroundMusic && this.game.musicPause) {
-        //     this.game.backgroundMusic.resume();
-        // }
-        //
-        // this.graphics = this.game.add.graphics(0, 0);
-
+        if (!this.gameState.backgroundMusic || !this.gameState.hasStartedMusic) {
+            this.gameState.backgroundMusic = this.game.add.audio('backgroundMusic');
+            this.gameState.backgroundMusic.play();
+            this.gameState.hasStartedMusic = true;
+        } else if (this.gameState.backgroundMusic && this.gameState.musicPause) {
+            this.gameState.backgroundMusic.resume();
+        }
+        
         let bkgrd = this.game.add.image(0, 0, 'retro-background');
         bkgrd.scale.setTo(.25, .5);
 

@@ -72,7 +72,7 @@ var TurretHandler = (function (_super) {
         //and is there a problem placing there?
         //if not, use one of those
         //make turret
-        new Turret_1["default"](this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight, null);
+        new Turret_1["default"](this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight);
         this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);
         this.text.setText(this.num());
         var place = this.game.add.audio('place-item');

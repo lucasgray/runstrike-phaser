@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Button_1 = require("../prefabs/Button");
+var Button_1 = require("../objects/Button");
 var TurretHandler_1 = require("../handlers/setup/TurretHandler");
 var Turret_1 = require("../objects/Turret");
 var Wall_1 = require("../objects/Wall");

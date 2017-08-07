@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Button_1 = require("../prefabs/Button");
+var Button_1 = require("../objects/Button");
 var Menu = (function (_super) {
     __extends(Menu, _super);
     function Menu(gameState) {
@@ -19,16 +19,15 @@ var Menu = (function (_super) {
         return _this;
     }
     Menu.prototype.create = function () {
-        // if (!this.game.backgroundMusic || !this.game.hasStartedMusic) {
-        //     this.game.backgroundMusic = this.game.add.audio('backgroundMusic');
-        //     this.game.backgroundMusic.play();
-        //     this.game.hasStartedMusic = true;
-        // } else if (this.game.backgroundMusic && this.game.musicPause) {
-        //     this.game.backgroundMusic.resume();
-        // }
-        //
-        // this.graphics = this.game.add.graphics(0, 0);
         var _this = this;
+        if (!this.gameState.backgroundMusic || !this.gameState.hasStartedMusic) {
+            this.gameState.backgroundMusic = this.game.add.audio('backgroundMusic');
+            this.gameState.backgroundMusic.play();
+            this.gameState.hasStartedMusic = true;
+        }
+        else if (this.gameState.backgroundMusic && this.gameState.musicPause) {
+            this.gameState.backgroundMusic.resume();
+        }
         var bkgrd = this.game.add.image(0, 0, 'retro-background');
         bkgrd.scale.setTo(.25, .5);
         var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 20, "WAR ROOM", {

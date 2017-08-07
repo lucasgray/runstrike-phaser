@@ -10,16 +10,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Button_1 = require("../prefabs/Button");
-var missions = require("../missions");
-var Menu = (function (_super) {
-    __extends(Menu, _super);
-    function Menu(gameState) {
+var Button_1 = require("../objects/Button");
+var Missions = (function (_super) {
+    __extends(Missions, _super);
+    function Missions(gameState) {
         var _this = _super.call(this) || this;
         _this.gameState = gameState;
         return _this;
     }
-    Menu.prototype.create = function () {
+    Missions.prototype.create = function () {
         var _this = this;
         var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 200, "Select Mission", {
             font: '60px Righteous',
@@ -27,18 +26,16 @@ var Menu = (function (_super) {
             align: 'center'
         });
         title.anchor.setTo(0.5);
-        Object.keys(missions).forEach(function (mission, index) {
-            new Button_1["default"](_this.game, _this.game.world.centerX, _this.game.world.centerY + (70 * index), _this.game.width * 0.8, 60, mission, function () {
-                console.log("asking to play a mission!");
-                _this.state.start('Setup', new missions[mission](_this.game));
-            });
+        new Button_1["default"](this.game, this.game.world.centerX, this.game.world.centerY + (70), this.game.width * 0.8, 60, 'Skirmish', function () {
+            console.log("asking to play a mission!");
+            _this.game.state.start('Skirmish');
         });
         new Button_1["default"](this.game, 100, this.game.height - 40, 100, 40, 'Back', function () {
             console.log("asking to go to menu");
             _this.state.start('Menu');
         });
     };
-    return Menu;
+    return Missions;
 }(Phaser.State));
-exports["default"] = Menu;
+exports["default"] = Missions;
 //# sourceMappingURL=Missions.js.map

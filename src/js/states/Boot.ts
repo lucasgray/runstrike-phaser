@@ -4,6 +4,8 @@ import {PlacedLootInfo} from "../objects/GameData";
 import Preload from "./Preload";
 import Menu from "./Menu";
 import Setup from "./Setup";
+import Missions from "./Missions";
+import Skirmish from "../missions/Skirmish";
 
 export default class Boot extends Phaser.State {
 
@@ -29,7 +31,9 @@ export default class Boot extends Phaser.State {
 
         this.game.state.add('Preload', new Preload());
         this.game.state.add('Menu', new Menu(this.gameState));
+        this.game.state.add('Missions', new Missions(this.gameState));
         this.game.state.add('Setup', new Setup(this.gameState));
+        this.game.state.add('Skirmish', new Skirmish(this.gameState));
 
         this.state.start('Preload');
     }

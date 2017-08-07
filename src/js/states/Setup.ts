@@ -1,8 +1,7 @@
-import Button from "../prefabs/Button";
-import * as gameObjects from "../objects";
+import Button from "../objects/Button";
 import TurretHandler from "../handlers/setup/TurretHandler"
 import Mission from "../missions/Mission";
-import {GameState} from "../objects/GameData";
+import { GameState } from "../objects/GameData";
 import Turret from "../objects/Turret";
 import Wall from "../objects/Wall";
 

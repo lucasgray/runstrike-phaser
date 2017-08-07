@@ -1,8 +1,8 @@
-import Button from "../prefabs/Button";
-import * as missions from "../missions";
+import Button from "../objects/Button";
 import {GameState} from "../objects/GameData";
+import Skirmish from "../missions/Skirmish";
 
-export default class Menu extends Phaser.State {
+export default class Missions extends Phaser.State {
 
     gameState: GameState;
 
@@ -23,19 +23,18 @@ export default class Menu extends Phaser.State {
         });
         title.anchor.setTo(0.5);
 
-        Object.keys(missions).forEach((mission, index) => {
-          new Button(
-              this.game,
-              this.game.world.centerX,
-              this.game.world.centerY + (70 * index),
-              this.game.width * 0.8,
-              60,
-              mission, ()=>{
-                  console.log("asking to play a mission!");
-                  this.state.start('Setup', new missions[mission](this.game));
-              }
-          );
-        });
+
+        new Button(
+            this.game,
+            this.game.world.centerX,
+            this.game.world.centerY + (70),
+            this.game.width * 0.8,
+            60,
+            'Skirmish', ()=>{
+                console.log("asking to play a mission!");
+                this.game.state.start('Skirmish');
+            }
+        );
 
         new Button(
             this.game,

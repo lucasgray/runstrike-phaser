@@ -90,7 +90,7 @@ export default class TurretHandler extends Phaser.Sprite {
         //if not, use one of those
 
         //make turret
-        new Turret(this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight, null);
+        new Turret(this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight);
         this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);
         this.text.setText(this.num());
 

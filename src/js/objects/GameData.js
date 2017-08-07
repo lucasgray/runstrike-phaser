@@ -1,11 +1,9 @@
 "use strict";
 exports.__esModule = true;
 var _ = require("lodash");
-var EasyStar = require("easystarjs");
 //everybody has this?
 var GameState = (function () {
     function GameState(placedLoot, inventoryLoot, isReactNative) {
-        this.easystar = new EasyStar.js();
         this.placedLoot = placedLoot;
         this.inventoryLoot = inventoryLoot;
         this.isReactNative = isReactNative;

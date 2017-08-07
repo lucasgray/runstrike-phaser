@@ -1,5 +1,3 @@
-import MapObject from './MapObject';
-import _ from 'lodash';
 
 export default class Bullet extends Phaser.Sprite {
 

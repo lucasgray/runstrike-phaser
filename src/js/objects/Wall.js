@@ -10,11 +10,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var MapObject_1 = require("./MapObject");
 var Wall = (function (_super) {
     __extends(Wall, _super);
     function Wall(game, x, y) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this, game, x, y) || this;
         var g = game.add.graphics(0, 0);
         g.lineStyle(2, 0x0000FF, 0.5);
         g.beginFill(0x0000FF, 1);
@@ -25,6 +24,6 @@ var Wall = (function (_super) {
         // this.addToGroup(groups);
     }
     return Wall;
-}(MapObject_1["default"]));
+}(Phaser.Sprite));
 exports["default"] = Wall;
 //# sourceMappingURL=Wall.js.map

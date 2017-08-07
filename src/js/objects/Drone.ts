@@ -1,4 +1,3 @@
-import EnemyObject from './EnemyObject';
 import Mission from "../missions/Mission";
 import * as EasyStar from "easystarjs";
 import PhysicsExtensions from "../extensions/PhysicsExtensions";
