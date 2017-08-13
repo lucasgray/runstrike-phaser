@@ -36,7 +36,6 @@ export default class GridDescriptor {
         this.offsetX = (gameWidth - this.width) / 2;
     }
 
-    //FIXME not quite right
     getGridLocation(input){
         let gridX = Math.round((input.x - this.offsetX)/ this.cellWidth);
         if(gridX < 0){
