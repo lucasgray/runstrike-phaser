@@ -4,32 +4,37 @@ import Mission from "../../missions/Mission";
 import SpriteExtensions from "../../extensions/SpriteExtensions";
 import {GameState} from "../../objects/GameData";
 
-export default class TurretHandler extends Phaser.Sprite {
+export default class TurretHandler {
 
     mission: Mission;
     text: Phaser.Text;
-    currentlyActiveHandler: boolean;
-    allHandlers: Array<TurretHandler>;
-    gameState: GameState;
 
-    constructor(mission: Mission, allHandlers: Array<TurretHandler>, gameState: GameState, game: Phaser.Game, x: number, y: number) {
-        super(game, x, y);
+    allHandlers: Array<TurretHandler>;
+
+    gameState: GameState;
+    game: Phaser.Game;
+    parentSprite: Phaser.Sprite;
+    backgroundSprite: Phaser.Sprite;
+
+    constructor(mission: Mission, allHandlers: Array<TurretHandler>, gameState: GameState, backgroundSprite: Phaser.Sprite, game: Phaser.Game, x: number, y: number) {
 
         this.mission = mission;
         this.allHandlers = allHandlers;
         this.gameState = gameState;
+        this.game = game;
+        this.backgroundSprite = backgroundSprite;
 
         var graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
         graphics.lineStyle(3, 0xF1235B);
         graphics.drawCircle(0, 0, 60);
 
-        var parentSprite = game.add.sprite(x, y, graphics.generateTexture());
+        var parentSprite = new Phaser.Sprite(game, x, y, graphics.generateTexture());
         parentSprite.anchor.set(.5);
         graphics.destroy();
 
         var turretIcon = game.add.sprite(0, 0, 'turret');
-        turretIcon.anchor.set(0.5);
+        turretIcon.anchor.set(.5);
         // turretIcon.scale.setTo(.25, .25);
 
         parentSprite.addChild(turretIcon);
@@ -55,7 +60,10 @@ export default class TurretHandler extends Phaser.Sprite {
         itemSprite.addChild(text);
 
         parentSprite.inputEnabled = true;
-        parentSprite.events.onInputDown.add(this.inputListener, parentSprite);
+        parentSprite.events.onInputDown.add(this.inputListener, this);
+
+        this.parentSprite = parentSprite;
+        this.game.add.existing(parentSprite);
 
         this.text = text;
     }
@@ -63,26 +71,31 @@ export default class TurretHandler extends Phaser.Sprite {
     update() {
     }
 
+    /**
+     * The action performed when switching to THIS handler
+     * This should go on the parent handler class in the group.
+     */
     inputListener() {
-        this.currentlyActiveHandler = true;
-        this.game.input.onTap.removeAll();
+        //turn all active handlers off
+        this.backgroundSprite.events.onInputDown.removeAll();
 
-        this.game.add.tween(this.allHandlers.filter(i => i.currentlyActiveHandler).pop().scale)
-            .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
-        this.allHandlers.map(i => i.currentlyActiveHandler = false);
-
-        this.game.input.onTap.add(this.action, this);
-        this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Phaser.Easing.Bounce.Out).start();
-
+        this.game.add.tween(this.parentSprite.scale).to({ x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
         let button = this.game.add.audio('button');
         button.play();
+
+        //add an onTap to listen for placing turrets
+        this.backgroundSprite.events.onInputDown.add(this.action, this);
     }
 
-    action(pointer, doubleTap, sprite) {
+    /**
+     * The action performed if you choose this handler and click on the grid!
+     *
+     * @param pointer
+     * @param sprite
+     */
+    action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        this.currentlyActiveHandler = true;
-
-        let grid = this.getGridLocation(pointer);
+        let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
         //check if currently there is a turret there.
         //if so, were we closer to the top/down/left/right of current,
@@ -90,7 +103,9 @@ export default class TurretHandler extends Phaser.Sprite {
         //if not, use one of those
 
         //make turret
-        new Turret(this.game, (this.mission.gridSize.offsetX + (grid.x * this.mission.gridSize.cellWidth)), grid.y * this.mission.gridSize.cellHeight);
+        let turret = new Turret(this.mission, this.game, (this.mission.gridDescriptor.offsetX + (grid.x * this.mission.gridDescriptor.cellWidth)), grid.y * this.mission.gridDescriptor.cellHeight);
+        this.game.add.existing(turret);
+
         this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);
         this.text.setText(this.num());
 
@@ -106,24 +121,6 @@ export default class TurretHandler extends Phaser.Sprite {
         } else {
             return "0";
         }
-    }
-
-    getGridLocation(input){
-        let gridX = Math.floor((input.x - this.mission.gridSize.offsetX)/ this.mission.gridSize.cellWidth);
-        if(gridX < 0){
-            gridX = 0;
-        }
-        if(gridX >= this.mission.gridSize.x){
-            gridX = this.mission.gridSize.x-1;
-        }
-        let gridY = Math.floor(input.y / this.mission.gridSize.cellHeight);
-        if(gridY < 0){
-            gridY = 0;
-        }
-        if(gridY >= this.mission.gridSize.y){
-            gridY = this.mission.gridSize.y -1;
-        }
-        return {x: gridX, y: gridY};
     }
 
 }

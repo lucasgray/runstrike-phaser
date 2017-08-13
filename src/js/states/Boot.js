@@ -17,7 +17,7 @@ var Preload_1 = require("./Preload");
 var Menu_1 = require("./Menu");
 var Setup_1 = require("./Setup");
 var Missions_1 = require("./Missions");
-var Skirmish_1 = require("../missions/Skirmish");
+var Phaser = require("phaser-ce");
 var Boot = (function (_super) {
     __extends(Boot, _super);
     function Boot() {
@@ -105,7 +105,6 @@ var Boot = (function (_super) {
         this.game.state.add('Menu', new Menu_1["default"](this.gameState));
         this.game.state.add('Missions', new Missions_1["default"](this.gameState));
         this.game.state.add('Setup', new Setup_1["default"](this.gameState));
-        this.game.state.add('Skirmish', new Skirmish_1["default"](this.gameState));
         this.state.start('Preload');
     };
     Boot.prototype.makeGameData = function () {

@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Button_1 = require("../objects/Button");
+var Skirmish_1 = require("../missions/Skirmish");
 var Missions = (function (_super) {
     __extends(Missions, _super);
     function Missions(gameState) {
@@ -28,7 +29,7 @@ var Missions = (function (_super) {
         title.anchor.setTo(0.5);
         new Button_1["default"](this.game, this.game.world.centerX, this.game.world.centerY + (70), this.game.width * 0.8, 60, 'Skirmish', function () {
             console.log("asking to play a mission!");
-            _this.game.state.start('Skirmish');
+            _this.game.state.start('Setup', true, false, new Skirmish_1["default"](_this.game));
         });
         new Button_1["default"](this.game, 100, this.game.height - 40, 100, 40, 'Back', function () {
             console.log("asking to go to menu");

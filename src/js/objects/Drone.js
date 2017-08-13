@@ -17,8 +17,8 @@ var Drone = (function (_super) {
         var _this = _super.call(this, game, x, y, 'drone') || this;
         _this.lastMove = false;
         var defaultSize = { width: 128, height: 128 };
-        var scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
-        var scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
+        var scaleX = game.mission.gridDescriptor.cellWidth / defaultSize.width;
+        var scaleY = game.mission.gridDescriptor.cellHeight / defaultSize.height;
         _this.animations.add('fly');
         _this.animations.play('fly', 30, true);
         _this.scale.setTo(scaleX, scaleY);
@@ -28,9 +28,9 @@ var Drone = (function (_super) {
         if (groups) {
             game.addToGroup(groups);
         }
-        var curXCell = Math.floor(((_this.x - _this.mission.gridSize.offsetX) / _this.mission.gridSize.width) * _this.mission.gridSize.x) - 1;
-        var curYCell = Math.floor((_this.y / _this.mission.gridSize.height) * _this.mission.gridSize.y);
-        _this.easystar.findPath(curXCell, curYCell, Math.floor(_this.mission.gridSize.x / 2), (_this.mission.gridSize.y - 1), function (path) {
+        var curXCell = Math.floor(((_this.x - _this.mission.gridDescriptor.offsetX) / _this.mission.gridDescriptor.width) * _this.mission.gridDescriptor.x) - 1;
+        var curYCell = Math.floor((_this.y / _this.mission.gridDescriptor.height) * _this.mission.gridDescriptor.y);
+        _this.easystar.findPath(curXCell, curYCell, Math.floor(_this.mission.gridDescriptor.x / 2), (_this.mission.gridDescriptor.y - 1), function (path) {
             if (!path) {
                 console.log("The path to the destination point was not found.");
             }
@@ -60,8 +60,8 @@ var Drone = (function (_super) {
             var path = this.path;
             var first = path[0];
             var second = path[1];
-            //second.y * this.game.mission.gridSize.cellHeight to convert to cells
-            if (this.y >= (second.y * this.mission.gridSize.cellHeight)) {
+            //second.y * this.game.mission.gridDescriptor.cellHeight to convert to cells
+            if (this.y >= (second.y * this.mission.gridDescriptor.cellHeight)) {
                 // console.log("we made it! altering path");
                 path = path.slice(1);
                 this.path = path;
@@ -69,22 +69,22 @@ var Drone = (function (_super) {
                 second = path[1];
             }
             //we want to move towards the CENTER of the next cell.. plus a little randomness
-            var xToGo = (second.x * this.mission.gridSize.cellWidth + Math.floor(this.mission.gridSize.cellWidth / 2));
-            var yToGo = (second.y * this.mission.gridSize.cellHeight + Math.floor(this.mission.gridSize.cellHeight / 2));
+            var xToGo = (second.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2));
+            var yToGo = (second.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2));
             console.log(this.x + ' | ' + this.y);
             console.log(xToGo + ' | ' + yToGo);
             var velocity = this.randomVelocity;
-            if (yToGo >= this.mission.gridSize.height - this.mission.gridSize.cellHeight) {
+            if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
                 this.lastMove = true;
             }
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this, this.mission.gridSize.offsetX + xToGo, yToGo, velocity);
-            PhysicsExtensions_1["default"].rotateToXY(this, this.mission.gridSize.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
+            this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, velocity);
+            PhysicsExtensions_1["default"].rotateToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
         }
         else {
             // console.log('lastmoved.')
             if (this.alive) {
-                if (this.body.y > this.mission.gridSize.height - (this.mission.gridSize.cellHeight / 2)) {
+                if (this.body.y > this.mission.gridDescriptor.height - (this.mission.gridDescriptor.cellHeight / 2)) {
                     this.game.state.start('Defeat');
                 }
             }

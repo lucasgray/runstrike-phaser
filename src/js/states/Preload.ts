@@ -1,4 +1,3 @@
-import { Sprite } from "phaser-ce";
 import * as WebFont from "webfontloader";
 
 require('../../css/joystix-monospace.ttf');
@@ -10,6 +9,7 @@ export default class Preload extends Phaser.State {
     create() {
 
         this.game.renderer.renderSession.roundPixels = true;
+        Phaser['Component'].Core.skipTypeChecks = true;
     }
 
     preload() {

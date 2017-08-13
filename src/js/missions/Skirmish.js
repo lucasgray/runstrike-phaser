@@ -11,16 +11,18 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Mission_1 = require("./Mission");
+var GridDescriptor_1 = require("../extensions/GridDescriptor");
 var Skirmish = (function (_super) {
     __extends(Skirmish, _super);
-    function Skirmish(gameState) {
-        return _super.call(this) || this;
+    function Skirmish(game) {
+        var _this = _super.call(this, game) || this;
+        _this.name = 'Skirmish';
+        _this.gridDescriptor = new GridDescriptor_1["default"](game.width, game.height, 15, 20, 50);
+        return _this;
     }
     Skirmish.prototype.create = function () {
         this.game.stage.backgroundColor = 0x002200;
     };
-    // this.name = 'Skirmish';
-    //
     // this.gridSize = {x: 15, y:20};
     // this.calculateGridSize();
     // this.game.create.grid('grid', this.gridSize.width + 1, this.gridSize.height + 1, this.gridSize.cellWidth, this.gridSize.cellHeight, '#ffffff');

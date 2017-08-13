@@ -1,4 +1,4 @@
-import * as Phaser from 'phaser-ce'
+import 'phaser';
 
 export default class Button extends Phaser.Sprite {
 

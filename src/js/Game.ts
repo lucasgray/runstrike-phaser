@@ -1,4 +1,4 @@
-import * as Phaser from "phaser-ce";
+import 'phaser';
 import Boot from './states/Boot'
 
 const game = new Phaser.Game(640, 960, Phaser.AUTO);

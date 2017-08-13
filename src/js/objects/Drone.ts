@@ -16,8 +16,8 @@ export default class Drone extends Phaser.Sprite {
         super(game, x, y, 'drone');
 
         let defaultSize = {width: 128, height: 128};
-        let scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
-        let scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
+        let scaleX = game.mission.gridDescriptor.cellWidth / defaultSize.width;
+        let scaleY = game.mission.gridDescriptor.cellHeight / defaultSize.height;
 
         this.animations.add('fly');
         this.animations.play('fly', 30, true);
@@ -30,10 +30,10 @@ export default class Drone extends Phaser.Sprite {
           game.addToGroup(groups);
         }
 
-        let curXCell = Math.floor(((this.x - this.mission.gridSize.offsetX) / this.mission.gridSize.width) * this.mission.gridSize.x) - 1;
-        let curYCell = Math.floor((this.y / this.mission.gridSize.height) * this.mission.gridSize.y);
+        let curXCell = Math.floor(((this.x - this.mission.gridDescriptor.offsetX) / this.mission.gridDescriptor.width) * this.mission.gridDescriptor.x) - 1;
+        let curYCell = Math.floor((this.y / this.mission.gridDescriptor.height) * this.mission.gridDescriptor.y);
 
-        this.easystar.findPath(curXCell, curYCell, Math.floor(this.mission.gridSize.x / 2), (this.mission.gridSize.y - 1), (path) => {
+        this.easystar.findPath(curXCell, curYCell, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
             if (!path) {
                 console.log("The path to the destination point was not found.");
             } else {
@@ -66,8 +66,8 @@ export default class Drone extends Phaser.Sprite {
             var first = path[0];
             var second = path[1];
 
-            //second.y * this.game.mission.gridSize.cellHeight to convert to cells
-            if (this.y >= (second.y * this.mission.gridSize.cellHeight)) {
+            //second.y * this.game.mission.gridDescriptor.cellHeight to convert to cells
+            if (this.y >= (second.y * this.mission.gridDescriptor.cellHeight)) {
                 // console.log("we made it! altering path");
 
                 path = path.slice(1);
@@ -78,25 +78,25 @@ export default class Drone extends Phaser.Sprite {
             }
 
             //we want to move towards the CENTER of the next cell.. plus a little randomness
-            let xToGo = (second.x * this.mission.gridSize.cellWidth +  Math.floor(this.mission.gridSize.cellWidth / 2)) ;
-            let yToGo = (second.y * this.mission.gridSize.cellHeight +  Math.floor(this.mission.gridSize.cellHeight / 2));
+            let xToGo = (second.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
+            let yToGo = (second.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
 
             console.log(this.x + ' | ' + this.y);
             console.log(xToGo + ' | ' + yToGo);
 
             let velocity = this.randomVelocity;
 
-            if (yToGo >= this.mission.gridSize.height - this.mission.gridSize.cellHeight) {
+            if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
                 this.lastMove = true;
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this, this.mission.gridSize.offsetX + xToGo, yToGo, velocity);
-            PhysicsExtensions.rotateToXY(this, this.mission.gridSize.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
+            this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, velocity);
+            PhysicsExtensions.rotateToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
             if(this.alive){
-              if(this.body.y > this.mission.gridSize.height - (this.mission.gridSize.cellHeight / 2)){
+              if(this.body.y > this.mission.gridDescriptor.height - (this.mission.gridDescriptor.cellHeight / 2)){
                 this.game.state.start('Defeat');
               }
             }

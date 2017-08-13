@@ -34,4 +34,4 @@
 //     }
 //
 // }
-//# sourceMappingURL=defeat.js.map
+//# sourceMappingURL=Defeat.js.map

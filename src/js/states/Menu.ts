@@ -20,7 +20,7 @@ export default class Menu extends Phaser.State {
         } else if (this.gameState.backgroundMusic && this.gameState.musicPause) {
             this.gameState.backgroundMusic.resume();
         }
-        
+
         let bkgrd = this.game.add.image(0, 0, 'retro-background');
         bkgrd.scale.setTo(.25, .5);
 

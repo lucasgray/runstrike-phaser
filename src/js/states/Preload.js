@@ -21,6 +21,7 @@ var Preload = (function (_super) {
     }
     Preload.prototype.create = function () {
         this.game.renderer.renderSession.roundPixels = true;
+        Phaser['Component'].Core.skipTypeChecks = true;
     };
     Preload.prototype.preload = function () {
         WebFont.load({

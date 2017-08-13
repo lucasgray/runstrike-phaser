@@ -13,14 +13,13 @@ exports.__esModule = true;
 var Wall = (function (_super) {
     __extends(Wall, _super);
     function Wall(game, x, y) {
-        var _this = _super.call(this, game, x, y) || this;
-        var g = game.add.graphics(0, 0);
-        g.lineStyle(2, 0x0000FF, 0.5);
-        g.beginFill(0x0000FF, 1);
-        g.drawRect(x, y, game.mission.gridSize.cellWidth, game.mission.gridSize.cellHeight); //no anchor, need to move it!
-        g.endFill();
-        g.inputEnabled = true;
-        return _this;
+        return _super.call(this, game, x, y) || this;
+        // var g = game.add.graphics(0, 0);
+        // g.lineStyle(2, 0x0000FF, 0.5);
+        // g.beginFill(0x0000FF, 1);
+        // g.drawRect(x, y, game.mission.gridSize.cellWidth, game.mission.gridSize.cellHeight); //no anchor, need to move it!
+        // g.endFill();
+        // g.inputEnabled = true;
         // this.addToGroup(groups);
     }
     return Wall;

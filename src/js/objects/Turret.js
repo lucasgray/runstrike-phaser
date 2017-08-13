@@ -12,18 +12,19 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var Turret = (function (_super) {
     __extends(Turret, _super);
-    function Turret(game, x, y) {
+    function Turret(mission, game, x, y) {
         var _this = _super.call(this, game, x, y, 'turret') || this;
+        _this.game = game;
         var defaultSize = { width: 32, height: 32 };
-        var scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
-        var scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
-        // g.anchor.y = -.1;
-        _this.inputEnabled = true;
+        var scaleX = mission.gridDescriptor.cellWidth / defaultSize.width;
+        var scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
         _this.anchor.setTo(0.5);
         _this.scale.setTo(scaleX, scaleY);
+        _this.inputEnabled = true;
         return _this;
-        // this.lastShot = 0;
-        // this.bulletsGroup = base.game.add.physicsGroup();
+        // g.anchor.y = -.1;
+        // turret.lastShot = 0;
+        // turret.bulletsGroup = base.game.add.physicsGroup();
         // base.update = this.update;
         // base.shootBulletFromTo = this.shootBulletFromTo;
         // base.maybeShoot = this.maybeShoot;

@@ -1,18 +1,23 @@
 
 import Mission from './Mission';
-import {GameState} from "../objects/GameData";
+import GridDescriptor from "../extensions/GridDescriptor";
 
 export default class Skirmish extends Mission {
 
-    constructor(gameState: GameState) {
-        super();
+    gridDescriptor: GridDescriptor;
+    name = 'Skirmish';
+    background: 'skirmish-background';
+
+    constructor(game: Phaser.Game) {
+        super(game);
+
+        this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20, 50);
     }
 
     create() {
         this.game.stage.backgroundColor = 0x002200;
     }
-      // this.name = 'Skirmish';
-      //
+
 
       // this.gridSize = {x: 15, y:20};
       // this.calculateGridSize();

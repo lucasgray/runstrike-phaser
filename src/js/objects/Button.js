@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Phaser = require("phaser-ce");
+require("phaser");
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button(game, x, y, width, height, label, callback) {

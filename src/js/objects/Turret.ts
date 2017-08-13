@@ -1,21 +1,28 @@
 import _ from 'lodash';
 import Bullet from './Bullet';
+import Mission from "../missions/Mission";
 
 export default class Turret extends Phaser.Sprite {
 
-    constructor(game, x, y) {
-        super(game, x, y, 'turret');
-        let defaultSize = {width: 32, height: 32};
-        let scaleX = game.mission.gridSize.cellWidth / defaultSize.width;
-        let scaleY = game.mission.gridSize.cellHeight / defaultSize.height;
+    game: Phaser.Game;
 
-        // g.anchor.y = -.1;
-        this.inputEnabled = true;
+    constructor(mission: Mission, game : Phaser.Game, x: number, y: number) {
+        super(game, x, y, 'turret');
+
+        this.game = game;
+
+        let defaultSize = {width: 32, height: 32};
+        let scaleX = mission.gridDescriptor.cellWidth / defaultSize.width;
+        let scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
         this.anchor.setTo(0.5);
         this.scale.setTo(scaleX, scaleY);
+        this.inputEnabled = true;
 
-        // this.lastShot = 0;
-        // this.bulletsGroup = base.game.add.physicsGroup();
+        // g.anchor.y = -.1;
+
+
+        // turret.lastShot = 0;
+        // turret.bulletsGroup = base.game.add.physicsGroup();
 
         // base.update = this.update;
         // base.shootBulletFromTo = this.shootBulletFromTo;
