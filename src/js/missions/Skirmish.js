@@ -17,7 +17,7 @@ var Skirmish = (function (_super) {
     function Skirmish(game) {
         var _this = _super.call(this, game) || this;
         _this.name = 'Skirmish';
-        _this.gridDescriptor = new GridDescriptor_1["default"](game.width, game.height, 15, 20, 50);
+        _this.gridDescriptor = new GridDescriptor_1["default"](game.width, game.height, 15, 20);
         return _this;
     }
     Skirmish.prototype.create = function () {

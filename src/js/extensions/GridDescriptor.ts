@@ -22,10 +22,9 @@ export default class GridDescriptor {
      * @param {number} y - amount of rows
      * @param {number} offsetX - offset x to start playing field
      */
-    constructor(gameWidth: number, gameHeight: number, x: number, y: number, offsetX: number) {
+    constructor(gameWidth: number, gameHeight: number, x: number, y: number) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.offsetX = offsetX;
 
         this.x = x;
         this.y = y;
@@ -37,16 +36,16 @@ export default class GridDescriptor {
         this.offsetX = (gameWidth - this.width) / 2;
     }
 
-    //todo should this go to GridDescriptor?
+    //FIXME not quite right
     getGridLocation(input){
-        let gridX = Math.floor((input.x - this.offsetX)/ this.cellWidth);
+        let gridX = Math.round((input.x - this.offsetX)/ this.cellWidth);
         if(gridX < 0){
             gridX = 0;
         }
         if(gridX >= this.x){
             gridX = this.x-1;
         }
-        let gridY = Math.floor(input.y / this.cellHeight);
+        let gridY = Math.round(input.y / this.cellHeight);
         if(gridY < 0){
             gridY = 0;
         }

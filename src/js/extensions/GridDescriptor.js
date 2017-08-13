@@ -9,10 +9,9 @@ var GridDescriptor = (function () {
      * @param {number} y - amount of rows
      * @param {number} offsetX - offset x to start playing field
      */
-    function GridDescriptor(gameWidth, gameHeight, x, y, offsetX) {
+    function GridDescriptor(gameWidth, gameHeight, x, y) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.offsetX = offsetX;
         this.x = x;
         this.y = y;
         this.cellWidth = Math.floor((gameWidth * .8) / this.x);
@@ -21,16 +20,16 @@ var GridDescriptor = (function () {
         this.height = this.y * this.cellHeight;
         this.offsetX = (gameWidth - this.width) / 2;
     }
-    //todo should this go to GridDescriptor?
+    //FIXME not quite right
     GridDescriptor.prototype.getGridLocation = function (input) {
-        var gridX = Math.floor((input.x - this.offsetX) / this.cellWidth);
+        var gridX = Math.round((input.x - this.offsetX) / this.cellWidth);
         if (gridX < 0) {
             gridX = 0;
         }
         if (gridX >= this.x) {
             gridX = this.x - 1;
         }
-        var gridY = Math.floor(input.y / this.cellHeight);
+        var gridY = Math.round(input.y / this.cellHeight);
         if (gridY < 0) {
             gridY = 0;
         }

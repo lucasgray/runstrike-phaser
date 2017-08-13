@@ -11,7 +11,7 @@ export default class Skirmish extends Mission {
     constructor(game: Phaser.Game) {
         super(game);
 
-        this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20, 50);
+        this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20);
     }
 
     create() {
