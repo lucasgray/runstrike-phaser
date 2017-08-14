@@ -15,7 +15,7 @@ var definePlugin = new webpack.DefinePlugin({
 const PATHS = {
     src: path.join(__dirname, 'src'),
     js: path.join(__dirname, 'src'),
-    game: path.join(__dirname, 'src/js/game.js'),
+    game: path.join(__dirname, 'src/js/game.ts'),
     img: path.join(__dirname, 'src/img'),
     audio: path.join(__dirname, 'src/audio'),
     sounds: path.join(__dirname, 'src/audio/sounds'),
