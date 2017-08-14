@@ -87,7 +87,6 @@ export default class Play extends Phaser.State {
 
     update() {
         this.mission.update();
-        this.mission.easystar.calculate();
     }
 
     shutdown() {

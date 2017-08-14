@@ -8,6 +8,8 @@ import Missions from "./Missions";
 import Skirmish from "../missions/Skirmish";
 import * as Phaser from 'phaser-ce';
 import Play from "./Play";
+import Victory from "./Victory";
+import Defeat from "./Defeat";
 
 
 export default class Boot extends Phaser.State {
@@ -37,6 +39,8 @@ export default class Boot extends Phaser.State {
         this.game.state.add('Missions', new Missions(this.gameState));
         this.game.state.add('Setup', new Setup(this.gameState));
         this.game.state.add('Play', new Play(this.gameState));
+        this.game.state.add('Victory', new Victory(this.gameState));
+        this.game.state.add('Defeat', new Defeat(this.gameState));
 
         this.state.start('Preload');
     }

@@ -1,24 +1,24 @@
 import GridDescriptor from "../extensions/GridDescriptor";
 import * as EasyStar from 'easystarjs';
 import {PlacedLootInfo} from "../objects/GameData";
-import * as _ from 'lodash';
 import Drone from "../objects/Drone";
+
+//this is a little big, maybe we can break it up somehow
 
 abstract class Mission {
 
     abstract name: string;
     abstract gridDescriptor: GridDescriptor;
     abstract background: () => Phaser.Sprite;
+    abstract enemyArray: Array<object>;
+
     game: Phaser.Game;
+    easystar: EasyStar.js;
 
     enemies: Phaser.Group;
     bullets: Phaser.Group;
 
     placedItems: Array<PlacedLootInfo>;
-
-    easystar: EasyStar.js;
-
-    abstract enemyArray: Array<object>;
 
     curEnemy: number = 0;
     allDeployed: boolean;
@@ -31,6 +31,9 @@ abstract class Mission {
 
         this.game = game;
         this.placedItems = placedItems;
+
+        this.enemies = game.add.group();
+        this.bullets = game.add.group();
     }
 
     recalculateGrid() {
@@ -63,25 +66,13 @@ abstract class Mission {
 
     update() {
 
+        this.easystar.calculate();
+
         this.deploy();
 
-        // this.checkBulletCollisions();
-        //
-        // this.checkWinCondition();
+        this.checkBulletCollisions();
 
-        // this.easystar.calculate();
-    }
-
-    checkWinCondition() {
-        if (this.allDeployed && this.enemies.getFirstAlive() === null) {
-            if (this.winTime) {
-                if (Date.now() - this.winTime > 2000) {
-                    this.game.state.start('Victory');
-                }
-            } else {
-                this.winTime = Date.now();
-            }
-        }
+        this.checkWinCondition();
     }
 
     deploy() {
@@ -102,22 +93,33 @@ abstract class Mission {
         }
     }
 
-    // //every bullet can kill one drone.
-    // checkBulletCollisions() {
-    //
-    //     let bulletsThatCollided = [];
-    //
-    //     //this is NOT an observer!  It fires once in the update loop.
-    //     this.game.physics.arcade.overlap(this.game.bullets, this.game.enemies, (bullet, sprite) => {
-    //         if(sprite.alive && !bulletsThatCollided.includes(bullet)){
-    //             sprite.shot();
-    //             bulletsThatCollided.push(bullet);
-    //             bullet.kill();
-    //         }
-    //     }, null, this);
-    //
-    // }
-    //
+    checkWinCondition() {
+        if (this.allDeployed && this.enemies.getFirstAlive() === null) {
+            if (this.winTime) {
+                if (Date.now() - this.winTime > 2000) {
+                    this.game.state.start('Victory');
+                }
+            } else {
+                this.winTime = Date.now();
+            }
+        }
+    }
+
+    //every bullet can kill one drone.
+    checkBulletCollisions() {
+
+        let bulletsThatCollided = [];
+
+        //this is NOT an observer!  It fires once in the update loop.
+        this.game.physics.arcade.overlap(this.bullets, this.enemies, (bullet, sprite) => {
+            if(sprite.alive && bulletsThatCollided.indexOf(bullet) == -1){
+                sprite.shot();
+                bulletsThatCollided.push(bullet);
+                bullet.kill();
+            }
+        }, null, this);
+
+    }
 
     shutdown() {
         this.enemies.destroy();

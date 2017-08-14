@@ -4,13 +4,12 @@ export default class Bullet extends Phaser.Sprite {
     fromSprite: Phaser.Sprite;
     toSprite: Phaser.Sprite;
 
-    constructor(game, fromSprite, toSprite) {
+    constructor(game: Phaser.Game, fromSprite: Phaser.Sprite, toSprite: Phaser.Sprite) {
         super(game, fromSprite.x, fromSprite.y, 'bullet');
 
         this.anchor.setTo(0.5);
         this.angle = fromSprite.angle;
         game.physics.arcade.enable(this);
-        game.bullets.add(this);
 
         let halfXVelocity = toSprite.body.velocity.x / 2;
         let halfYVelocity = toSprite.body.velocity.y / 2;

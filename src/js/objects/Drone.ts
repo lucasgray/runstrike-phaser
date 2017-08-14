@@ -11,8 +11,12 @@ export default class Drone extends Phaser.Sprite {
     path: {x: number; y: number}[];
     lastMove: boolean = false;
 
-    constructor(game: Phaser.Game, mission: Mission, xCell: number, yCell: number) {
-        super(game, xCell * mission.gridDescriptor.cellWidth, yCell * mission.gridDescriptor.cellHeight, 'drone');
+    constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
+        super(game, 0, 0, 'drone');
+
+        //compensate for offset, then get the right cell, then place into center of cell
+        this.x = mission.gridDescriptor.offsetX + (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
+        this.y = mission.gridDescriptor.offsetY + (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
 
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -30,7 +34,7 @@ export default class Drone extends Phaser.Sprite {
         this.randomVelocity = 50 + (Math.random() * 30);
         this.lastCalculation = 0;
 
-        this.mission.easystar.findPath(xCell, yCell, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
+        this.mission.easystar.findPath(row, col, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
             if (!path) {
                 console.log("The path to the destination point was not found.");
             } else {
