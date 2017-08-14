@@ -103,7 +103,7 @@ export default class TurretHandler {
         //if not, use one of those
 
         //make turret
-        let turret = new Turret(this.mission, this.game, (this.mission.gridDescriptor.offsetX + (grid.x * this.mission.gridDescriptor.cellWidth)), grid.y * this.mission.gridDescriptor.cellHeight);
+        let turret = new Turret(this.mission, this.game, grid.x, grid.y);
         this.game.add.existing(turret);
 
         this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);

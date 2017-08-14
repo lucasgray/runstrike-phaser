@@ -1,49 +1,128 @@
 import GridDescriptor from "../extensions/GridDescriptor";
+import * as EasyStar from 'easystarjs';
+import {PlacedLootInfo} from "../objects/GameData";
+import * as _ from 'lodash';
+import Drone from "../objects/Drone";
 
 abstract class Mission {
 
     abstract name: string;
     abstract gridDescriptor: GridDescriptor;
-    abstract background: string;
+    abstract background: () => Phaser.Sprite;
     game: Phaser.Game;
 
-    constructor(game: Phaser.Game) {
+    enemies: Phaser.Group;
+    bullets: Phaser.Group;
 
-      this.game = game;
+    placedItems: Array<PlacedLootInfo>;
+
+    easystar: EasyStar.js;
+
+    abstract enemyArray: Array<object>;
+
+    curEnemy: number = 0;
+    allDeployed: boolean;
+
+    winTime: number;
+
+    lastDeployment: number = Date.now();
+
+    constructor(game: Phaser.Game, placedItems: Array<PlacedLootInfo>) {
+
+        this.game = game;
+        this.placedItems = placedItems;
     }
 
-    createGrid(){
-      // this.game.enemies = this.game.add.physicsGroup();
-      // this.game.bullets = this.game.add.physicsGroup();
-      // let background = this.game.add.sprite(this.gridSize.offsetX, 0,'skirmish-background');
-      // background.width = this.gridSize.width;
-      // background.height = this.gridSize.height;
-      // this.game.world.sendToBack(background);
-      // this.setupGrid();
+    recalculateGrid() {
+
+        let easystar = new EasyStar.js();
+
+        //goddamn it
+        let grid = [];
+        for (let y = 0; y < this.gridDescriptor.y; y++) {
+            let f = [];
+            for (let x = 0; x < this.gridDescriptor.x; x++) {
+                f.push(0);
+            }
+            grid.push(f);
+        }
+
+        this.placedItems.forEach((i) =>{
+           grid[i.col][i.row] = 1;
+        });
+
+        easystar.setGrid(grid);
+        easystar.setAcceptableTiles([0]);
+        easystar.calculate();
+        easystar.enableDiagonals();
+        easystar.disableCornerCutting();
+        easystar.calculate();
+
+        this.easystar = easystar;
     }
 
-    // setupGrid() {
-    //     let easystar = new EasyStar.js();
+    update() {
+
+        this.deploy();
+
+        // this.checkBulletCollisions();
+        //
+        // this.checkWinCondition();
+
+        // this.easystar.calculate();
+    }
+
+    checkWinCondition() {
+        if (this.allDeployed && this.enemies.getFirstAlive() === null) {
+            if (this.winTime) {
+                if (Date.now() - this.winTime > 2000) {
+                    this.game.state.start('Victory');
+                }
+            } else {
+                this.winTime = Date.now();
+            }
+        }
+    }
+
+    deploy() {
+
+        if (!this.allDeployed && Date.now() - this.lastDeployment > this.enemyArray[this.curEnemy]['delay']) {
+
+            console.log('new drone');
+
+            let drone = new Drone(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+            this.game.add.existing(drone);
+            this.enemies.add(drone);
+
+            this.curEnemy++;
+            if (this.curEnemy >= this.enemyArray.length) {
+                this.allDeployed = true;
+            }
+            this.lastDeployment = Date.now();
+        }
+    }
+
+    // //every bullet can kill one drone.
+    // checkBulletCollisions() {
     //
-    //     var grid = [];
-    //     Array.from(new Array(this.gridSize.y)).forEach(() => {
-    //         grid.push(new Array(this.gridSize.x).fill(0));
-    //     });
+    //     let bulletsThatCollided = [];
     //
-    //     this.game.gameData.placedItems.forEach((it) => {
-    //       grid[it.y][it.x] = 1;
-    //       new gameObjects[it.type](this.game, this.gridSize.offsetX + (it.x * this.gridSize.cellWidth), it.y * this.gridSize.cellHeight);
-    //     });
+    //     //this is NOT an observer!  It fires once in the update loop.
+    //     this.game.physics.arcade.overlap(this.game.bullets, this.game.enemies, (bullet, sprite) => {
+    //         if(sprite.alive && !bulletsThatCollided.includes(bullet)){
+    //             sprite.shot();
+    //             bulletsThatCollided.push(bullet);
+    //             bullet.kill();
+    //         }
+    //     }, null, this);
     //
-    //     easystar.setGrid(grid);
-    //     easystar.setAcceptableTiles([0]);
-    //     easystar.calculate();
-    //     easystar.enableDiagonals();
-    //     easystar.disableCornerCutting();
-    //
-    //     this.game.easystar = easystar;
-    //     this.game.easystar.calculate();
     // }
+    //
+
+    shutdown() {
+        this.enemies.destroy();
+        this.bullets.destroy();
+    }
 }
 
 export default Mission;

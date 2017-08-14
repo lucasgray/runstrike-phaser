@@ -9,7 +9,6 @@ export default class Preload extends Phaser.State {
     create() {
 
         this.game.renderer.renderSession.roundPixels = true;
-        Phaser['Component'].Core.skipTypeChecks = true;
     }
 
     preload() {

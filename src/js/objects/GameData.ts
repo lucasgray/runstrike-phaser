@@ -89,14 +89,14 @@ export class PlacedLootInfo {
 
     type: string;
     mission: string;
-    x: number;
-    y: number;
+    row: number;
+    col: number;
 
-    constructor(type: string, mission: string, x: number, y: number) {
+    constructor(type: string, mission: string, row: number, col: number) {
 
         this.type = type;
         this.mission = mission;
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.col = col;
     }
 }

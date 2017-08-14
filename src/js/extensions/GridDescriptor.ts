@@ -6,7 +6,7 @@ export default class GridDescriptor {
     height: number;
 
     offsetX: number;
-    offsetY: number;
+    offsetY: number = 0;
 
     gameWidth: number;
     gameHeight: number;
@@ -20,7 +20,7 @@ export default class GridDescriptor {
      * @param {number} gameHeight - height of entire game
      * @param {number} x - amount of columns
      * @param {number} y - amount of rows
-     * @param {number} offsetX - offset x to start playing field
+     * @param {number} offsetX - offset row to start playing field
      */
     constructor(gameWidth: number, gameHeight: number, x: number, y: number) {
         this.gameWidth = gameWidth;
@@ -36,20 +36,20 @@ export default class GridDescriptor {
         this.offsetX = (gameWidth - this.width) / 2;
     }
 
-    getGridLocation(input){
-        let gridX = Math.round((input.x - this.offsetX)/ this.cellWidth);
-        if(gridX < 0){
+    getGridLocation(input) {
+        let gridX = Math.round((input.x - this.offsetX) / this.cellWidth);
+        if (gridX < 0) {
             gridX = 0;
         }
-        if(gridX >= this.x){
-            gridX = this.x-1;
+        if (gridX >= this.x) {
+            gridX = this.x - 1;
         }
         let gridY = Math.round(input.y / this.cellHeight);
-        if(gridY < 0){
+        if (gridY < 0) {
             gridY = 0;
         }
-        if(gridY >= this.y){
-            gridY = this.y -1;
+        if (gridY >= this.y) {
+            gridY = this.y - 1;
         }
         return {x: gridX, y: gridY};
     }

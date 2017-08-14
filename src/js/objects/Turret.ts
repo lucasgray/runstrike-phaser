@@ -6,8 +6,14 @@ export default class Turret extends Phaser.Sprite {
 
     game: Phaser.Game;
 
-    constructor(mission: Mission, game : Phaser.Game, x: number, y: number) {
-        super(game, x, y, 'turret');
+    constructor(mission: Mission, game : Phaser.Game, row: number, col: number) {
+        super(game, 0, 0, 'turret');
+
+        //compensate for offset, then get the right cell, then place into center of cell
+        this.x = mission.gridDescriptor.offsetX + (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
+        this.y = mission.gridDescriptor.offsetY + (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
+
+        this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
         this.game = game;
 
@@ -18,7 +24,7 @@ export default class Turret extends Phaser.Sprite {
         this.scale.setTo(scaleX, scaleY);
         this.inputEnabled = true;
 
-        // g.anchor.y = -.1;
+        // g.anchor.col = -.1;
 
 
         // turret.lastShot = 0;
@@ -59,7 +65,7 @@ export default class Turret extends Phaser.Sprite {
 
         // let spriteDistances = this.game.enemies.hash.map((sprite) => {
         //     return {
-        //         distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
+        //         distance: Math.abs(sprite.row - this.row) + Math.abs(sprite.col - this.col),
         //         sprite: sprite
         //     };
         // });
@@ -109,7 +115,7 @@ export default class Turret extends Phaser.Sprite {
     //     //and that body is relatively close to us
     //     if (Date.now() - this.lastShot > (1000 + (Math.random() * 200))
     //         && this.tracking && this.tracking.alive && this.tracking.body.velocity
-    //         && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < 100) {
+    //         && Phaser.Math.distance(this.row, this.col, this.tracking.row, this.tracking.col) < 100) {
     //         new Bullet(this.game, this, this.tracking);
     //         this.lastShot = Date.now();
     //     }

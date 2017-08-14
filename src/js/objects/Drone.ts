@@ -5,19 +5,22 @@ import PhysicsExtensions from "../extensions/PhysicsExtensions";
 export default class Drone extends Phaser.Sprite {
 
     mission: Mission;
-    easystar: EasyStar.js;
     randomVelocity: number;
     lastCalculation: number;
     explodeSound: Function;
     path: {x: number; y: number}[];
     lastMove: boolean = false;
 
-    constructor(game, x, y, groups) {
-        super(game, x, y, 'drone');
+    constructor(game: Phaser.Game, mission: Mission, xCell: number, yCell: number) {
+        super(game, xCell * mission.gridDescriptor.cellWidth, yCell * mission.gridDescriptor.cellHeight, 'drone');
+
+        this.game.physics.enable(this, Phaser.Physics.ARCADE);
+
+        this.mission = mission;
 
         let defaultSize = {width: 128, height: 128};
-        let scaleX = game.mission.gridDescriptor.cellWidth / defaultSize.width;
-        let scaleY = game.mission.gridDescriptor.cellHeight / defaultSize.height;
+        let scaleX = mission.gridDescriptor.cellWidth / defaultSize.width;
+        let scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
 
         this.animations.add('fly');
         this.animations.play('fly', 30, true);
@@ -26,14 +29,8 @@ export default class Drone extends Phaser.Sprite {
 
         this.randomVelocity = 50 + (Math.random() * 30);
         this.lastCalculation = 0;
-        if(groups){
-          game.addToGroup(groups);
-        }
 
-        let curXCell = Math.floor(((this.x - this.mission.gridDescriptor.offsetX) / this.mission.gridDescriptor.width) * this.mission.gridDescriptor.x) - 1;
-        let curYCell = Math.floor((this.y / this.mission.gridDescriptor.height) * this.mission.gridDescriptor.y);
-
-        this.easystar.findPath(curXCell, curYCell, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
+        this.mission.easystar.findPath(xCell, yCell, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
             if (!path) {
                 console.log("The path to the destination point was not found.");
             } else {
@@ -58,7 +55,7 @@ export default class Drone extends Phaser.Sprite {
     }
 
     update(){
-        if (!this.lastMove && this.alive && this.path) {
+        if (!this.lastMove && this.alive && this.path && this.path.length > 0) {
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
 
@@ -66,7 +63,7 @@ export default class Drone extends Phaser.Sprite {
             var first = path[0];
             var second = path[1];
 
-            //second.y * this.game.mission.gridDescriptor.cellHeight to convert to cells
+            //second.col * this.game.mission.gridDescriptor.cellHeight to convert to cells
             if (this.y >= (second.y * this.mission.gridDescriptor.cellHeight)) {
                 // console.log("we made it! altering path");
 
@@ -84,18 +81,16 @@ export default class Drone extends Phaser.Sprite {
             console.log(this.x + ' | ' + this.y);
             console.log(xToGo + ' | ' + yToGo);
 
-            let velocity = this.randomVelocity;
-
             if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
                 this.lastMove = true;
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, velocity);
+            this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity);
             PhysicsExtensions.rotateToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
         } else {
             // console.log('lastmoved.')
-            if(this.alive){
+            if(this.alive && this.body){
               if(this.body.y > this.mission.gridDescriptor.height - (this.mission.gridDescriptor.cellHeight / 2)){
                 this.game.state.start('Defeat');
               }

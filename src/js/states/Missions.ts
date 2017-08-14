@@ -32,7 +32,7 @@ export default class Missions extends Phaser.State {
             60,
             'Skirmish', ()=>{
                 console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new Skirmish(this.game));
+                this.game.state.start('Setup', true, false, new Skirmish(this.game, this.gameState));
             }
         );
 
@@ -48,5 +48,4 @@ export default class Missions extends Phaser.State {
             }
         );
     }
-
 }

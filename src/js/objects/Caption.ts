@@ -3,7 +3,7 @@ export default class Caption {
     constructor(game, x, y, groups) {
 
         //buid caption
-        //image? y/n
+        //image? col/n
         //text
     }
 

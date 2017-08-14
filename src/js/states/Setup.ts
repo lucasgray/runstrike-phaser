@@ -21,19 +21,11 @@ export default class Setup extends Phaser.State {
         console.log("mission" + mission);
     }
 
-    preload() {
-    }
-
     create() {
 
-        // this.objects = [];
-
-        let background = this.game.add.sprite(this.mission.gridDescriptor.offsetX, 0, 'skirmish-background');//this.mission.background);
-        background.width = this.mission.gridDescriptor.width;
-        background.height = this.mission.gridDescriptor.height;
-        this.game.world.sendToBack(background);
-        background.inputEnabled = true;
-        this.backgroundSprite = background;
+        let spr = this.mission.background();
+        this.game.add.existing(spr);
+        spr.sendToBack();
 
         console.log(this.gameState.placedLoot);
 
@@ -41,10 +33,9 @@ export default class Setup extends Phaser.State {
 
             //TODO factory or something
             if (it.type.toLowerCase() == 'turret') {
-                let turret = new Turret(this.mission, this.game, (this.mission.gridDescriptor.offsetX + (it.x * this.mission.gridDescriptor.cellWidth)), it.y * this.mission.gridDescriptor.cellHeight);
+                let turret = new Turret(this.mission, this.game, it.row, it.col);
                 this.game.add.existing(turret);
             }
-
         });
 
         this.drawInputs();
@@ -55,7 +46,7 @@ export default class Setup extends Phaser.State {
         // Object.keys(setupInputHandlers).forEach((ih,index) => {
         //     new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
         // });
-        let turretHandler = new TurretHandler(this.mission, [], this.gameState, this.backgroundSprite, this.game, 50, 300);
+        new TurretHandler(this.mission, [], this.gameState, this.backgroundSprite, this.game, 50, 300);
 
         new Button(
             this.game,
@@ -77,7 +68,7 @@ export default class Setup extends Phaser.State {
             40,
             'Defend', ()=>{
                 console.log("asking to defend");
-                this.state.start('Play');
+                this.state.start('Play', true, false, this.mission, this.gameState);
             }
         );
     }
