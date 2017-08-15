@@ -1,4 +1,4 @@
-# Runstrike-Game
+# runstrike-phaser
 
 This is the tower defense side of runstrike.
 
