@@ -4,11 +4,13 @@ import Mission from "../missions/Mission";
 import {GameState} from "../objects/GameData";
 import Turret from "../objects/Turret";
 import Drone from "../objects/Drone";
+import CocktailHandler from "../handlers/CocktailHandler";
 
 export default class Play extends Phaser.State {
 
     gameState : GameState;
     mission : Mission;
+    backgroundSprite: Phaser.Sprite;
 
     constructor(gameState: GameState) {
         super();
@@ -30,6 +32,7 @@ export default class Play extends Phaser.State {
         let spr = this.mission.background();
         this.game.add.existing(spr);
         spr.sendToBack();
+        this.backgroundSprite = spr;
 
         //TODO refactor this into something
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
@@ -67,10 +70,7 @@ export default class Play extends Phaser.State {
 
     drawInput() {
 
-        //TODO input handler for cocktail
-        // Object.keys(inputHandlers).forEach((ih,index) => {
-        //     new inputHandlers[ih](this.game, 50, 300 + (90 * index));
-        // });
+        new CocktailHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
 
         new Button(
             this.game,

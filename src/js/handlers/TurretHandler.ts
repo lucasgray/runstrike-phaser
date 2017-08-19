@@ -1,8 +1,8 @@
 
-import Turret from "../../objects/Turret";
-import Mission from "../../missions/Mission";
-import SpriteExtensions from "../../extensions/SpriteExtensions";
-import {GameState} from "../../objects/GameData";
+import Turret from "../objects/Turret";
+import Mission from "../missions/Mission";
+import SpriteExtensions from "../extensions/SpriteExtensions";
+import {GameState} from "../objects/GameData";
 
 export default class TurretHandler {
 
@@ -35,7 +35,6 @@ export default class TurretHandler {
 
         var turretIcon = game.add.sprite(0, 0, 'turret');
         turretIcon.anchor.set(.5);
-        // turretIcon.scale.setTo(.25, .25);
 
         parentSprite.addChild(turretIcon);
 
@@ -66,9 +65,6 @@ export default class TurretHandler {
         this.game.add.existing(parentSprite);
 
         this.text = text;
-    }
-
-    update() {
     }
 
     /**

@@ -1,5 +1,5 @@
 import Button from "../objects/Button";
-import TurretHandler from "../handlers/setup/TurretHandler"
+import TurretHandler from "../handlers/TurretHandler"
 import Mission from "../missions/Mission";
 import { GameState } from "../objects/GameData";
 import Turret from "../objects/Turret";
@@ -26,6 +26,7 @@ export default class Setup extends Phaser.State {
         let spr = this.mission.background();
         this.game.add.existing(spr);
         spr.sendToBack();
+        this.backgroundSprite = spr;
 
         console.log(this.gameState.placedLoot);
 

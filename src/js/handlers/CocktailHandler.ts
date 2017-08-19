@@ -1,8 +1,28 @@
-import InputHandler from './InputHandler';
 
-export default class CocktailHandler extends InputHandler {
-    constructor(game, x, y) {
-        super(game);
+import Mission from "../missions/Mission";
+import TurretHandler from "./TurretHandler";
+import {GameState} from "../objects/GameData";
+import SpriteExtensions from "../extensions/SpriteExtensions";
+
+export default class CocktailHandler {
+
+    mission: Mission;
+    text: Phaser.Text;
+
+    //TODO later we'll want to keep a reference to all the other handlers..
+    // allHandlers: Array<TurretHandler>;
+
+    gameState: GameState;
+    game: Phaser.Game;
+    parentSprite: Phaser.Sprite;
+    backgroundSprite: Phaser.Sprite;
+
+    constructor(mission: Mission, gameState: GameState, backgroundSprite: Phaser.Sprite, game: Phaser.Game, x: number, y: number) {
+
+        this.mission = mission;
+        this.gameState = gameState;
+        this.game = game;
+        this.backgroundSprite = backgroundSprite;
 
         var graphics = game.add.graphics(x, y);
         graphics.beginFill(0xffffff, 1);
@@ -15,7 +35,7 @@ export default class CocktailHandler extends InputHandler {
 
         var cocktailIcon = game.add.sprite(0, 0, 'cocktail_icon');
         cocktailIcon.anchor.set(0.5);
-        cocktailIcon.scale.setTo(.25, .25);
+        cocktailIcon.scale.set(.25);
 
         parentSprite.addChild(cocktailIcon);
 
@@ -28,7 +48,8 @@ export default class CocktailHandler extends InputHandler {
         graphics.destroy();
         itemSprite.anchor.set(.5);
         parentSprite.addChild(itemSprite);
-        itemSprite.alignInParent(Phaser.BOTTOM_RIGHT);
+
+        SpriteExtensions.alignInParent(itemSprite, parentSprite, Phaser.BOTTOM_RIGHT);
 
         var text = game.add.text(0, 0, this.num(), {
             font: '12px Joystix',
@@ -39,44 +60,46 @@ export default class CocktailHandler extends InputHandler {
         itemSprite.addChild(text);
 
         parentSprite.inputEnabled = true;
-        parentSprite.events.onInputDown.add(this.inputListener, parentSprite);
+        parentSprite.events.onInputDown.add(this.inputListener, this);
 
-        parentSprite.inputListener = this.inputListener;
-        parentSprite.action = this.action;
-        parentSprite.text = text;
-        parentSprite.num = this.num;
+        this.parentSprite = parentSprite;
+        this.game.add.existing(parentSprite);
+
+        this.text = text;
     }
 
-    update() {
-    }
-
+    /**
+     * The action performed when switching to THIS handler
+     * This should go on the parent handler class in the group.
+     */
     inputListener() {
-        this.firstEvent = true;
-        this.game.input.onTap.removeAll();
-        if (this.game.activeInputHandler) {
-            this.game.add.tween(this.game.activeInputHandler.scale)
-                .to({ x: 1.0, y: 1.0}, 200, Phaser.Easing.Exponential.In).start();
-        }
-        this.game.input.onTap.add(this.action, this);
-        this.game.add.tween(this.scale).to({ x: 1.4, y: 1.4}, 600, Phaser.Easing.Bounce.Out).start();
-        this.game.activeInputHandler = this;
+        console.log("hi time to check the background sprite");
 
+        //turn all active handlers off
+        this.backgroundSprite.events.onInputDown.removeAll();
+
+        this.game.add.tween(this.parentSprite.scale).to({ x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
         let button = this.game.add.audio('button');
         button.play();
+
+        //add an onTap to listen for placing turrets
+        this.backgroundSprite.events.onInputDown.add(this.action, this);
     }
 
-    action(pointer, doubleTap) {
-        if (this.firstEvent) {
-            this.firstEvent = false;
-            this.game.activeInputHandler = this;
-            return;
-        }
+    /**
+     * The action performed if you choose this handler and click on the grid!
+     *
+     * @param pointer
+     * @param sprite
+     */
+    action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
+
         let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
         explosion.anchor.setTo(0.5, 0.5);
         let explosionAnimation = explosion.animations.add('fly');
         explosion.animations.play('fly', 30, false);
 
-        this.game.enemies.forEachAlive((sprite) => {
+        this.mission.enemies.forEachAlive((sprite) => {
             let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
             //FIXME
@@ -90,13 +113,13 @@ export default class CocktailHandler extends InputHandler {
             explosion.destroy();
         });
 
-        this.game.dao.useItem("Cocktail");
+        this.gameState.useItem("Cocktail");
         this.text.setText(this.num());
     }
 
     num() {
 
-        let cocktails = this.game.gameData.inventoryItems.find(it => it.type === 'cocktail');
+        let cocktails = this.gameState.inventoryLoot.filter(it => it.type === 'cocktail').pop();
 
         if (cocktails) {
             return cocktails.amount + "";
