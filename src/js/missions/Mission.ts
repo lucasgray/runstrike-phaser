@@ -1,7 +1,7 @@
-import GridDescriptor from "../extensions/GridDescriptor";
+import GridDescriptor from "../models/state/GridDescriptor";
 import * as EasyStar from 'easystarjs';
-import {PlacedLootInfo} from "../objects/GameData";
-import Drone from "../objects/Drone";
+import {PlacedLootInfo} from "../models/state/GameData";
+import Drone from "../models/sprites/Drone";
 
 //this is a little big, maybe we can break it up somehow
 

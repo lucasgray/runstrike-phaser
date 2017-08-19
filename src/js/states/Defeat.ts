@@ -1,5 +1,5 @@
-import {GameState} from "../objects/GameData";
-import Button from "../objects/Button";
+import {GameState} from "../models/state/GameData";
+import Button from "../models/sprites/Button";
 
 //TODO victory and defeat could share a lot of codez
 

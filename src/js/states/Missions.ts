@@ -1,5 +1,5 @@
-import Button from "../objects/Button";
-import {GameState} from "../objects/GameData";
+import Button from "../models/sprites/Button";
+import {GameState} from "../models/state/GameData";
 import Skirmish from "../missions/Skirmish";
 
 export default class Missions extends Phaser.State {

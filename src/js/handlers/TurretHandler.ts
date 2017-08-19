@@ -1,8 +1,8 @@
 
-import Turret from "../objects/Turret";
+import Turret from "../models/sprites/Turret";
 import Mission from "../missions/Mission";
 import SpriteExtensions from "../extensions/SpriteExtensions";
-import {GameState} from "../objects/GameData";
+import {GameState} from "../models/state/GameData";
 
 export default class TurretHandler {
 

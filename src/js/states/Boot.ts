@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import * as GameData from '../objects/GameData'
-import {PlacedLootInfo} from "../objects/GameData";
+import * as GameData from '../models/state/GameData'
+import {PlacedLootInfo} from "../models/state/GameData";
 import Preload from "./Preload";
 import Menu from "./Menu";
 import Setup from "./Setup";

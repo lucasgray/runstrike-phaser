@@ -1,5 +1,5 @@
-import Button from "../objects/Button";
-import * as GameData from "../objects/GameData";
+import Button from "../models/sprites/Button";
+import * as GameData from "../models/state/GameData";
 
 export default class Menu extends Phaser.State {
 

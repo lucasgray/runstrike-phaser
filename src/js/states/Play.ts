@@ -1,9 +1,9 @@
-import Button from "../objects/Button";
+import Button from "../models/sprites/Button";
 import 'phaser';
 import Mission from "../missions/Mission";
-import {GameState} from "../objects/GameData";
-import Turret from "../objects/Turret";
-import Drone from "../objects/Drone";
+import {GameState} from "../models/state/GameData";
+import Turret from "../models/sprites/Turret";
+import Drone from "../models/sprites/Drone";
 import CocktailHandler from "../handlers/CocktailHandler";
 
 export default class Play extends Phaser.State {
@@ -15,8 +15,6 @@ export default class Play extends Phaser.State {
     constructor(gameState: GameState) {
         super();
         this.gameState = gameState;
-
-
     }
 
     init(mission: Mission, gameState: GameState) {

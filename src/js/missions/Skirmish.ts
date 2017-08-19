@@ -1,8 +1,8 @@
 
 import Mission from './Mission';
-import GridDescriptor from "../extensions/GridDescriptor";
-import {GameState} from "../objects/GameData";
-import Drone from "../objects/Drone";
+import GridDescriptor from "../models/state/GridDescriptor";
+import {GameState} from "../models/state/GameData";
+import Drone from "../models/sprites/Drone";
 
 export default class Skirmish extends Mission {
 

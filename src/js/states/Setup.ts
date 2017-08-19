@@ -1,8 +1,8 @@
-import Button from "../objects/Button";
+import Button from "../models/sprites/Button";
 import TurretHandler from "../handlers/TurretHandler"
 import Mission from "../missions/Mission";
-import { GameState } from "../objects/GameData";
-import Turret from "../objects/Turret";
+import { GameState } from "../models/state/GameData";
+import Turret from "../models/sprites/Turret";
 
 export default class Setup extends Phaser.State {
 

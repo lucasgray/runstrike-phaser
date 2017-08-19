@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import Bullet from './Bullet';
-import Mission from "../missions/Mission";
+import Mission from "../../missions/Mission";
 
 export default class Turret extends Phaser.Sprite {
 

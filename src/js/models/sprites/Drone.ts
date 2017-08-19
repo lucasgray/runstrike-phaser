@@ -1,6 +1,6 @@
-import Mission from "../missions/Mission";
+import Mission from "../../missions/Mission";
 import * as EasyStar from "easystarjs";
-import PhysicsExtensions from "../extensions/PhysicsExtensions";
+import PhysicsExtensions from "../../extensions/PhysicsExtensions";
 
 export default class Drone extends Phaser.Sprite {
 

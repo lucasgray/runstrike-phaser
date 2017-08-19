@@ -1,7 +1,7 @@
 
 import Mission from "../missions/Mission";
 import TurretHandler from "./TurretHandler";
-import {GameState} from "../objects/GameData";
+import {GameState} from "../models/state/GameData";
 import SpriteExtensions from "../extensions/SpriteExtensions";
 
 export default class CocktailHandler {
