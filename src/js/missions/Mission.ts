@@ -40,10 +40,9 @@ abstract class Mission {
 
         let easystar = new EasyStar.js();
 
-        //goddamn it
-        let grid = [];
+        let grid = Array<Array<number>>();
         for (let y = 0; y < this.gridDescriptor.y; y++) {
-            let f = [];
+            let f = Array<number>();
             for (let x = 0; x < this.gridDescriptor.x; x++) {
                 f.push(0);
             }
@@ -108,7 +107,7 @@ abstract class Mission {
     //every bullet can kill one drone.
     checkBulletCollisions() {
 
-        let bulletsThatCollided = [];
+        let bulletsThatCollided = Array<Phaser.Sprite>();
 
         //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.bullets, this.enemies, (bullet, sprite) => {
@@ -117,7 +116,7 @@ abstract class Mission {
                 bulletsThatCollided.push(bullet);
                 bullet.kill();
             }
-        }, null, this);
+        });
 
     }
 

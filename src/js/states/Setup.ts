@@ -1,14 +1,14 @@
 import Button from "../models/sprites/Button";
 import TurretHandler from "../handlers/TurretHandler"
 import Mission from "../missions/Mission";
-import { GameState } from "../models/state/GameData";
+import {GameState} from "../models/state/GameData";
 import Turret from "../models/sprites/Turret";
 
 export default class Setup extends Phaser.State {
 
     mission: Mission;
     gameState: GameState;
-    backgroundSprite : Phaser.Sprite;
+    backgroundSprite: Phaser.Sprite;
 
     constructor(gameState: GameState) {
         super();
@@ -44,10 +44,7 @@ export default class Setup extends Phaser.State {
 
     drawInputs() {
 
-        // Object.keys(setupInputHandlers).forEach((ih,index) => {
-        //     new setupInputHandlers[ih](this.game, 50, 300 + (90 * index));
-        // });
-        new TurretHandler(this.mission, [], this.gameState, this.backgroundSprite, this.game, 50, 300);
+        new TurretHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
 
         new Button(
             this.game,
@@ -55,7 +52,7 @@ export default class Setup extends Phaser.State {
             this.game.height - 40,
             100,
             40,
-            'Back', ()=>{
+            'Back', () => {
                 console.log("asking to go back");
                 this.state.start('Missions');
             }
@@ -67,7 +64,7 @@ export default class Setup extends Phaser.State {
             this.game.height - 40,
             100,
             40,
-            'Defend', ()=>{
+            'Defend', () => {
                 console.log("asking to defend");
                 this.state.start('Play', true, false, this.mission, this.gameState);
             }

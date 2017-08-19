@@ -47,7 +47,7 @@ export default class Drone extends Phaser.Sprite {
 
         this.explodeSound = () => {
 
-            let sound = null;
+            let sound;
             if (Math.random() > .5) {
                 sound = game.add.audio('crash-1');
             } else {

@@ -5,12 +5,14 @@ import {GameState} from "../models/state/GameData";
 import Turret from "../models/sprites/Turret";
 import Drone from "../models/sprites/Drone";
 import CocktailHandler from "../handlers/CocktailHandler";
+import InputHandler from "../handlers/InputHandler";
 
 export default class Play extends Phaser.State {
 
     gameState : GameState;
     mission : Mission;
     backgroundSprite: Phaser.Sprite;
+    inputHandlers: Array<InputHandler>;
 
     constructor(gameState: GameState) {
         super();
@@ -68,7 +70,9 @@ export default class Play extends Phaser.State {
 
     drawInput() {
 
-        new CocktailHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
+        let ih = new CocktailHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
+        this.inputHandlers = [];
+        this.inputHandlers.push(ih);
 
         new Button(
             this.game,
@@ -90,5 +94,6 @@ export default class Play extends Phaser.State {
     shutdown() {
         console.log("shut down called");
         this.mission.shutdown();
+        this.inputHandlers.forEach(_ => _.shutdown());
     }
 }
