@@ -53,6 +53,48 @@ export default class Turret extends Phaser.Sprite {
         this.maybeShoot();
     }
 
+    doRotation() {
+
+        //if we're rotating to a tween do nothing
+        if (this.rotationTween && this.rotationTween.isRunning) return;
+
+        let sprite = this.closestSprite();
+
+        if (!sprite) return;
+
+        //if its a new sprite or the current tracking sprite is dead, tween the rotation to it
+        if (sprite !== this.tracking || !this.tracking.alive) {
+            this.tracking = sprite;
+
+            //where we need to be
+            let angle = this.calcRotationAngle(this,sprite, false);
+
+            //figure out the best rotation (do we go negative or positive?)
+            let bestRotation = this.getRotationVectorForSprite(this, angle);
+            bestRotation.start();
+
+            this.rotationTween = bestRotation;
+            //else keep tracking it
+        } else {
+            this.body.rotation = this.calcRotationAngle(this,sprite);
+        }
+    }
+
+    maybeShoot() {
+        //shoot if we havent shot in over a second (give or take some randomness,
+        //and we're tracking a body,
+        //and that body is relatively close to us
+        if (Date.now() - this.lastShot > (1000 + (Math.random() * 200))
+            && this.tracking && this.tracking.alive && this.tracking.body.velocity
+            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < 100) {
+
+            let bullet = new Bullet(this.game, this, this.tracking);
+            this.game.add.existing(bullet);
+            this.mission.bullets.add(bullet);
+            this.lastShot = Date.now();
+        }
+    }
+
     closestSprite() {
 
         let spriteDistances = this.mission.enemies.hash.map((sprite) => {
@@ -74,48 +116,6 @@ export default class Turret extends Phaser.Sprite {
         }
 
         return null;
-    }
-
-    doRotation() {
-
-        //if we're rotating to a tween do nothing
-        if (this.rotationTween && this.rotationTween.isRunning) return;
-
-        let sprite = this.closestSprite();
-
-        if (!sprite) return;
-
-        //if its a new sprite tween the rotation to it
-        if (sprite !== this.tracking) {
-            this.tracking = sprite;
-
-            //where we need to be
-            let angle = this.calcRotationAngle(this,sprite, false);
-
-            //figure out the best rotation (do we go negative or positive?)
-            let bestRotation = this.getRotationVectorForSprite(this, angle);
-            bestRotation.start();
-
-            this.rotationTween = bestRotation;
-        //else keep tracking it
-        } else {
-            this.body.rotation = this.calcRotationAngle(this,sprite);
-        }
-    }
-
-    maybeShoot() {
-        //shoot if we havent shot in over a second (give or take some randomness,
-        //and we're tracking a body,
-        //and that body is relatively close to us
-        if (Date.now() - this.lastShot > (1000 + (Math.random() * 200))
-            && this.tracking && this.tracking.alive && this.tracking.body.velocity
-            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < 100) {
-
-            let bullet = new Bullet(this.game, this, this.tracking);
-            this.game.add.existing(bullet);
-            this.mission.bullets.add(bullet);
-            this.lastShot = Date.now();
-        }
     }
 
     //TODO maybe this stuff should move into a local math lib?
