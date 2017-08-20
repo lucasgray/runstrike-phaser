@@ -93,7 +93,7 @@ abstract class Mission {
     }
 
     checkWinCondition() {
-        if (this.allDeployed && this.enemies.getFirstAlive() === null) {
+        if (this.allDeployed && !this.enemies.getFirstAlive()) {
             if (this.winTime) {
                 if (Date.now() - this.winTime > 2000) {
                     this.game.state.start('Victory');

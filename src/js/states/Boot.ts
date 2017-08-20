@@ -153,6 +153,15 @@ export default class Boot extends Phaser.State {
                     "longitude": -89.33985730479297
                 },
                 "type": "Turret"
+            },"-Kj-ezDNFAwbZsdfsdfirmeGOI": {
+                "foundBy": "TODO!",
+                "foundOn": "TODO!",
+                "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
+                "latLong": {
+                    "latitude": 43.06856735536175,
+                    "longitude": -89.33985730479297
+                },
+                "type": "green-turret"
             }
         }
     }

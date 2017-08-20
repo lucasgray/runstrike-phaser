@@ -14,6 +14,10 @@ export default class Turret extends Phaser.Sprite {
     rotationTween: Phaser.Tween;
     tracking: Phaser.Sprite;
 
+    range: number = 300;
+    fireRate: number = 500;
+
+
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
         super(game, 0, 0, 'turret');
 
@@ -67,7 +71,7 @@ export default class Turret extends Phaser.Sprite {
             this.tracking = sprite;
 
             //where we need to be
-            let angle = this.calcRotationAngle(this,sprite, false);
+            let angle = this.calcRotationAngle(this, sprite, false);
 
             //figure out the best rotation (do we go negative or positive?)
             let bestRotation = this.getRotationVectorForSprite(this, angle);
@@ -84,11 +88,11 @@ export default class Turret extends Phaser.Sprite {
         //shoot if we havent shot in over a second (give or take some randomness,
         //and we're tracking a body,
         //and that body is relatively close to us
-        if (Date.now() - this.lastShot > (1000 + (Math.random() * 200))
+        if (Date.now() - this.lastShot > (this.fireRate + (Math.random() * 200))
             && this.tracking && this.tracking.alive && this.tracking.body.velocity
-            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < 100) {
+            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
 
-            let bullet = new Bullet(this.game, this, this.tracking);
+            let bullet = new Bullet(this.game, this, this.tracking, this.range);
             this.game.add.existing(bullet);
             this.mission.bullets.add(bullet);
             this.lastShot = Date.now();
@@ -97,19 +101,20 @@ export default class Turret extends Phaser.Sprite {
 
     closestSprite() {
 
-        let spriteDistances = this.mission.enemies.hash.map((sprite) => {
-            return {
-                distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
-                sprite: sprite
-            };
-        });
+        let spriteDistances = this.mission.enemies.hash
+            //TODO hacky hack - groups have display objects, but we know our group just has Sprites
+            //groups can contain things that dont necessarily have the prop 'alive'
+            .filter(s => s['alive'])
+            .map((sprite) => {
+                return {
+                    distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
+                    sprite: sprite
+                };
+            }
+        );
 
-        //TODO hacky hack - groups have display objects, but we know our group just has Sprites
-        //groups can contain things that dont necessarily have the prop 'alive'
-        let spritesInRange = spriteDistances.filter(s => s.sprite['alive']);
-
-        if (spritesInRange) {
-            let rslt = _.minBy(spritesInRange, (s) => s.distance);
+        if (spriteDistances) {
+            let rslt = _.minBy(spriteDistances, (s) => s.distance);
             if (rslt) {
                 return rslt.sprite;
             }

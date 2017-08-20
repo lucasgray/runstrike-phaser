@@ -49,8 +49,6 @@ export default class Play extends Phaser.State {
 
         this.drawHealth();
         this.drawInput();
-
-        this.game.add.existing(new Drone(this.game, this.mission, 5, 0));
     }
 
     drawHealth() {

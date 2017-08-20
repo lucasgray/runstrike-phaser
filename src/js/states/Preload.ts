@@ -39,7 +39,6 @@ export default class Preload extends Phaser.State {
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
-        //new stuff
         this.game.load.image('cocktail_icon', require('../../img/cocktail.png')); //128x128
         this.game.load.image('grenade_icon', require('../../img/grenade.png')); //128x128
         this.game.load.spritesheet('drone', require('../../img/drone.png').toString(), 128, 128, 3); // 128x128 with 3 frames (option param)
@@ -53,6 +52,11 @@ export default class Preload extends Phaser.State {
         this.game.load.image('green-turret', require('../../img/green-turret.png'));
         this.game.load.image('retro-background', require('../../img/retro-background.jpg'));
         this.game.load.image('skirmish-background', require('../../img/skirmish-background.jpg'));
+
+        this.game.load.spritesheet('green-projectile', require('../../img/green-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('missile-projectile', require('../../img/missile-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('blue-projectile', require('../../img/blue-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('blue-missile-projectile', require('../../img/blue-missile-projectile.png').toString(), 32, 32, 5);
     }
 
     update() {
