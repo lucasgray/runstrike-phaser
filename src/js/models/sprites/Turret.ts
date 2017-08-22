@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import Bullet from './Bullet';
 import Mission from "../../missions/Mission";
+import MathExtensions from "../../extensions/MathExtensions";
 
 export default class Turret extends Phaser.Sprite {
 
@@ -71,16 +72,17 @@ export default class Turret extends Phaser.Sprite {
             this.tracking = sprite;
 
             //where we need to be
-            let angle = this.calcRotationAngle(this, sprite, false);
+            let angle = MathExtensions.calcRotationAngle(this, sprite, false);
 
             //figure out the best rotation (do we go negative or positive?)
-            let bestRotation = this.getRotationVectorForSprite(this, angle);
-            bestRotation.start();
+            let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
+            let tween = this.game.add.tween(this).to({'rotation': bestRotation}, 600, Phaser.Easing.Linear.None);
+            tween.start();
 
-            this.rotationTween = bestRotation;
+            this.rotationTween = tween;
             //else keep tracking it
         } else {
-            this.body.rotation = this.calcRotationAngle(this,sprite);
+            this.body.rotation = MathExtensions.calcRotationAngle(this,sprite);
         }
     }
 
@@ -99,7 +101,7 @@ export default class Turret extends Phaser.Sprite {
         }
     }
 
-    closestSprite() {
+    closestSprite(): Phaser.Sprite | null {
 
         let spriteDistances = this.mission.enemies.hash
             //TODO hacky hack - groups have display objects, but we know our group just has Sprites
@@ -121,45 +123,6 @@ export default class Turret extends Phaser.Sprite {
         }
 
         return null;
-    }
-
-    //TODO maybe this stuff should move into a local math lib?
-
-    calcRotationAngle(centerPt, targetPt, degrees = true) {
-        let theta = Math.atan2(targetPt.y - centerPt.y, targetPt.x - centerPt.x);
-
-        theta += Math.PI / 2.0;
-
-        if (!degrees) return theta;
-
-        let angle = Phaser.Math.radToDeg(theta);
-
-        if (angle < 0) {
-            angle += 360;
-        }
-
-        return angle;
-    }
-
-    getRotationVectorForSprite(sprite, desiredRotation) {
-        var rotation = 0;
-        var turnNegative = -((Math.PI * 2) - (desiredRotation));
-        var turnPositive = ((Math.PI * 2) - (desiredRotation));
-
-        var diffDistance = Math.abs(sprite.rotation - turnNegative)
-
-        // math.pi is the center
-        if (diffDistance >= Math.PI) {
-            rotation = (Math.PI * 2) - turnPositive;
-            console.log('positive')
-        } else {
-            rotation = turnNegative - sprite.rotation;
-            console.log('negative')
-        }
-
-        console.log(rotation);
-
-        return this.game.add.tween(sprite).to({'rotation': rotation}, 600, Phaser.Easing.Linear.None);
     }
 
 }

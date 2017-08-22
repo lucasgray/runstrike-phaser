@@ -28,9 +28,7 @@ export default class Bullet extends Phaser.Sprite {
         let toX = toSprite.x + halfXVelocity;
         let toY = toSprite.y + halfYVelocity;
 
-        this.angle = this.calcRotationAngle(this, toX, toY, true);
-
-        game.physics.arcade.moveToXY(this, toX, toY, this.speed);
+        this.angle = Phaser.Math.radToDeg(game.physics.arcade.moveToXY(this, toX, toY, this.speed)) + 90;
 
         let shootSound = game.add.audio('shoot');
         shootSound.play();
@@ -41,22 +39,6 @@ export default class Bullet extends Phaser.Sprite {
             this.kill();
             this.destroy();
         }
-    }
-
-    calcRotationAngle(centerPt, x, y, degrees = true) {
-        let theta = Math.atan2(y - centerPt.y, x - centerPt.x);
-
-        theta += Math.PI / 2.0;
-
-        if (!degrees) return theta;
-
-        let angle = Phaser.Math.radToDeg(theta);
-
-        if (angle < 0) {
-            angle += 360;
-        }
-
-        return angle;
     }
 
 }

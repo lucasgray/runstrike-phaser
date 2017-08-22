@@ -36,7 +36,6 @@ export default class Skirmish extends Mission {
         super(game, gameState.placedLoot);
 
         this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20);
-
     }
 
     background = () => {

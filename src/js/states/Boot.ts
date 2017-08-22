@@ -97,12 +97,6 @@ export default class Boot extends Phaser.State {
                     "type": "Turret",
                     "x": 0,
                     "y": 0
-                },
-                "-Kj57wIvhvgeQG7Xdz3X": {
-                    "mission": "Skirmish",
-                    "type": "Turret",
-                    "x": 8,
-                    "y": 10
                 }
             }
         },

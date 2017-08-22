@@ -3,7 +3,6 @@ import 'phaser';
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import Turret from "../models/sprites/Turret";
-import Drone from "../models/sprites/Drone";
 import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
 
