@@ -1,13 +1,11 @@
 import Mission from "../../missions/Mission";
-import * as EasyStar from "easystarjs";
-import PhysicsExtensions from "../../extensions/PhysicsExtensions";
 
 export default class Drone extends Phaser.Sprite {
 
     mission: Mission;
     randomVelocity: number;
     lastCalculation: number;
-    explodeSound: Function;
+    explodeSound: () => Phaser.Sound;
     path: {x: number; y: number}[];
     lastMove: boolean = false;
 
@@ -90,8 +88,7 @@ export default class Drone extends Phaser.Sprite {
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity);
-            PhysicsExtensions.rotateToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, 90); //rotate with a 90 deg offset
+            this.angle = Phaser.Math.radToDeg(this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity)) + 90;
         } else {
             // console.log('lastmoved.')
             if(this.alive && this.body){

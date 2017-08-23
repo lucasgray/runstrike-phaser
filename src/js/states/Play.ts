@@ -2,9 +2,13 @@ import Button from "../models/sprites/Button";
 import 'phaser';
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import Turret from "../models/sprites/Turret";
+import BlueTurret from "../models/sprites/BlueTurret";
 import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
+import GreenTurret from "../models/sprites/GreenTurret";
+import YellowTurret from "../models/sprites/YellowTurret";
+import RedTurret from "../models/sprites/RedTurret";
+import OrangeTurret from "../models/sprites/OrangeTurret";
 
 export default class Play extends Phaser.State {
 
@@ -37,8 +41,28 @@ export default class Play extends Phaser.State {
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
 
             //TODO factory or something
-            if (it.type.toLowerCase() == 'turret') {
-                let turret = new Turret(this.mission, this.game, it.row, it.col);
+            if (it.type.toLowerCase() == 'blue-turret') {
+                let turret = new BlueTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'green-turret') {
+                let turret = new GreenTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'yellow-turret') {
+                let turret = new YellowTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'red-turret') {
+                let turret = new RedTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'orange-turret') {
+                let turret = new OrangeTurret(this.mission, this.game, it.row, it.col);
                 this.game.add.existing(turret);
             }
 

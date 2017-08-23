@@ -3,7 +3,7 @@ import Bullet from './Bullet';
 import Mission from "../../missions/Mission";
 import MathExtensions from "../../extensions/MathExtensions";
 
-export default class Turret extends Phaser.Sprite {
+export default class YellowTurret extends Phaser.Sprite {
 
     mission: Mission;
 
@@ -20,7 +20,7 @@ export default class Turret extends Phaser.Sprite {
 
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-        super(game, 0, 0, 'turret');
+        super(game, 0, 0, 'yellow-turret');
 
         this.mission = mission;
 

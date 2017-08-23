@@ -45,7 +45,7 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('hack', require('../../img/hack.png').toString(), 128, 128, 3); // 128x128 with 2 frames (option param)
         this.game.load.spritesheet('explosion', require('../../img/explosion.png').toString(), 86, 86);
         this.game.load.image('bullet', require('../../img/bullet.png'));
-        this.game.load.image('turret', require('../../img/turret.png'));
+        this.game.load.image('blue-turret', require('../../img/turret.png'));
         this.game.load.image('yellow-turret', require('../../img/yellow-turret.png'));
         this.game.load.image('red-turret', require('../../img/red-turret.png'));
         this.game.load.image('orange-turret', require('../../img/orange-turret.png'));

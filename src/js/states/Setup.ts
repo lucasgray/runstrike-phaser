@@ -1,8 +1,17 @@
 import Button from "../models/sprites/Button";
-import TurretHandler from "../handlers/TurretHandler"
+import BlueTurretHandler from "../handlers/BlueTurretHandler"
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import Turret from "../models/sprites/Turret";
+import BlueTurret from "../models/sprites/BlueTurret";
+import GreenTurret from "../models/sprites/GreenTurret";
+import GreenTurretHandler from "../handlers/GreenTurretHandler";
+import InputHandler from "../handlers/InputHandler";
+import YellowTurret from "../models/sprites/YellowTurret";
+import RedTurret from "../models/sprites/RedTurret";
+import OrangeTurret from "../models/sprites/OrangeTurret";
+import RedTurretHandler from "../handlers/RedTurretHandler";
+import OrangeTurretHandler from "../handlers/OrangeTurretHandler";
+import YellowTurretHandler from "../handlers/YellowTurretHandler";
 
 export default class Setup extends Phaser.State {
 
@@ -33,8 +42,28 @@ export default class Setup extends Phaser.State {
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
 
             //TODO factory or something
-            if (it.type.toLowerCase() == 'turret') {
-                let turret = new Turret(this.mission, this.game, it.row, it.col);
+            if (it.type.toLowerCase() == 'blue-turret') {
+                let turret = new BlueTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'green-turret') {
+                let turret = new GreenTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'yellow-turret') {
+                let turret = new YellowTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'red-turret') {
+                let turret = new RedTurret(this.mission, this.game, it.row, it.col);
+                this.game.add.existing(turret);
+            }
+
+            if (it.type.toLowerCase() == 'orange-turret') {
+                let turret = new OrangeTurret(this.mission, this.game, it.row, it.col);
                 this.game.add.existing(turret);
             }
         });
@@ -44,7 +73,12 @@ export default class Setup extends Phaser.State {
 
     drawInputs() {
 
-        new TurretHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
+        let allTurretHandlers = Array<InputHandler>();
+        allTurretHandlers.push(new BlueTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 300));
+        allTurretHandlers.push(new GreenTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 390));
+        allTurretHandlers.push(new RedTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 480));
+        allTurretHandlers.push(new OrangeTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 570));
+        allTurretHandlers.push(new YellowTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 660));
 
         new Button(
             this.game,

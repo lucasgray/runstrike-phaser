@@ -8,7 +8,7 @@ export default abstract class InputHandler {
     text: Phaser.Text;
 
     //TODO later we'll want to keep a reference to all the other handlers on the current state!
-    // allHandlers: Array<InputHandler>;
+    allHandlers: Array<InputHandler>;
 
     gameState: GameState;
     game: Phaser.Game;
@@ -33,6 +33,7 @@ export default abstract class InputHandler {
 
     constructor(mission: Mission,
                 gameState: GameState,
+                allHandlers: Array<InputHandler>,
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
@@ -40,6 +41,7 @@ export default abstract class InputHandler {
 
         this.mission = mission;
         this.gameState = gameState;
+        this.allHandlers = allHandlers;
         this.game = game;
         this.backgroundSprite = backgroundSprite;
 
@@ -101,9 +103,11 @@ export default abstract class InputHandler {
 
         //turn all active handlers off
         this.backgroundSprite.events.onInputDown.removeAll();
+        this.allHandlers.forEach(ih =>
+            this.game.add.tween(ih.parentSprite.scale).to({x: 1.0, y: 1.0}, 400, Phaser.Easing.Exponential.In).start()
+        );
 
-        //TODO keep a group of like input handlers and turn them all "off" here!
-
+        //turn this one on
         this.game.add.tween(this.parentSprite.scale).to({x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
         let button = this.game.add.audio('button');
         button.play();

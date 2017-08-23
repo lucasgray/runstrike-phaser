@@ -15,7 +15,7 @@ export default class CocktailHandler extends InputHandler {
                 x: number,
                 y: number) {
 
-        super(mission, gameState, backgroundSprite, game, x, y);
+        super(mission, gameState, [], backgroundSprite, game, x, y);
 
         super.paint();
     }

@@ -1,22 +1,24 @@
-import Turret from "../models/sprites/Turret";
+import Turret from "../models/sprites/BlueTurret";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
+import GreenTurret from "../models/sprites/GreenTurret";
 
-export default class TurretHandler extends InputHandler {
+export default class GreenTurretHandler extends InputHandler {
 
-    icon: string = 'turret';
-    lootType: string = 'Turret';
+    icon: string = 'green-turret';
+    lootType: string = 'Green-Turret';
     spriteScaling: number = 1;
 
     constructor(mission: Mission,
                 gameState: GameState,
+                allHandlers: Array<InputHandler>,
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
                 y: number) {
 
-        super(mission, gameState, backgroundSprite, game, x, y);
+        super(mission, gameState, allHandlers, backgroundSprite, game, x, y);
 
         super.paint();
     }
@@ -31,10 +33,10 @@ export default class TurretHandler extends InputHandler {
         //if not, use one of those
 
         //make turret
-        let turret = new Turret(this.mission, this.game, grid.x, grid.y);
+        let turret = new GreenTurret(this.mission, this.game, grid.x, grid.y);
         this.game.add.existing(turret);
 
-        this.gameState.placeItem("Turret", this.mission.name, grid.x, grid.y);
+        this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
         this.text.setText(this.num());
 
         let place = this.game.add.audio('place-item');
