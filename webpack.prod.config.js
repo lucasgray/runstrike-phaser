@@ -46,6 +46,7 @@ module.exports = {
     ],
     module: {
         rules: [
+            { test: /\.tsx?$/, loader: 'ts-loader', include: PATHS.js },
             { test: /\.js$/, use: ['babel-loader'], include: PATHS.js },
             { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
             { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
@@ -66,6 +67,7 @@ module.exports = {
             'phaser': phaser,
             'pixi': pixi,
             'p2': p2
-        }
+        },
+        extensions: [ '.ts', '.tsx', '.js' ]
     }
 }
