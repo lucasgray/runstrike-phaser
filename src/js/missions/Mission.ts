@@ -1,7 +1,7 @@
 import GridDescriptor from "../models/state/GridDescriptor";
 import * as EasyStar from 'easystarjs';
 import {PlacedLootInfo} from "../models/state/GameData";
-import Drone from "../models/sprites/Drone";
+import Drone from "../models/sprites/enemies/Drone";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -16,7 +16,7 @@ abstract class Mission {
     easystar: EasyStar.js;
 
     enemies: Phaser.Group;
-    bullets: Phaser.Group;
+    projectiles: Phaser.Group;
 
     placedItems: Array<PlacedLootInfo>;
 
@@ -33,7 +33,7 @@ abstract class Mission {
         this.placedItems = placedItems;
 
         this.enemies = game.add.group();
-        this.bullets = game.add.group();
+        this.projectiles = game.add.group();
     }
 
     recalculateGrid() {
@@ -110,7 +110,7 @@ abstract class Mission {
         let bulletsThatCollided = Array<Phaser.Sprite>();
 
         //this is NOT an observer!  It fires once in the update loop.
-        this.game.physics.arcade.overlap(this.bullets, this.enemies, (bullet, sprite) => {
+        this.game.physics.arcade.overlap(this.projectiles, this.enemies, (bullet, sprite) => {
             if(sprite.alive && bulletsThatCollided.indexOf(bullet) == -1){
                 sprite.shot();
                 bulletsThatCollided.push(bullet);
@@ -122,7 +122,7 @@ abstract class Mission {
 
     shutdown() {
         this.enemies.destroy();
-        this.bullets.destroy();
+        this.projectiles.destroy();
     }
 }
 

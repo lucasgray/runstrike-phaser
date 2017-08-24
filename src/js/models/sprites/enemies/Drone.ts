@@ -1,4 +1,4 @@
-import Mission from "../../missions/Mission";
+import Mission from "../../../missions/Mission";
 
 export default class Drone extends Phaser.Sprite {
 

@@ -1,9 +1,9 @@
-import Turret from "../models/sprites/BlueTurret";
+import Turret from "../models/sprites/turrets/BlueTurret";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
-import GreenTurret from "../models/sprites/GreenTurret";
-import YellowTurret from "../models/sprites/YellowTurret";
+import GreenTurret from "../models/sprites/turrets/GreenTurret";
+import YellowTurret from "../models/sprites/turrets/YellowTurret";
 
 export default class YellowTurretHandler extends InputHandler {
 

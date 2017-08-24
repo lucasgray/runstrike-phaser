@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
-import Bullet from './Bullet';
-import Mission from "../../missions/Mission";
-import MathExtensions from "../../extensions/MathExtensions";
+import Projectile from '../projectiles/Projectile';
+import Mission from "../../../missions/Mission";
+import MathExtensions from "../../../extensions/MathExtensions";
 
-export default class YellowTurret extends Phaser.Sprite {
+abstract class Turret extends Phaser.Sprite {
 
     mission: Mission;
 
@@ -15,12 +15,13 @@ export default class YellowTurret extends Phaser.Sprite {
     rotationTween: Phaser.Tween;
     tracking: Phaser.Sprite;
 
-    range: number = 300;
-    fireRate: number = 500;
+    abstract range: number;
+    abstract fireRate: number;
+    abstract shoot: () => Projectile;
 
-
-    constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-        super(game, 0, 0, 'yellow-turret');
+    constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string) {
+        super(game, 0, 0, '');
+        this.loadTexture(texture);
 
         this.mission = mission;
 
@@ -94,9 +95,9 @@ export default class YellowTurret extends Phaser.Sprite {
             && this.tracking && this.tracking.alive && this.tracking.body.velocity
             && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
 
-            let bullet = new Bullet(this.game, this, this.tracking, this.range);
-            this.game.add.existing(bullet);
-            this.mission.bullets.add(bullet);
+            let projectile = this.shoot();
+            this.game.add.existing(projectile);
+            this.mission.projectiles.add(projectile);
             this.lastShot = Date.now();
         }
     }
@@ -104,16 +105,16 @@ export default class YellowTurret extends Phaser.Sprite {
     closestSprite(): Phaser.Sprite | null {
 
         let spriteDistances = this.mission.enemies.hash
-            //TODO hacky hack - groups have display objects, but we know our group just has Sprites
-            //groups can contain things that dont necessarily have the prop 'alive'
+        //TODO hacky hack - groups have display objects, but we know our group just has Sprites
+        //groups can contain things that dont necessarily have the prop 'alive'
             .filter(s => s['alive'])
             .map((sprite) => {
-                return {
-                    distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
-                    sprite: sprite
-                };
-            }
-        );
+                    return {
+                        distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
+                        sprite: sprite
+                    };
+                }
+            );
 
         if (spriteDistances) {
             let rslt = _.minBy(spriteDistances, (s) => s.distance);
@@ -126,3 +127,5 @@ export default class YellowTurret extends Phaser.Sprite {
     }
 
 }
+
+export default Turret;

@@ -1,4 +1,4 @@
-import BlueTurret from "../models/sprites/BlueTurret";
+import BlueTurret from "../models/sprites/turrets/BlueTurret";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";

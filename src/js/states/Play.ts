@@ -2,13 +2,13 @@ import Button from "../models/sprites/Button";
 import 'phaser';
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import BlueTurret from "../models/sprites/BlueTurret";
+import BlueTurret from "../models/sprites/turrets/BlueTurret";
 import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
-import GreenTurret from "../models/sprites/GreenTurret";
-import YellowTurret from "../models/sprites/YellowTurret";
-import RedTurret from "../models/sprites/RedTurret";
-import OrangeTurret from "../models/sprites/OrangeTurret";
+import GreenTurret from "../models/sprites/turrets/GreenTurret";
+import YellowTurret from "../models/sprites/turrets/YellowTurret";
+import RedTurret from "../models/sprites/turrets/RedTurret";
+import OrangeTurret from "../models/sprites/turrets/OrangeTurret";
 
 export default class Play extends Phaser.State {
 
@@ -30,7 +30,7 @@ export default class Play extends Phaser.State {
         this.gameState = gameState;
 
         mission.enemies = this.game.add.group(this,"enemies", true, true, Phaser.Physics.ARCADE);
-        mission.bullets = this.game.add.group(this,"bullets", true, true, Phaser.Physics.ARCADE);
+        mission.projectiles = this.game.add.group(this,"projectiles", true, true, Phaser.Physics.ARCADE);
 
         let spr = this.mission.background();
         this.game.add.existing(spr);
