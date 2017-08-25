@@ -15,8 +15,6 @@ abstract class Projectile extends Phaser.Sprite {
         this.game = game;
         this.fromSprite = fromSprite;
         this.toSprite = toSprite;
-
-        this.paint();
     }
 
     paint() {
