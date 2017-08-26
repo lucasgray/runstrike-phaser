@@ -44,9 +44,11 @@ export default class Preload extends Phaser.State {
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
+        this.game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs='); //for health bar
+
         this.game.load.image('cocktail_icon', require('../../img/cocktail.png')); //128x128
         this.game.load.image('grenade_icon', require('../../img/grenade.png')); //128x128
-        this.game.load.spritesheet('drone', require('../../img/drone.png').toString(), 128, 128, 3); // 128x128 with 3 frames (option param)
+        this.game.load.spritesheet('drone', require('../../img/drone.png').toString(), 32, 32, 3); // 128x128 with 3 frames (option param)
         this.game.load.spritesheet('hack', require('../../img/hack.png').toString(), 128, 128, 3); // 128x128 with 2 frames (option param)
         this.game.load.spritesheet('explosion', require('../../img/explosion.png').toString(), 86, 86);
         this.game.load.image('bullet', require('../../img/bullet.png'));

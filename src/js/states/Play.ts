@@ -9,6 +9,9 @@ import GreenTurret from "../models/sprites/turrets/GreenTurret";
 import YellowTurret from "../models/sprites/turrets/YellowTurret";
 import RedTurret from "../models/sprites/turrets/RedTurret";
 import OrangeTurret from "../models/sprites/turrets/OrangeTurret";
+import SmartGroup from "../extensions/SmartGroup";
+import Drone from "../models/sprites/enemies/Drone";
+import Projectile from "../models/sprites/projectiles/Projectile";
 
 export default class Play extends Phaser.State {
 
@@ -29,8 +32,8 @@ export default class Play extends Phaser.State {
         this.mission = mission;
         this.gameState = gameState;
 
-        mission.enemies = this.game.add.group(this,"enemies", true, true, Phaser.Physics.ARCADE);
-        mission.projectiles = this.game.add.group(this,"projectiles", true, true, Phaser.Physics.ARCADE);
+        mission.enemies = new SmartGroup<Drone>(this.game);
+        mission.projectiles = new SmartGroup<Projectile>(this.game);
 
         let spr = this.mission.background();
         this.game.add.existing(spr);

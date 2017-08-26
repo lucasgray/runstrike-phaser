@@ -2,6 +2,9 @@ import GridDescriptor from "../models/state/GridDescriptor";
 import * as EasyStar from 'easystarjs';
 import {PlacedLootInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
+import SmartGroup from "../extensions/SmartGroup";
+import Projectile from "../models/sprites/projectiles/Projectile";
+import * as _ from 'lodash';
 
 //this is a little big, maybe we can break it up somehow
 
@@ -15,16 +18,13 @@ abstract class Mission {
     game: Phaser.Game;
     easystar: EasyStar.js;
 
-    enemies: Phaser.Group;
-    projectiles: Phaser.Group;
+    enemies: SmartGroup<Drone>;
+    projectiles: SmartGroup<Projectile>;
 
     placedItems: Array<PlacedLootInfo>;
 
     curEnemy: number = 0;
     allDeployed: boolean;
-
-    winTime: number;
-
     lastDeployment: number = Date.now();
 
     constructor(game: Phaser.Game, placedItems: Array<PlacedLootInfo>) {
@@ -32,8 +32,8 @@ abstract class Mission {
         this.game = game;
         this.placedItems = placedItems;
 
-        this.enemies = game.add.group();
-        this.projectiles = game.add.group();
+        this.enemies = new SmartGroup<Drone>(this.game);
+        this.projectiles = new SmartGroup<Projectile>(this.game);
     }
 
     recalculateGrid() {
@@ -71,7 +71,7 @@ abstract class Mission {
 
         this.checkBulletCollisions();
 
-        this.checkWinCondition();
+        this.checkWinOrLose();
     }
 
     deploy() {
@@ -92,26 +92,34 @@ abstract class Mission {
         }
     }
 
-    checkWinCondition() {
-        if (this.allDeployed && !this.enemies.getFirstAlive()) {
-            if (this.winTime) {
-                if (Date.now() - this.winTime > 2000) {
-                    this.game.state.start('Victory');
-                }
-            } else {
-                this.winTime = Date.now();
-            }
+    checkWinOrLose() {
+        let won = this.allDeployed && !this.enemies.getFirstAlive();
+
+        let lost = _.some(this.enemies.all(), s => {
+            return s.alive && s.targetable &&
+            s.y > this.gridDescriptor.height - (this.gridDescriptor.cellHeight / 2)
+        });
+
+        if (won) {
+            setTimeout(() => {
+                this.game.state.start('Victory');
+            }, 2000);
+        }
+
+        if (lost) {
+            setTimeout(() => {
+                this.game.state.start('Defeat');
+            }, 500);
         }
     }
 
-    //every bullet can kill one drone.
     checkBulletCollisions() {
 
         let bulletsThatCollided = Array<Phaser.Sprite>();
 
         //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.projectiles, this.enemies, (bullet, sprite) => {
-            if(sprite.alive && bulletsThatCollided.indexOf(bullet) == -1){
+            if(sprite.alive && sprite.targetable && bulletsThatCollided.indexOf(bullet) == -1){
                 sprite.shot();
                 bulletsThatCollided.push(bullet);
                 bullet.kill();
