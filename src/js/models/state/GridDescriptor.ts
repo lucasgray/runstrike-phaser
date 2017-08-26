@@ -37,14 +37,14 @@ export default class GridDescriptor {
     }
 
     getGridLocation(input) {
-        let gridX = Math.round((input.x - this.offsetX) / this.cellWidth);
+        let gridX = Math.floor((input.x - this.offsetX) / this.cellWidth);
         if (gridX < 0) {
             gridX = 0;
         }
         if (gridX >= this.x) {
             gridX = this.x - 1;
         }
-        let gridY = Math.round(input.y / this.cellHeight);
+        let gridY = Math.floor(input.y / this.cellHeight);
         if (gridY < 0) {
             gridY = 0;
         }

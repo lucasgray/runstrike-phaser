@@ -57,7 +57,7 @@ abstract class Mission {
         easystar.setAcceptableTiles([0]);
         easystar.calculate();
         easystar.enableDiagonals();
-        easystar.disableCornerCutting();
+        easystar.enableCornerCutting();
         easystar.calculate();
 
         this.easystar = easystar;

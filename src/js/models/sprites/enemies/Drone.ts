@@ -43,7 +43,7 @@ export default class Drone extends Phaser.Sprite {
             } else {
                 console.log("easystar success. ");
                 path.forEach((p) => console.log(JSON.stringify(p)));
-                this.path = path;
+                this.path = path.slice(1);
             }
             this.lastCalculation = Date.now();
         });
@@ -60,8 +60,8 @@ export default class Drone extends Phaser.Sprite {
             return sound;
         };
 
-        this.health = 100;
-        this.maxHealth = 100;
+        this.health = 5000;
+        this.maxHealth = 5000;
 
         this.healthBar = this.game.add.existing(new HealthBar({
             game: this.game,
@@ -76,34 +76,39 @@ export default class Drone extends Phaser.Sprite {
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
 
-            let path = this.path;
-            let next = path[1];
+            let next = this.path[0];
 
-            //second.col * this.game.mission.gridDescriptor.cellHeight to convert to cells
-            if (this.y >= (next.y * this.mission.gridDescriptor.cellHeight)) {
-                // console.log("we made it! altering path");
+            if (next) {
 
-                path = path.slice(1);
-                this.path = path;
+                //we want to move towards the CENTER of the next cell..
+                let xToGo = this.mission.gridDescriptor.offsetX + (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
+                let yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
 
-                next = path[1];
+                if (next) {
+                    if (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10) {
+                        console.log('got to next!');
+                        this.path = this.path.slice(1);
+                        next = this.path[0];
+
+                        xToGo = this.mission.gridDescriptor.offsetX + (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
+                        yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
+                    }
+                }
+
+                // console.log(this.x + ' | ' + this.y);
+                // console.log(xToGo + ' | ' + yToGo);
+
+                if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
+                    this.lastMove = true;
+                }
+
+                // console.log("moving to " + xToGo + "," + yToGo)
+                let angle = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+                let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
+                this.game.add.tween(this).to({rotation: bestRotation}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
             }
 
-            //we want to move towards the CENTER of the next cell.. plus a little randomness
-            let xToGo = (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
-            let yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
 
-            // console.log(this.x + ' | ' + this.y);
-            // console.log(xToGo + ' | ' + yToGo);
-
-            if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
-                this.lastMove = true;
-            }
-
-            // console.log("moving to " + xToGo + "," + yToGo)
-            let angle = this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity)
-            let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
-            this.game.add.tween(this).to({rotation: bestRotation}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
         } else {
             // console.log('lastmoved.')
         }
