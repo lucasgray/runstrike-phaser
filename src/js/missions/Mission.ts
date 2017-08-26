@@ -25,9 +25,6 @@ abstract class Mission {
 
     curEnemy: number = 0;
     allDeployed: boolean;
-
-    winTime: number;
-
     lastDeployment: number = Date.now();
 
     constructor(game: Phaser.Game, placedItems: Array<PlacedLootInfo>) {
@@ -122,7 +119,7 @@ abstract class Mission {
 
         //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.projectiles, this.enemies, (bullet, sprite) => {
-            if(sprite.alive && bulletsThatCollided.indexOf(bullet) == -1){
+            if(sprite.alive && sprite.targetable && bulletsThatCollided.indexOf(bullet) == -1){
                 sprite.shot();
                 bulletsThatCollided.push(bullet);
                 bullet.kill();
