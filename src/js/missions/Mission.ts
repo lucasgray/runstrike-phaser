@@ -2,6 +2,8 @@ import GridDescriptor from "../models/state/GridDescriptor";
 import * as EasyStar from 'easystarjs';
 import {PlacedLootInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
+import SmartGroup from "../extensions/SmartGroup";
+import Projectile from "../models/sprites/projectiles/Projectile";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -15,8 +17,8 @@ abstract class Mission {
     game: Phaser.Game;
     easystar: EasyStar.js;
 
-    enemies: Phaser.Group;
-    projectiles: Phaser.Group;
+    enemies: SmartGroup<Drone>;
+    projectiles: SmartGroup<Projectile>;
 
     placedItems: Array<PlacedLootInfo>;
 
@@ -32,8 +34,8 @@ abstract class Mission {
         this.game = game;
         this.placedItems = placedItems;
 
-        this.enemies = game.add.group();
-        this.projectiles = game.add.group();
+        this.enemies = new SmartGroup<Drone>(this.game);
+        this.projectiles = new SmartGroup<Projectile>(this.game);
     }
 
     recalculateGrid() {
@@ -104,7 +106,6 @@ abstract class Mission {
         }
     }
 
-    //every bullet can kill one drone.
     checkBulletCollisions() {
 
         let bulletsThatCollided = Array<Phaser.Sprite>();

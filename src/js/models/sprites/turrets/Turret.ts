@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
 import MathExtensions from "../../../extensions/MathExtensions";
+import Drone from "../enemies/Drone";
 
 abstract class Turret extends Phaser.Sprite {
 
@@ -13,7 +14,7 @@ abstract class Turret extends Phaser.Sprite {
     col: number;
 
     rotationTween: Phaser.Tween;
-    tracking: Phaser.Sprite;
+    tracking: Drone;
 
     abstract range: number;
     abstract fireRate: number;
@@ -64,7 +65,7 @@ abstract class Turret extends Phaser.Sprite {
         //if we're rotating to a tween do nothing
         if (this.rotationTween && this.rotationTween.isRunning) return;
 
-        let sprite = this.closestSprite();
+        let sprite = this.closestEnemy();
 
         if (!sprite) return;
 
@@ -102,12 +103,11 @@ abstract class Turret extends Phaser.Sprite {
         }
     }
 
-    closestSprite(): Phaser.Sprite | null {
+    closestEnemy(): Drone | null {
 
-        let spriteDistances = this.mission.enemies.hash
-        //TODO hacky hack - groups have display objects, but we know our group just has Sprites
-        //groups can contain things that dont necessarily have the prop 'alive'
-            .filter(s => s['alive'])
+        let spriteDistances = this.mission.enemies
+            .all()
+            .filter(s => s.alive && s.targetable)
             .map((sprite) => {
                     return {
                         distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),

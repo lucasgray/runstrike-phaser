@@ -10,6 +10,7 @@ export default class Drone extends Phaser.Sprite {
     path: {x: number; y: number}[];
     lastMove: boolean = false;
     healthBar: HealthBar;
+    targetable: boolean;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, 0, 0, 'drone');
@@ -33,6 +34,7 @@ export default class Drone extends Phaser.Sprite {
 
         this.randomVelocity = 50 + (Math.random() * 30);
         this.lastCalculation = 0;
+        this.targetable = true;
 
         this.mission.easystar.findPath(row, col, Math.floor(this.mission.gridDescriptor.x / 2), (this.mission.gridDescriptor.y - 1), (path) => {
             if (!path) {
@@ -117,26 +119,26 @@ export default class Drone extends Phaser.Sprite {
     }
 
     kill() {
-
         this.healthBar.destroy();
         this.explodeSound().play();
+        this.targetable = false;
 
         this.game.add.tween(this).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         let fall = this.game.add.tween(this.scale).to({
             x: 0,
             y: 0
         }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        fall.onComplete.add(() => {
-            super.kill();
 
-            let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
+        let s = this;
+        fall.onComplete.add(() => {
+
+            let explosion = s.game.add.sprite(this.x, this.y, 'explosion');
             explosion.anchor.setTo(0.2, 0.2);
             explosion.scale.setTo(0.2, 0.2);
             let explosionAnimation = explosion.animations.add('fly');
             explosion.animations.play('fly', 30, false);
             explosionAnimation.onComplete.add(() => {
                 explosion.destroy();
-                this.destroy();
             });
         });
 
