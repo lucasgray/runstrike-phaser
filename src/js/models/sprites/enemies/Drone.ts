@@ -90,9 +90,9 @@ export default class Drone extends Phaser.Sprite {
             //we want to move towards the CENTER of the next cell.. plus a little randomness
             let xToGo = (second.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
             let yToGo = (second.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
-
-            console.log(this.x + ' | ' + this.y);
-            console.log(xToGo + ' | ' + yToGo);
+            //
+            // console.log(this.x + ' | ' + this.y);
+            // console.log(xToGo + ' | ' + yToGo);
 
             if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
                 this.lastMove = true;
@@ -102,11 +102,6 @@ export default class Drone extends Phaser.Sprite {
             this.angle = Phaser.Math.radToDeg(this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity)) + 90;
         } else {
             // console.log('lastmoved.')
-            if(this.alive && this.body){
-              if(this.body.y > this.mission.gridDescriptor.height - (this.mission.gridDescriptor.cellHeight / 2)){
-                this.game.state.start('Defeat');
-              }
-            }
         }
     }
 

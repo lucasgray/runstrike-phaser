@@ -4,6 +4,7 @@ import {PlacedLootInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 import SmartGroup from "../extensions/SmartGroup";
 import Projectile from "../models/sprites/projectiles/Projectile";
+import * as _ from 'lodash';
 
 //this is a little big, maybe we can break it up somehow
 
@@ -73,7 +74,7 @@ abstract class Mission {
 
         this.checkBulletCollisions();
 
-        this.checkWinCondition();
+        this.checkWinOrLose();
     }
 
     deploy() {
@@ -94,15 +95,24 @@ abstract class Mission {
         }
     }
 
-    checkWinCondition() {
-        if (this.allDeployed && !this.enemies.getFirstAlive()) {
-            if (this.winTime) {
-                if (Date.now() - this.winTime > 2000) {
-                    this.game.state.start('Victory');
-                }
-            } else {
-                this.winTime = Date.now();
-            }
+    checkWinOrLose() {
+        let won = this.allDeployed && !this.enemies.getFirstAlive();
+
+        let lost = _.some(this.enemies.all(), s => {
+            return s.alive && s.targetable &&
+            s.y > this.gridDescriptor.height - (this.gridDescriptor.cellHeight / 2)
+        });
+
+        if (won) {
+            setTimeout(() => {
+                this.game.state.start('Victory');
+            }, 2000);
+        }
+
+        if (lost) {
+            setTimeout(() => {
+                this.game.state.start('Defeat');
+            }, 500);
         }
     }
 
