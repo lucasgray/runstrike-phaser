@@ -129,10 +129,9 @@ export default class Drone extends Phaser.Sprite {
             y: 0
         }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
 
-        let s = this;
         fall.onComplete.add(() => {
 
-            let explosion = s.game.add.sprite(this.x, this.y, 'explosion');
+            let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
             explosion.anchor.setTo(0.2, 0.2);
             explosion.scale.setTo(0.2, 0.2);
             let explosionAnimation = explosion.animations.add('fly');
