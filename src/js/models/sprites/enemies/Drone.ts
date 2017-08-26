@@ -1,4 +1,5 @@
 import Mission from "../../../missions/Mission";
+import HealthBar from './HealthBar';
 
 export default class Drone extends Phaser.Sprite {
 
@@ -8,6 +9,7 @@ export default class Drone extends Phaser.Sprite {
     explodeSound: () => Phaser.Sound;
     path: {x: number; y: number}[];
     lastMove: boolean = false;
+    healthBar: HealthBar;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, 0, 0, 'drone');
@@ -20,7 +22,7 @@ export default class Drone extends Phaser.Sprite {
 
         this.mission = mission;
 
-        let defaultSize = {width: 128, height: 128};
+        let defaultSize = {width: 32, height: 32};
         let scaleX = mission.gridDescriptor.cellWidth / defaultSize.width;
         let scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
 
@@ -56,6 +58,11 @@ export default class Drone extends Phaser.Sprite {
         };
 
         this.health = 100;
+        this.maxHealth = 100;
+
+        let hb = new HealthBar(this.game, this);
+        this.game.add.existing(hb);
+        this.healthBar = hb;
     }
 
     update(){
@@ -111,6 +118,7 @@ export default class Drone extends Phaser.Sprite {
 
     kill() {
 
+        this.healthBar.destroy();
         this.explodeSound().play();
 
         this.game.add.tween(this).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
