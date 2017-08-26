@@ -7,6 +7,7 @@ import Victory from "./Victory";
 import Play from "./Play";
 import Defeat from "./Defeat";
 import * as _ from 'lodash';
+import Debug from "./Debug";
 require('../../css/joystix-monospace.ttf');
 
 export default class Preload extends Phaser.State {
@@ -70,6 +71,7 @@ export default class Preload extends Phaser.State {
         this.game.state.add('Play', new Play(s));
         this.game.state.add('Victory', new Victory(s));
         this.game.state.add('Defeat', new Defeat(s));
+        this.game.state.add('Debug', new Debug(s));
 
     }
 
