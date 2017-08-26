@@ -5,7 +5,9 @@ import * as _ from 'lodash';
 //everybody has this?
 export class GameState {
 
+    //TODO more structure now that we have TS!
     placedLoot: Array<PlacedLootInfo>;
+    //TODO more structure here too!
     inventoryLoot: Array<LootInfo>;
 
     backgroundMusic: Phaser.Sound;
