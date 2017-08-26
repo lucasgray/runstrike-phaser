@@ -1,5 +1,6 @@
 import Mission from "../../../missions/Mission";
 import HealthBar from 'phaser-percent-bar';
+import MathExtensions from "../../../extensions/MathExtensions";
 
 export default class Drone extends Phaser.Sprite {
 
@@ -64,12 +65,14 @@ export default class Drone extends Phaser.Sprite {
 
         this.healthBar = this.game.add.existing(new HealthBar({
             game: this.game,
-            host: this
+            host: this,
+            height: 4,
+            xOffset: - (this.width / 2)
         }));
     }
 
     update(){
-        if (!this.lastMove && this.alive && this.path && this.path.length > 0) {
+        if (!this.lastMove && this.alive && this.targetable && this.path && this.path.length > 0) {
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
 
@@ -98,9 +101,9 @@ export default class Drone extends Phaser.Sprite {
             }
 
             // console.log("moving to " + xToGo + "," + yToGo)
-            let angle = Phaser.Math.radToDeg(this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity)) + 90
-            this.angle = angle;
-            this.healthBar['angle'] = -angle;
+            let angle = this.game.physics.arcade.moveToXY(this, this.mission.gridDescriptor.offsetX + xToGo, yToGo, this.randomVelocity)
+            let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
+            this.game.add.tween(this).to({rotation: bestRotation}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
         } else {
             // console.log('lastmoved.')
         }
@@ -119,13 +122,10 @@ export default class Drone extends Phaser.Sprite {
         this.explodeSound().play();
         this.targetable = false;
 
-        this.game.add.tween(this).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let fall = this.game.add.tween(this.scale).to({
-            x: 0,
-            y: 0
-        }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        this.game.add.tween(this).to({angle: 359}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let fallTween = this.game.add.tween(this.scale).to({x: 0, y: 0}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
 
-        fall.onComplete.add(() => {
+        fallTween.onComplete.add(() => {
             this.alive = false;
 
             let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
