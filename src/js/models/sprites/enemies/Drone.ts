@@ -54,6 +54,8 @@ export default class Drone extends Phaser.Sprite {
 
             return sound;
         };
+
+        this.health = 100;
     }
 
     update(){
@@ -99,17 +101,26 @@ export default class Drone extends Phaser.Sprite {
         }
     }
 
-    shot(){
-        this.alive = false;
+    shot() {
+        this.damage(20);
+    }
+
+    massivelyDamage() {
+        this.damage(50);
+    }
+
+    kill() {
 
         this.explodeSound().play();
 
         this.game.add.tween(this).to({angle: 360}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        var fall = this.game.add.tween(this.scale).to({
+        let fall = this.game.add.tween(this.scale).to({
             x: 0,
             y: 0
         }, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         fall.onComplete.add(() => {
+            super.kill();
+
             let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
             explosion.anchor.setTo(0.2, 0.2);
             explosion.scale.setTo(0.2, 0.2);
@@ -120,5 +131,7 @@ export default class Drone extends Phaser.Sprite {
                 this.destroy();
             });
         });
+
+        return this;
     }
 }

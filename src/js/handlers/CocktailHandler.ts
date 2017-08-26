@@ -30,10 +30,8 @@ export default class CocktailHandler extends InputHandler {
         this.mission.enemies.forEachAlive((sprite) => {
             let dist = Math.sqrt((Math.abs(sprite.position.y - pointer.position.y) * Math.abs(sprite.position.y - pointer.position.y)) + (Math.abs(sprite.position.x - pointer.position.x) * Math.abs(sprite.position.x - pointer.position.x)));
 
-            //FIXME
-            //for now we just kills em
             if (dist <= 50) {
-                sprite.shot();
+                sprite.massivelyDamage();
             }
         });
 
