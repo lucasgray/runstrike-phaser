@@ -1,6 +1,6 @@
 import Mission from "../../../missions/Mission";
 import HealthBar from 'phaser-percent-bar';
-import MathExtensions from "../../../extensions/MathExtensions";
+import * as _ from 'lodash';
 
 export default class Drone extends Phaser.Sprite {
 
@@ -8,8 +8,7 @@ export default class Drone extends Phaser.Sprite {
     randomVelocity: number;
     lastCalculation: number;
     explodeSound: () => Phaser.Sound;
-    path: {x: number; y: number}[];
-    lastMove: boolean = false;
+    path: {x: number; y: number, seen: boolean}[];
     healthBar: HealthBar;
     targetable: boolean;
 
@@ -43,7 +42,7 @@ export default class Drone extends Phaser.Sprite {
             } else {
                 console.log("easystar success. ");
                 path.forEach((p) => console.log(JSON.stringify(p)));
-                this.path = path.slice(1);
+                this.path = path.map(i => { return {...i, seen: false}});
             }
             this.lastCalculation = Date.now();
         });
@@ -60,9 +59,10 @@ export default class Drone extends Phaser.Sprite {
             return sound;
         };
 
-        this.health = 5000;
-        this.maxHealth = 5000;
+        this.health = 10000;
+        this.maxHealth = 10000;
 
+        //health bar starts off on top?
         this.healthBar = this.game.add.existing(new HealthBar({
             game: this.game,
             host: this,
@@ -72,45 +72,36 @@ export default class Drone extends Phaser.Sprite {
     }
 
     update(){
-        if (!this.lastMove && this.alive && this.targetable && this.path && this.path.length > 0) {
+        if (this.alive && this.targetable && this.path && this.path.length > 0 && _.some(this.path, _ => !_.seen)) {
+
             //if we're in the process of moving from loc a to b, keep going
             //otherwise prep the next step
 
-            let next = this.path[0];
+            let cur = this.path.filter(_ => !_.seen)[0];
+            let next = cur;
 
-            if (next) {
+            if (cur) {
 
                 //we want to move towards the CENTER of the next cell..
-                let xToGo = this.mission.gridDescriptor.offsetX + (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
-                let yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
+                let xToGo = this.mission.gridDescriptor.offsetX + (cur.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
+                let yToGo = (cur.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
 
-                if (next) {
-                    if (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10) {
-                        console.log('got to next!');
-                        this.path = this.path.slice(1);
-                        next = this.path[0];
+                //have we made it yet, or are we going for the first time?
+                if (_.every(this.path, _ => !_.seen) || (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10)) {
+                    console.log('got to next!');
+                    cur.seen = true;
+                    next = this.path.filter(_ => !_.seen)[0];
 
+                    if (next) {
                         xToGo = this.mission.gridDescriptor.offsetX + (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
                         yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
+
+                        let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+                        let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
+                        this.game.add.tween(this).to({angle: this.angle + b }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
                     }
                 }
-
-                // console.log(this.x + ' | ' + this.y);
-                // console.log(xToGo + ' | ' + yToGo);
-
-                if (yToGo >= this.mission.gridDescriptor.height - this.mission.gridDescriptor.cellHeight) {
-                    this.lastMove = true;
-                }
-
-                // console.log("moving to " + xToGo + "," + yToGo)
-                let angle = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
-                let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
-                this.game.add.tween(this).to({rotation: bestRotation}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
             }
-
-
-        } else {
-            // console.log('lastmoved.')
         }
     }
 

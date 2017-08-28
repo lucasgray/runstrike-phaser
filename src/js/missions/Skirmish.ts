@@ -13,23 +13,23 @@ export default class Skirmish extends Mission {
         //TODO
         // { type: 'Intro', delay: 0, showFor: 1000, size: 'large', at: 100, image: 'clock', imageSrc:'img/cocktail.png', imageSize: {row:128,col:128}, messages: ['','The','Droids','Are','Coming!']},
         { type: 'Drone', delay: 1000, size: 'large', at: 3},
-        { type: 'Drone', delay: 600, size: 'medium', at: 4},
-        { type: 'Drone', delay: 900, size: 'small', at: 5},
+        { type: 'Drone', delay: 600, size: 'medium', at: 14},
+        { type: 'Drone', delay: 900, size: 'small', at: 13},
         { type: 'Drone', delay: 400, size: 'large', at: 1},
-        { type: 'Drone', delay: 60, size: 'medium', at: 3},
+        { type: 'Drone', delay: 60, size: 'medium', at: 12},
         { type: 'Drone', delay: 300, size: 'small', at: 6},
         { type: 'Drone', delay: 300, size: 'large', at: 10},
         { type: 'Drone', delay: 300, size: 'medium', at: 6},
         { type: 'Drone', delay: 3000, size: 'small', at: 7},
-        { type: 'Drone', delay: 1000, size: 'large', at: 3},
+        { type: 'Drone', delay: 1000, size: 'large', at: 14},
         { type: 'Drone', delay: 600, size: 'medium', at: 4},
         { type: 'Drone', delay: 900, size: 'small', at: 5},
-        { type: 'Drone', delay: 400, size: 'large', at: 1},
+        { type: 'Drone', delay: 400, size: 'large', at: 12},
         { type: 'Drone', delay: 60, size: 'medium', at: 3},
         { type: 'Drone', delay: 300, size: 'small', at: 6},
-        { type: 'Drone', delay: 300, size: 'large', at: 10},
-        { type: 'Drone', delay: 300, size: 'medium', at: 6},
-        { type: 'Drone', delay: 3000, size: 'small', at: 7}
+        { type: 'Drone', delay: 300, size: 'large', at: 12},
+        { type: 'Drone', delay: 300, size: 'medium', at: 12},
+        { type: 'Drone', delay: 3000, size: 'small', at: 14}
     ];
 
     constructor(game: Phaser.Game, gameState: GameState) {

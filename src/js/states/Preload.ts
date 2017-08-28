@@ -127,14 +127,7 @@ export default class Preload extends Phaser.State {
     fakeData: object = {
         "caps": 395,
         "placed_loot": {
-            "Skirmish": {
-                "-KivEivrunTm0bGxrfPq": {
-                    "mission": "Skirmish",
-                    "type": "blue-turret",
-                    "x": 0,
-                    "y": 0
-                }
-            }
+
         },
         "unused_loot": {
             "-Kj-ezDNFAwbZirmeGOE": {

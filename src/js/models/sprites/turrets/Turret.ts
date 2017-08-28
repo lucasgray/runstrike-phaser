@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
-import MathExtensions from "../../../extensions/MathExtensions";
 import Drone from "../enemies/Drone";
 
 abstract class Turret extends Phaser.Sprite {
@@ -74,17 +73,17 @@ abstract class Turret extends Phaser.Sprite {
             this.tracking = sprite;
 
             //where we need to be
-            let angle = MathExtensions.calcRotationAngle(this, sprite, false);
+            let angle = Phaser.Math.radToDeg(Phaser.Math.angleBetween(this.x, this.y, sprite.x, sprite.y)) + 90;
 
             //figure out the best rotation (do we go negative or positive?)
-            let bestRotation = MathExtensions.getRotationVectorForSprite(this, angle);
-            let tween = this.game.add.tween(this).to({'rotation': bestRotation}, 600, Phaser.Easing.Linear.None);
+            let bestAngle = Phaser.Math.getShortestAngle(this.angle, angle);
+            let tween = this.game.add.tween(this).to({angle: this.angle + bestAngle}, 400, Phaser.Easing.Linear.None);
             tween.start();
 
             this.rotationTween = tween;
             //else keep tracking it
         } else {
-            this.body.rotation = MathExtensions.calcRotationAngle(this,sprite);
+            this.angle = Phaser.Math.radToDeg(Phaser.Math.angleBetween(this.x, this.y, sprite.x, sprite.y)) + 90;
         }
     }
 
