@@ -27,6 +27,8 @@ abstract class Mission {
     allDeployed: boolean;
     lastDeployment: number = Date.now();
 
+    pendingFinalize = false;
+
     constructor(game: Phaser.Game, placedItems: Array<PlacedLootInfo>) {
 
         this.game = game;
@@ -71,7 +73,9 @@ abstract class Mission {
 
         this.checkBulletCollisions();
 
-        this.checkWinOrLose();
+        if (!this.pendingFinalize) {
+            this.pendingFinalize = this.checkWinOrLose();
+        }
     }
 
     deploy() {
@@ -92,7 +96,7 @@ abstract class Mission {
         }
     }
 
-    checkWinOrLose() {
+    checkWinOrLose() : boolean {
         let won = this.allDeployed && !this.enemies.getFirstAlive();
 
         let lost = _.some(this.enemies.all(), s => {
@@ -111,6 +115,10 @@ abstract class Mission {
                 this.game.state.start('Defeat');
             }, 500);
         }
+
+        if (won || lost) {
+            return true;
+        } else return false;
     }
 
     checkBulletCollisions() {

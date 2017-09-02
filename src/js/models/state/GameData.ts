@@ -27,14 +27,14 @@ export class GameState {
         console.log("placing turret at: " );
         console.log(xGrid, yGrid);
 
+        this.placedLoot.push(new PlacedLootInfo(itemType, mission, xGrid, yGrid));
+
         let payload = {
             type: itemType,
             x: xGrid,
             y: yGrid,
             mission: mission
         };
-
-        this.placedLoot.push(new PlacedLootInfo(itemType, mission, xGrid, yGrid));
 
         if (this.isReactNative) {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
