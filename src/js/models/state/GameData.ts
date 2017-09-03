@@ -1,5 +1,4 @@
 
-import * as Phaser from 'phaser-ce';
 import * as _ from 'lodash';
 
 //everybody has this?
@@ -50,12 +49,10 @@ export class GameState {
         }
     }
 
-    unplaceItem(itemType, mission, xGrid, yGrid) {
+    unplaceItem(itemType, mission, row, col) {
         console.log('unplace... this will do something soon');
 
-        // let placed = _.find(x => (x.col == xGrid && x.row == yGrid) && x.mission == mission)[0];
-        //
-        // this.placedLoot = this.placedLoot.filter(x => !((x.col == xGrid && x.row == yGrid) && x.mission == mission));
+        this.placedLoot = this.placedLoot.filter(x => !((x.col === col && x.row === row) && x.mission === mission));
         //
         // if (this.isReactNative) {
         //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
@@ -64,11 +61,11 @@ export class GameState {
         //     }))
         // }
         //
-        // let i = _.find(this.inventoryLoot, it => it.type === itemType);
-        //
-        // if (i) {
-        //     i.amount = i.amount + 1;
-        // }
+        let i = _.find(this.inventoryLoot, it => it.type === itemType);
+
+        if (i) {
+            i.amount = i.amount + 1;
+        }
     }
 
     useItem(itemType) {
@@ -122,4 +119,12 @@ export class PlacedLootInfo {
         this.row = row;
         this.col = col;
     }
+}
+
+export class AllLoots {
+
+    static Value = ["cocktail", "blue-turret", "green-turret", "orange-turret", "yellow-turret", "red-turret"];
+
+    static EmptyLoots : Array<LootInfo> = AllLoots.Value.map(i => new LootInfo(i, 0));
+
 }

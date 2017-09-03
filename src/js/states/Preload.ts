@@ -1,5 +1,5 @@
 import * as WebFont from "webfontloader";
-import {PlacedLootInfo, GameState, LootInfo} from "../models/state/GameData";
+import {PlacedLootInfo, GameState, LootInfo, AllLoots} from "../models/state/GameData";
 import Menu from "./Menu";
 import Missions from "./Missions";
 import Setup from "./Setup";
@@ -88,7 +88,7 @@ export default class Preload extends Phaser.State {
 
         let jsonString;
         let isReactNative;
-        //if not react native, comment this out!
+
         if (typeof(window.DATA) !== "undefined") {
             jsonString = window.DATA;
             isReactNative = true;
@@ -100,12 +100,21 @@ export default class Preload extends Phaser.State {
         let asMissionArray = _.values(jsonString.placed_loot);
 
         let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i.type, i.mission, i.x, i.y));
-        let inventoryItems = this.groupItems(jsonString.unused_loot, jsonString.caps);
 
-        return new GameState(placedItems, inventoryItems, isReactNative);
+
+        let emptyLoot = AllLoots.EmptyLoots;
+        let inventoryItems : Array<LootInfo> = this.groupItems(jsonString.unused_loot, jsonString.caps);
+
+        let finalInventoryItems = emptyLoot.map(i => {
+            if (_.some(inventoryItems, j => j.type === i.type)) {
+                return _.find(inventoryItems, j => j.type === i.type);
+            } else return i;
+        });
+
+        return new GameState(placedItems, finalInventoryItems, isReactNative);
     }
 
-    groupItems(items, caps) {
+    groupItems(items, caps) : Array<LootInfo> {
         if (items) {
             let byType = _.countBy(items, i => i.type);
             console.log("bytype " + JSON.stringify(byType));

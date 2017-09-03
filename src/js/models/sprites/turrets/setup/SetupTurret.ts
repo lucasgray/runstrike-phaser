@@ -26,6 +26,7 @@ abstract class SetupTurret extends Turret {
         super(mission, game, row, col, texture);
 
         this.inputHandler = inputHandler;
+
         this.gameState = gameState;
 
         this.events.onInputDown.add(this.remove, this);
