@@ -2,21 +2,17 @@ import Button from "../models/sprites/Button";
 import 'phaser';
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import BlueTurret from "../models/sprites/turrets/BlueTurret";
 import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
-import GreenTurret from "../models/sprites/turrets/GreenTurret";
-import YellowTurret from "../models/sprites/turrets/YellowTurret";
-import RedTurret from "../models/sprites/turrets/RedTurret";
-import OrangeTurret from "../models/sprites/turrets/OrangeTurret";
 import SmartGroup from "../extensions/SmartGroup";
 import Drone from "../models/sprites/enemies/Drone";
 import Projectile from "../models/sprites/projectiles/Projectile";
+import {RedTurret, YellowTurret, OrangeTurret, BlueTurret, GreenTurret} from "../models/sprites/turrets/Turrets";
 
 export default class Play extends Phaser.State {
 
-    gameState : GameState;
-    mission : Mission;
+    gameState: GameState;
+    mission: Mission;
     backgroundSprite: Phaser.Sprite;
     inputHandlers: Array<InputHandler>;
 
@@ -104,7 +100,7 @@ export default class Play extends Phaser.State {
             this.game.height - 40,
             100,
             40,
-            'Back', ()=>{
+            'Back', () => {
                 console.log("asking to go to menu");
                 this.state.start('Missions');
             }

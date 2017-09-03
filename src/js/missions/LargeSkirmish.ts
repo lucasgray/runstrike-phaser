@@ -4,7 +4,7 @@ import GridDescriptor from "../models/state/GridDescriptor";
 import {GameState} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 
-export default class Skirmish extends Mission {
+export default class LargeSkirmish extends Mission {
 
     gridDescriptor: GridDescriptor;
     name = 'Skirmish';
