@@ -71,7 +71,7 @@ export default class Play extends Phaser.State {
 
         });
 
-        this.mission.recalculateGrid();
+        this.mission.recalculateGrid(gameState.placedLoot);
 
         this.drawHealth();
         this.drawInput();

@@ -32,8 +32,8 @@ export default class Skirmish extends Mission {
         { type: 'Drone', delay: 3000, size: 'small', at: 14}
     ];
 
-    constructor(game: Phaser.Game, gameState: GameState) {
-        super(game, gameState.placedLoot);
+    constructor(game: Phaser.Game) {
+        super(game);
 
         this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20);
     }

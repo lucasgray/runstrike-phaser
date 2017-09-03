@@ -2,6 +2,7 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
 import {RedSetupTurret} from "../models/sprites/turrets/setup/SetupTurrets";
+import * as _ from 'lodash';
 
 export default class RedTurretHandler extends InputHandler {
 
@@ -24,16 +25,21 @@ export default class RedTurretHandler extends InputHandler {
 
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        let grid = this.mission.gridDescriptor.getGridLocation(pointer);
+        if (_.find(this.gameState.inventoryLoot, i => i.type === this.lootType).amount > 0) {
+            let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
-        let turret = new RedSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+            let turret = new RedSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
-        this.game.add.existing(turret);
+            this.game.add.existing(turret);
 
-        this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
-        this.updateText();
+            this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
+            this.updateText();
 
-        let place = this.game.add.audio('place-item');
-        place.play();
+            let place = this.game.add.audio('place-item');
+            place.play();
+        } else {
+            let cantplace = this.game.add.audio('wrong-choice');
+            cantplace.play();
+        }
     }
 }

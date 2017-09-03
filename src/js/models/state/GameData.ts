@@ -22,16 +22,16 @@ export class GameState {
         this.isReactNative = isReactNative;
     }
 
-    placeItem(itemType, mission, xGrid, yGrid) {
+    placeItem(itemType, mission, row, col) {
         console.log("placing turret at: " );
-        console.log(xGrid, yGrid);
+        console.log(row, col);
 
-        this.placedLoot.push(new PlacedLootInfo(itemType, mission, xGrid, yGrid));
+        this.placedLoot.push(new PlacedLootInfo(itemType, mission, row, col));
 
         let payload = {
             type: itemType,
-            x: xGrid,
-            y: yGrid,
+            x: row,
+            y: col,
             mission: mission
         };
 
@@ -50,9 +50,9 @@ export class GameState {
     }
 
     unplaceItem(itemType, mission, row, col) {
-        console.log('unplace... this will do something soon');
+        console.log('unplacing loot');
 
-        this.placedLoot = this.placedLoot.filter(x => !((x.col === col && x.row === row) && x.mission === mission));
+        this.placedLoot = _.remove(this.placedLoot, (x => !((x.row === row && x.col === col) && x.mission === mission)));
         //
         // if (this.isReactNative) {
         //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({

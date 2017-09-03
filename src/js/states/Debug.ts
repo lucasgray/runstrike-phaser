@@ -1,5 +1,5 @@
 
-import {GameState} from "../models/state/GameData";
+import {GameState, LootInfo} from "../models/state/GameData";
 import Button from "../models/sprites/Button";
 
 export default class Debug extends Phaser.State {
@@ -36,6 +36,22 @@ export default class Debug extends Phaser.State {
                 align: 'center'
             });
         textTwo.anchor.setTo(0.5);
+
+        new Button(
+            this.game,
+            this.game.world.centerX,
+            this.game.world.centerY + 125,
+            this.game.width * 0.8,
+            60,
+            'cheat', ()=>{
+                console.log("cheating!");
+
+                this.gameState.inventoryLoot =
+                    this.gameState.inventoryLoot.map(i =>
+                        new LootInfo(i.type, i.amount += 50)
+                    );
+            }
+        );
 
         new Button(
             this.game,

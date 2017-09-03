@@ -21,24 +21,21 @@ abstract class Mission {
     enemies: SmartGroup<Drone>;
     projectiles: SmartGroup<Projectile>;
 
-    placedItems: Array<PlacedLootInfo>;
-
     curEnemy: number = 0;
     allDeployed: boolean;
     lastDeployment: number = Date.now();
 
     pendingFinalize = false;
 
-    constructor(game: Phaser.Game, placedItems: Array<PlacedLootInfo>) {
+    constructor(game: Phaser.Game) {
 
         this.game = game;
-        this.placedItems = placedItems;
 
         this.enemies = new SmartGroup<Drone>(this.game);
         this.projectiles = new SmartGroup<Projectile>(this.game);
     }
 
-    recalculateGrid() {
+    recalculateGrid(placedItems: Array<PlacedLootInfo>) {
 
         let easystar = new EasyStar.js();
 
@@ -51,7 +48,7 @@ abstract class Mission {
             grid.push(f);
         }
 
-        this.placedItems.forEach((i) =>{
+        placedItems.forEach((i) =>{
            grid[i.col][i.row] = 1;
         });
 

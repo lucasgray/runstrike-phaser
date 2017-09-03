@@ -41,6 +41,7 @@ export default class Preload extends Phaser.State {
         this.load.audio('shoot', [require('../../audio/sounds/shoot-9.wav')]);
         this.load.audio('button', [require('../../audio/sounds/button.wav')]);
         this.load.audio('place-item', [require('../../audio/sounds/points-06.mp3')]);
+        this.load.audio('wrong-choice', [require('../../audio/sounds/wrong-choice.wav')]);
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
