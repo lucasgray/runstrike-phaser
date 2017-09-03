@@ -38,7 +38,7 @@ abstract class Turret extends Phaser.Sprite {
         let scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
         this.anchor.setTo(0.5);
         this.scale.setTo(scaleX, scaleY);
-        this.inputEnabled = true;
+        this.inputEnabled = false;
 
         this.lastShot = 0;
     }

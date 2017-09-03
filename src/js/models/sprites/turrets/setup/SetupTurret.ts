@@ -29,6 +29,8 @@ abstract class SetupTurret extends Turret {
         this.gameState = gameState;
 
         this.events.onInputDown.add(this.remove, this);
+
+        this.inputEnabled = true;
     }
 
     remove(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {

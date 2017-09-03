@@ -13,7 +13,7 @@ require('../../css/joystix-monospace.ttf');
 export default class Preload extends Phaser.State {
 
     create() {
-        this.game.renderer.renderSession.roundPixels = true;
+        // this.game.renderer.renderSession.roundPixels = true;
     }
 
     preload() {

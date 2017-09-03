@@ -1,15 +1,12 @@
-import Turret from "../models/sprites/turrets/BlueTurret";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
-import GreenTurret from "../models/sprites/turrets/GreenTurret";
-import YellowTurret from "../models/sprites/turrets/YellowTurret";
 import {YellowSetupTurret} from "../models/sprites/turrets/setup/SetupTurrets";
 
 export default class YellowTurretHandler extends InputHandler {
 
     icon: string = 'yellow-turret';
-    lootType: string = 'Yellow-Turret';
+    lootType: string = 'yellow-turret';
     spriteScaling: number = 1;
 
     constructor(mission: Mission,
@@ -35,7 +32,7 @@ export default class YellowTurretHandler extends InputHandler {
 
         this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
         this.updateText();
- 
+
         let place = this.game.add.audio('place-item');
         place.play();
     }

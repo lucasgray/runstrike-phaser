@@ -1,15 +1,12 @@
-import Turret from "../models/sprites/turrets/BlueTurret";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
-import GreenTurret from "../models/sprites/turrets/GreenTurret";
-import OrangeTurret from "../models/sprites/turrets/OrangeTurret";
 import {OrangeSetupTurret} from "../models/sprites/turrets/setup/SetupTurrets";
 
 export default class OrangeTurretHandler extends InputHandler {
 
     icon: string = 'orange-turret';
-    lootType: string = 'Orange-Turret';
+    lootType: string = 'orange-turret';
     spriteScaling: number = 1;
 
     constructor(mission: Mission,
