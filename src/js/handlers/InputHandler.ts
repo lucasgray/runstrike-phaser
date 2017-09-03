@@ -126,13 +126,17 @@ export default abstract class InputHandler {
 
     num() {
 
-        let cocktails = this.gameState.inventoryLoot.filter(it => it.type === this.lootType).pop();
+        let amt = this.gameState.inventoryLoot.filter(it => it.type === this.lootType).pop();
 
-        if (cocktails) {
-            return cocktails.amount + "";
+        if (amt) {
+            return amt.amount + "";
         } else {
             return "0";
         }
+    }
+
+    updateText() {
+        this.text.setText(this.num());
     }
 
     shutdown() {

@@ -3,6 +3,7 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
 import GreenTurret from "../models/sprites/turrets/GreenTurret";
+import {GreenSetupTurret} from "../models/sprites/turrets/setup/SetupTurrets";
 
 export default class GreenTurretHandler extends InputHandler {
 
@@ -27,17 +28,12 @@ export default class GreenTurretHandler extends InputHandler {
 
         let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
-        //check if currently there is a turret there.
-        //if so, were we closer to the top/down/left/right of current,
-        //and is there a problem placing there?
-        //if not, use one of those
+        let turret = new GreenSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
-        //make turret
-        let turret = new GreenTurret(this.mission, this.game, grid.x, grid.y);
         this.game.add.existing(turret);
 
         this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
-        this.text.setText(this.num());
+        this.updateText();
 
         let place = this.game.add.audio('place-item');
         place.play();

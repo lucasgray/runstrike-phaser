@@ -50,6 +50,27 @@ export class GameState {
         }
     }
 
+    unplaceItem(itemType, mission, xGrid, yGrid) {
+        console.log('unplace... this will do something soon');
+
+        // let placed = _.find(x => (x.col == xGrid && x.row == yGrid) && x.mission == mission)[0];
+        //
+        // this.placedLoot = this.placedLoot.filter(x => !((x.col == xGrid && x.row == yGrid) && x.mission == mission));
+        //
+        // if (this.isReactNative) {
+        //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
+        //         type: "UNPLACE_ITEM",
+        //         payload: placed
+        //     }))
+        // }
+        //
+        // let i = _.find(this.inventoryLoot, it => it.type === itemType);
+        //
+        // if (i) {
+        //     i.amount = i.amount + 1;
+        // }
+    }
+
     useItem(itemType) {
 
         if (this.isReactNative) {
