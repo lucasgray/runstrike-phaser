@@ -5,6 +5,8 @@ import Drone from "../models/sprites/enemies/Drone";
 import SmartGroup from "../extensions/SmartGroup";
 import Projectile from "../models/sprites/projectiles/Projectile";
 import * as _ from 'lodash';
+import Lurker from "../models/sprites/enemies/Lurker";
+import Shield from "../models/sprites/enemies/Shield";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -79,11 +81,24 @@ abstract class Mission {
 
         if (!this.allDeployed && Date.now() - this.lastDeployment > this.enemyArray[this.curEnemy]['delay']) {
 
-            console.log('new drone');
+            console.log('new enemy');
 
-            let drone = new Drone(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
-            this.game.add.existing(drone);
-            this.enemies.add(drone);
+            if (this.enemyArray[this.curEnemy]['type'] == "Drone") {
+                let sprite = new Drone(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+                this.game.add.existing(sprite);
+                this.enemies.add(sprite);
+            } else if (this.enemyArray[this.curEnemy]['type'] == "Lurker") {
+                let sprite = new Lurker(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+                this.game.add.existing(sprite);
+                this.enemies.add(sprite);
+            } else if (this.enemyArray[this.curEnemy]['type'] == "Shield") {
+                let sprite = new Shield(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+                this.game.add.existing(sprite);
+                this.enemies.add(sprite);
+            }
+
+
+
 
             this.curEnemy++;
             if (this.curEnemy >= this.enemyArray.length) {
@@ -103,13 +118,13 @@ abstract class Mission {
 
         if (won) {
             setTimeout(() => {
-                this.game.state.start('Victory');
+                this.game.state.start('Victory', true, false, this);
             }, 2000);
         }
 
         if (lost) {
             setTimeout(() => {
-                this.game.state.start('Defeat');
+                this.game.state.start('Defeat', true, false, this);
             }, 500);
         }
 

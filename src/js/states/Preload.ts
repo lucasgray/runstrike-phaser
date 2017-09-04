@@ -1,5 +1,5 @@
 import * as WebFont from "webfontloader";
-import {PlacedLootInfo, GameState, LootInfo, AllLoots} from "../models/state/GameData";
+import {PlacedLootInfo, GameState, LootInfo, AllLoots, AllMissions} from "../models/state/GameData";
 import Menu from "./Menu";
 import Missions from "./Missions";
 import Setup from "./Setup";
@@ -47,10 +47,12 @@ export default class Preload extends Phaser.State {
 
         this.game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs='); //for health bar
 
-        this.game.load.image('cocktail_icon', require('../../img/cocktail.png')); //128x128
-        this.game.load.image('grenade_icon', require('../../img/grenade.png')); //128x128
-        this.game.load.spritesheet('drone', require('../../img/drone-sm.png').toString(), 32, 32, 3); // 128x128 with 3 frames (option param)
-        this.game.load.spritesheet('hack', require('../../img/hack.png').toString(), 128, 128, 3); // 128x128 with 2 frames (option param)
+        this.game.load.image('cocktail_icon', require('../../img/cocktail.png'));
+        this.game.load.image('grenade_icon', require('../../img/grenade.png'));
+        this.game.load.spritesheet('drone', require('../../img/drone-sm.png').toString(), 32, 32, 3);
+        this.game.load.spritesheet('lurker', require('../../img/LurkerA.png').toString(), 16, 16, 5);
+        this.game.load.spritesheet('shield', require('../../img/ShieldF.png').toString(), 16, 16, 4);
+        this.game.load.spritesheet('hack', require('../../img/hack.png').toString(), 128, 128, 3);
         this.game.load.spritesheet('explosion', require('../../img/explosion.png').toString(), 86, 86);
         this.game.load.image('bullet', require('../../img/bullet.png'));
         this.game.load.image('blue-turret', require('../../img/turret.png'));
@@ -112,7 +114,9 @@ export default class Preload extends Phaser.State {
             } else return i;
         });
 
-        return new GameState(placedItems, finalInventoryItems, isReactNative);
+        let missions = AllMissions.BaseMissions;
+
+        return new GameState(placedItems, finalInventoryItems, missions, isReactNative);
     }
 
     groupItems(items, caps) : Array<LootInfo> {

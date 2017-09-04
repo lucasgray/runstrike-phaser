@@ -1,5 +1,6 @@
 
 import * as _ from 'lodash';
+import Mission from "../../missions/Mission";
 
 //everybody has this?
 export class GameState {
@@ -9,6 +10,8 @@ export class GameState {
     //TODO more structure here too!
     inventoryLoot: Array<LootInfo>;
 
+    missionInfo: Array<MissionInfo>;
+
     backgroundMusic: Phaser.Sound;
     isPlayingMusic: boolean;
     hasStartedMusic: boolean;
@@ -16,9 +19,10 @@ export class GameState {
 
     isReactNative: boolean;
 
-    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, isReactNative: boolean) {
+    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<MissionInfo>, isReactNative: boolean) {
         this.placedLoot = placedLoot;
         this.inventoryLoot = inventoryLoot;
+        this.missionInfo = missionInfo;
         this.isReactNative = isReactNative;
     }
 
@@ -84,12 +88,18 @@ export class GameState {
         }
     }
 
-    markMissionAsWon(missionName) {
+    markMissionAsWon(mission: Mission) {
+        let i = _.find(this.missionInfo, i => i.name === mission.name);
+        i.beat = true;
 
+        //TODO react native
     }
 
-    markMissionAsLost(missionName) {
+    markMissionAsLost(mission: Mission) {
+        let i = _.find(this.missionInfo, i => i.name === mission.name);
+        i.failedAttempts = i.failedAttempts + 1;
 
+        //TODO react native
     }
 
     //more to come!
@@ -127,4 +137,24 @@ export class AllLoots {
 
     static EmptyLoots : Array<LootInfo> = AllLoots.Value.map(i => new LootInfo(i, 0));
 
+}
+
+export class MissionInfo {
+
+    name: string;
+    failedAttempts: number;
+    beat: boolean;
+
+    constructor(name: string, failedAttempts: number, beat: boolean) {
+        this.name = name;
+        this.failedAttempts = failedAttempts;
+        this.beat = beat;
+    }
+}
+
+export class AllMissions {
+
+    static Value = ["small-skirmish", "large-skirmish", "story-one", "story-two", "story-three", "boss-one"];
+
+    static BaseMissions : Array<MissionInfo> = AllMissions.Value.map(i => new MissionInfo(i, 0, false));
 }

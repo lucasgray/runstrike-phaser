@@ -1,5 +1,6 @@
 import {GameState} from "../models/state/GameData";
 import Button from "../models/sprites/Button";
+import Mission from "../missions/Mission";
 
 //TODO victory and defeat could share a lot of codez
 
@@ -12,7 +13,9 @@ export default class Defeat extends Phaser.State {
         this.gameState = gameState;
     }
 
-    create() {
+    init(mission: Mission) {
+
+        this.gameState.markMissionAsLost(mission);
 
         this.gameState.backgroundMusic.pause();
         this.gameState.musicPause = true;

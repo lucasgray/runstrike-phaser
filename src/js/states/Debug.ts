@@ -53,6 +53,12 @@ export default class Debug extends Phaser.State {
             }
         );
 
+        let sprite = this.game.add.sprite(200, 200, 'lurker');
+
+        sprite.animations.add('fly');
+        sprite.animations.play('fly', 5, true);
+        sprite.scale.setTo(4)
+
         new Button(
             this.game,
             100,
