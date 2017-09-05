@@ -2,7 +2,7 @@ import Mission from "../../../missions/Mission";
 import HealthBar from 'phaser-percent-bar';
 import * as _ from 'lodash';
 
-abstract class Enemy extends Phaser.Sprite {
+export abstract class Enemy extends Phaser.Sprite {
 
     mission: Mission;
 
@@ -12,8 +12,7 @@ abstract class Enemy extends Phaser.Sprite {
     abstract rotatingSprite: boolean;
 
     randomVelocity: number;
-    lastCalculation: number;
-    path: {x: number; y: number, seen: boolean}[];
+
     targetable: boolean;
 
     healthBar: HealthBar;
@@ -27,7 +26,6 @@ abstract class Enemy extends Phaser.Sprite {
         this.mission = mission;
 
         this.randomVelocity =  speed + (Math.random() * 30);
-        this.lastCalculation = 0;
         this.targetable = true;
 
         this.explodeSound = () => {
@@ -76,6 +74,35 @@ abstract class Enemy extends Phaser.Sprite {
         }));
     }
 
+    shot() {
+        this.damage(20);
+    }
+
+    massivelyDamage() {
+        this.damage(50);
+    }
+
+    kill() {
+        this.healthBar.hide();
+        this.explodeSound().play();
+        this.targetable = false;
+        this.alive = false;
+
+        return this;
+    }
+}
+
+export abstract class PathfindingEnemy extends Enemy {
+
+    lastCalculation: number;
+    path: {x: number; y: number, seen: boolean}[];
+
+    constructor(game: Phaser.Game, mission: Mission, row: number, col: number, texture: string, speed: number) {
+        super(game, mission, row, col, texture, speed);
+
+        this.lastCalculation = 0;
+    }
+
     pathfind(mission: Mission, row: number, col: number) {
         this.mission.easystar.findPath(row, col, Math.floor(mission.gridDescriptor.x / 2), (mission.gridDescriptor.y - 1), (path) => {
             if (!path) {
@@ -89,7 +116,7 @@ abstract class Enemy extends Phaser.Sprite {
         });
     }
 
-    update(){
+    update() {
         if (this.alive && this.targetable && this.path && this.path.length > 0 && _.some(this.path, _ => !_.seen)) {
 
             //if we're in the process of moving from loc a to b, keep going
@@ -125,23 +152,27 @@ abstract class Enemy extends Phaser.Sprite {
             }
         }
     }
-
-    shot() {
-        this.damage(20);
-    }
-
-    massivelyDamage() {
-        this.damage(50);
-    }
-
-    kill() {
-        this.healthBar.hide();
-        this.explodeSound().play();
-        this.targetable = false;
-        this.alive = false;
-
-        return this;
-    }
 }
 
-export default Enemy;
+export abstract class FlyingEnemy extends Enemy {
+
+    rotatingSprite: boolean = true;
+
+    constructor(game: Phaser.Game, mission: Mission, row: number, col: number, texture: string, speed: number) {
+        super(game, mission, row, col, texture, speed);
+    }
+
+    flyTowardsBase() {
+
+        let xToGo = ((this.mission.gridDescriptor.x / 2) * this.mission.gridDescriptor.cellWidth)
+            + (this.mission.gridDescriptor.cellWidth / 2);
+        let yToGo = ((this.mission.gridDescriptor.y - 1) * this.mission.gridDescriptor.cellHeight)
+            + (this.mission.gridDescriptor.cellHeight / 2);
+
+        let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+
+        let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
+        this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
+    }
+
+}

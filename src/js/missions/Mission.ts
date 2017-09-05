@@ -7,6 +7,7 @@ import Projectile from "../models/sprites/projectiles/Projectile";
 import * as _ from 'lodash';
 import Lurker from "../models/sprites/enemies/Lurker";
 import Shield from "../models/sprites/enemies/Shield";
+import {Enemy} from "../models/sprites/enemies/Enemy";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -20,7 +21,7 @@ abstract class Mission {
     game: Phaser.Game;
     easystar: EasyStar.js;
 
-    enemies: SmartGroup<Drone>;
+    enemies: SmartGroup<Enemy>;
     projectiles: SmartGroup<Projectile>;
 
     curEnemy: number = 0;
@@ -33,7 +34,7 @@ abstract class Mission {
 
         this.game = game;
 
-        this.enemies = new SmartGroup<Drone>(this.game);
+        this.enemies = new SmartGroup<Enemy>(this.game);
         this.projectiles = new SmartGroup<Projectile>(this.game);
     }
 
@@ -96,8 +97,6 @@ abstract class Mission {
                 this.game.add.existing(sprite);
                 this.enemies.add(sprite);
             }
-
-
 
 
             this.curEnemy++;

@@ -1,9 +1,7 @@
 import Mission from "../../../missions/Mission";
-import HealthBar from 'phaser-percent-bar';
-import * as _ from 'lodash';
-import Enemy from "./Enemy";
+import {PathfindingEnemy} from "./Enemy";
 
-export default class Lurker extends Enemy {
+export default class Lurker extends PathfindingEnemy {
 
     defaultWidth: number = 16;
     defaultHeight: number = 16;

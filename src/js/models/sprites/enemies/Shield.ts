@@ -1,9 +1,7 @@
 import Mission from "../../../missions/Mission";
-import HealthBar from 'phaser-percent-bar';
-import * as _ from 'lodash';
-import Enemy from "./Enemy";
+import {PathfindingEnemy} from "./Enemy";
 
-export default class Shield extends Enemy {
+export default class Shield extends PathfindingEnemy {
 
     defaultWidth: number = 16;
     defaultHeight: number = 16;

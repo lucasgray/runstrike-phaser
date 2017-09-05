@@ -1,21 +1,18 @@
 import Mission from "../../../missions/Mission";
-import HealthBar from 'phaser-percent-bar';
-import * as _ from 'lodash';
-import Enemy from "./Enemy";
+import {FlyingEnemy} from "./Enemy";
 
-export default class Drone extends Enemy {
+export default class Drone extends FlyingEnemy {
 
     defaultWidth: number = 32;
     defaultHeight: number = 32;
     animationFrameRate: number = 15;
-    rotatingSprite: boolean = true;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, mission, row, col, 'drone', 50);
 
         this.paint(mission, row, col);
         this.addHealthbar(mission, 250);
-        this.pathfind(mission, row, col);
+        this.flyTowardsBase();
     }
 
     kill() {
