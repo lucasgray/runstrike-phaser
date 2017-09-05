@@ -50,8 +50,8 @@ export abstract class Enemy extends Phaser.Sprite {
         let scaleX = this.mission.gridDescriptor.cellWidth / defaultSize.width;
         let scaleY = this.mission.gridDescriptor.cellHeight / defaultSize.height;
 
-        this.animations.add('fly');
-        this.animations.play('fly', this.animationFrameRate, true);
+        this.animations.add('move');
+        this.animations.play('move', this.animationFrameRate, true);
         this.scale.setTo(scaleX, scaleY);
         this.anchor.setTo(0.5, 0.5);
 
@@ -61,7 +61,7 @@ export abstract class Enemy extends Phaser.Sprite {
         }
     }
 
-    addHealthbar(mission: Mission, health: number) {
+    addHealthbar(health: number) {
         this.health = health;
         this.maxHealth = health;
         //health bar starts off on top?
@@ -69,8 +69,9 @@ export abstract class Enemy extends Phaser.Sprite {
             game: this.game,
             host: this,
             height: 2,
+            width: this.width / this.scale.x,
             xOffset: - (this.width / 2),
-            yOffset: - (mission.gridDescriptor.cellHeight / 2)
+            yOffset: - ((this.height / this.scale.y) / 2) - ((this.height / this.scale.y) * .2)
         }));
     }
 

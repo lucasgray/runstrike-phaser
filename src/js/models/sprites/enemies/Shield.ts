@@ -12,7 +12,7 @@ export default class Shield extends PathfindingEnemy {
         super(game, mission, row, col, 'shield', 10);
 
         this.paint(mission, row, col);
-        this.addHealthbar(mission, 1000);
+        this.addHealthbar(1000);
         this.pathfind(mission, row, col);
     }
 

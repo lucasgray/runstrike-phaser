@@ -12,7 +12,7 @@ export default class Lurker extends PathfindingEnemy {
         super(game, mission, row, col, 'lurker', 20);
 
         this.paint(mission, row, col);
-        this.addHealthbar(mission, 500);
+        this.addHealthbar(500);
         this.pathfind(mission, row, col);
     }
 
@@ -21,8 +21,8 @@ export default class Lurker extends PathfindingEnemy {
 
         let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
         explosion.anchor.setTo(.5);
-        let explosionAnimation = explosion.animations.add('fly');
-        explosion.animations.play('fly', 30, false);
+        let explosionAnimation = explosion.animations.add('e');
+        explosion.animations.play('e', 30, false);
         explosionAnimation.onComplete.add(() => {
             explosion.destroy();
         });

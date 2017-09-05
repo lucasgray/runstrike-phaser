@@ -11,7 +11,7 @@ export default class Drone extends FlyingEnemy {
         super(game, mission, row, col, 'drone', 50);
 
         this.paint(mission, row, col);
-        this.addHealthbar(mission, 250);
+        this.addHealthbar(250);
         this.flyTowardsBase();
     }
 

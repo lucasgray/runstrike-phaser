@@ -13,7 +13,7 @@ require('../../css/joystix-monospace.ttf');
 export default class Preload extends Phaser.State {
 
     create() {
-        // this.game.renderer.renderSession.roundPixels = true;
+        this.game.renderer.renderSession.roundPixels = true;
     }
 
     preload() {
@@ -44,8 +44,6 @@ export default class Preload extends Phaser.State {
         this.load.audio('wrong-choice', [require('../../audio/sounds/wrong-choice.wav')]);
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
-
-        this.game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs='); //for health bar
 
         this.game.load.image('cocktail_icon', require('../../img/cocktail.png'));
         this.game.load.image('grenade_icon', require('../../img/grenade.png'));
