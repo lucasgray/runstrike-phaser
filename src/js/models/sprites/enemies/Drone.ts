@@ -8,7 +8,7 @@ export default class Drone extends FlyingEnemy {
     animationFrameRate: number = 15;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, row, col, 'drone', 50);
+        super(game, mission, 'drone', 50);
 
         this.paint(mission, row, col);
         this.addHealthbar(250);

@@ -18,7 +18,7 @@ export abstract class Enemy extends Phaser.Sprite {
     healthBar: HealthBar;
     explodeSound: () => Phaser.Sound;
 
-    constructor(game: Phaser.Game, mission: Mission, row: number, col: number, texture: string, speed: number) {
+    constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, 0, 0, texture);
 
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -98,8 +98,8 @@ export abstract class PathfindingEnemy extends Enemy {
     lastCalculation: number;
     path: {x: number; y: number, seen: boolean}[];
 
-    constructor(game: Phaser.Game, mission: Mission, row: number, col: number, texture: string, speed: number) {
-        super(game, mission, row, col, texture, speed);
+    constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
+        super(game, mission, texture, speed);
 
         this.lastCalculation = 0;
     }
@@ -159,8 +159,8 @@ export abstract class FlyingEnemy extends Enemy {
 
     rotatingSprite: boolean = true;
 
-    constructor(game: Phaser.Game, mission: Mission, row: number, col: number, texture: string, speed: number) {
-        super(game, mission, row, col, texture, speed);
+    constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
+        super(game, mission, texture, speed);
     }
 
     flyTowardsBase() {

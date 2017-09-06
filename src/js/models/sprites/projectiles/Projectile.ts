@@ -1,4 +1,6 @@
 
+import GridDescriptor from "../../state/GridDescriptor";
+
 abstract class Projectile extends Phaser.Sprite {
 
     fromSprite: Phaser.Sprite;
@@ -6,6 +8,8 @@ abstract class Projectile extends Phaser.Sprite {
 
     abstract range: number;
     abstract speed: number;
+    abstract defaultWidth: number;
+    abstract defaultHeight: number;
     abstract shootSound: string;
 
     constructor(game: Phaser.Game, fromSprite: Phaser.Sprite, toSprite: Phaser.Sprite, texture: string) {
@@ -17,7 +21,13 @@ abstract class Projectile extends Phaser.Sprite {
         this.toSprite = toSprite;
     }
 
-    paint() {
+    paint(gridDescriptor: GridDescriptor) {
+
+        let defaultSize = {width: this.defaultWidth, height: this.defaultHeight};
+        let scaleX = gridDescriptor.cellWidth / defaultSize.width;
+        let scaleY = gridDescriptor.cellHeight / defaultSize.height;
+        this.scale.setTo(scaleX, scaleY);
+
         this.animations.add('bullet');
         this.animations.play('bullet', 8, false);
 

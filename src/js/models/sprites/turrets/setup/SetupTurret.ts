@@ -15,7 +15,7 @@ abstract class SetupTurret extends Turret {
     //todo dont really need these
     range: number = 0;
     fireRate: number = 0;
-    shoot: () => Projectile = () => new BlueBlob(this.game, this, this.tracking);
+    shoot: () => Projectile = () => new BlueBlob(this.game, this, this.tracking, this.mission.gridDescriptor);
 
     constructor(mission: Mission, game: Phaser.Game,
                 gameState: GameState,

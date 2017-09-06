@@ -9,7 +9,7 @@ export default class Lurker extends PathfindingEnemy {
     rotatingSprite: boolean = false;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, row, col, 'lurker', 20);
+        super(game, mission, 'lurker', 20);
 
         this.paint(mission, row, col);
         this.addHealthbar(500);

@@ -9,7 +9,7 @@ export default class Shield extends PathfindingEnemy {
     rotatingSprite: boolean = false;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, row, col, 'shield', 10);
+        super(game, mission, 'shield', 10);
 
         this.paint(mission, row, col);
         this.addHealthbar(1000);
