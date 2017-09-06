@@ -8,6 +8,7 @@ import SmartGroup from "../extensions/SmartGroup";
 import Drone from "../models/sprites/enemies/Drone";
 import Projectile from "../models/sprites/projectiles/Projectile";
 import {RedTurret, YellowTurret, OrangeTurret, BlueTurret, GreenTurret} from "../models/sprites/turrets/Turrets";
+import TurretBuilder from "../models/builder/TurretBuilder";
 
 export default class Play extends Phaser.State {
 
@@ -36,35 +37,17 @@ export default class Play extends Phaser.State {
         spr.sendToBack();
         this.backgroundSprite = spr;
 
-        //TODO refactor this into something
+        let builder = new TurretBuilder()
+            .withGame(this.game)
+            .andMission(this.mission);
+
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
 
-            //TODO factory or something
-            if (it.type.toLowerCase() == 'blue-turret') {
-                let turret = new BlueTurret(this.mission, this.game, it.row, it.col);
-                this.game.add.existing(turret);
-            }
+            let turret = builder
+                .at({row: it.row, col: it.col})
+                .buildForPlay(it.type);
 
-            if (it.type.toLowerCase() == 'green-turret') {
-                let turret = new GreenTurret(this.mission, this.game, it.row, it.col);
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'yellow-turret') {
-                let turret = new YellowTurret(this.mission, this.game, it.row, it.col);
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'red-turret') {
-                let turret = new RedTurret(this.mission, this.game, it.row, it.col);
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'orange-turret') {
-                let turret = new OrangeTurret(this.mission, this.game, it.row, it.col);
-                this.game.add.existing(turret);
-            }
-
+            this.game.add.existing(turret);
         });
 
         this.mission.recalculateGrid(gameState.placedLoot);

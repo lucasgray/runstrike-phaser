@@ -80,7 +80,8 @@ abstract class Mission {
 
     deploy() {
 
-        if (!this.allDeployed && Date.now() - this.lastDeployment > this.enemyArray[this.curEnemy]['delay']) {
+        if (!this.allDeployed &&
+            ((Date.now() - this.lastDeployment > this.enemyArray[this.curEnemy]['delay'] || this.enemyArray[this.curEnemy]['delay'] == 0))) {
 
             console.log('new enemy');
 

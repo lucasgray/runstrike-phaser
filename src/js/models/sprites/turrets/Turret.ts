@@ -2,8 +2,6 @@ import * as _ from 'lodash';
 import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
 import Drone from "../enemies/Drone";
-import InputHandler from "../../../handlers/InputHandler";
-import {GameState} from "../../state/GameData";
 
 abstract class Turret extends Phaser.Sprite {
 

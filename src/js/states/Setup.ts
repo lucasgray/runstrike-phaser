@@ -15,6 +15,7 @@ import {
     OrangeSetupTurret,
 } from "../models/sprites/turrets/setup/SetupTurrets";
 import * as _ from 'lodash';
+import TurretBuilder from "../models/builder/TurretBuilder";
 
 export default class Setup extends Phaser.State {
 
@@ -85,38 +86,19 @@ export default class Setup extends Phaser.State {
 
     drawSetupTurrets(handlers: Array<InputHandler>) {
 
+        let builder = new TurretBuilder()
+            .withGame(this.game)
+            .andState(this.gameState)
+            .andMission(this.mission)
+            .andInputHandlers(handlers);
+
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
 
-            //TODO factory or something
-            if (it.type.toLowerCase() == 'blue-turret') {
-                let turret = new BlueSetupTurret(
-                    this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'blue-turret'));
-                this.game.add.existing(turret);
-            }
+            let turret = builder
+                .at({row: it.row, col: it.col})
+                .buildForSetup(it.type);
 
-            if (it.type.toLowerCase() == 'green-turret') {
-                let turret = new GreenSetupTurret(
-                    this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'green-turret'));
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'yellow-turret') {
-                let turret = new YellowSetupTurret(
-                    this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'yellow-turret'));
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'red-turret') {
-                let turret = new RedSetupTurret(
-                    this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'red-turret'));
-                this.game.add.existing(turret);
-            }
-
-            if (it.type.toLowerCase() == 'orange-turret') {
-                let turret = new OrangeSetupTurret(
-                    this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'orange-turret'));
-                this.game.add.existing(turret);
-            }
+            this.game.add.existing(turret);
         });
 
     }
