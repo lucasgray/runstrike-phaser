@@ -18,6 +18,8 @@ abstract class Mission {
     abstract background: () => Phaser.Sprite;
     abstract enemyArray: Array<object>;
 
+    //abstract baseLocation: {x: number, y: number}
+
     game: Phaser.Game;
     easystar: EasyStar.js;
 
@@ -40,6 +42,8 @@ abstract class Mission {
 
     recalculateGrid(placedItems: Array<PlacedLootInfo>) {
 
+        let myLoot =  placedItems.filter(it => it.mission === this.name);
+
         let easystar = new EasyStar.js();
 
         let grid = Array<Array<number>>();
@@ -51,7 +55,7 @@ abstract class Mission {
             grid.push(f);
         }
 
-        placedItems.forEach((i) =>{
+        myLoot.forEach((i) =>{
            grid[i.col][i.row] = 1;
         });
 

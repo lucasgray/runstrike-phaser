@@ -7,7 +7,7 @@ import Drone from "../models/sprites/enemies/Drone";
 export default class StoryThree extends Mission {
 
     gridDescriptor: GridDescriptor;
-    name = 'story-three';
+    name = 'Story Three';
 
     enemyArray = [
         //TODO

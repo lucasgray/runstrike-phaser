@@ -29,8 +29,8 @@ export default class GridDescriptor {
         this.x = x;
         this.y = y;
 
-        this.cellWidth = Math.floor((gameWidth * .8) / this.x);
-        this.cellHeight = Math.floor((gameHeight * .8) / this.y);
+        this.cellWidth = Math.floor((gameWidth) / this.x);
+        this.cellHeight = Math.floor((gameHeight) / this.y);
         this.width = this.x * this.cellWidth;
         this.height = this.y * this.cellHeight;
         this.offsetX = (gameWidth - this.width) / 2;

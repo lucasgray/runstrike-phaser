@@ -10,8 +10,6 @@ import {BlueTurret, GreenTurret, OrangeTurret, RedTurret, YellowTurret} from "..
 
 export default class TurretBuilder {
 
-    // this.mission, this.game, this.gameState, it.row, it.col, _.find(handlers, s => s.lootType === 'blue-turret'));
-
     mission: Mission;
     game: Phaser.Game;
     gameState: GameState;
@@ -50,27 +48,27 @@ export default class TurretBuilder {
 
         if (type.toLowerCase() == 'blue-turret') {
             return new BlueSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'blue-turret'));
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'blue-turret')!);
         }
 
         if (type.toLowerCase() == 'green-turret') {
             return new GreenSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'green-turret'));
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'green-turret')!);
         }
 
         if (type.toLowerCase() == 'yellow-turret') {
             return new YellowSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'yellow-turret'));
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'yellow-turret')!);
         }
 
         if (type.toLowerCase() == 'red-turret') {
             return new RedSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'red-turret'));
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'red-turret')!);
         }
 
         if (type.toLowerCase() == 'orange-turret') {
             return new OrangeSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'orange-turret'));
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'orange-turret')!);
         }
     }
 

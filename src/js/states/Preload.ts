@@ -65,6 +65,7 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('missile-projectile', require('../../img/missile-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-projectile', require('../../img/blue-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-missile-projectile', require('../../img/blue-missile-projectile.png').toString(), 32, 32, 5);
+        this.game.load.spritesheet('pico-icons', require('../../img/pico-icons.png').toString(), 8, 8);
 
         let s  = this.makeGameData();
 
@@ -100,26 +101,29 @@ export default class Preload extends Phaser.State {
 
         let asMissionArray = _.values(jsonString.placed_loot);
 
-        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i.type, i.mission, i.x, i.y));
+        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i['type'], i['mission'], i['x'], i['y']));
 
 
         let emptyLoot = AllLoots.EmptyLoots;
         let inventoryItems : Array<LootInfo> = this.groupItems(jsonString.unused_loot, jsonString.caps);
 
         let finalInventoryItems = emptyLoot.map(i => {
-            if (_.some(inventoryItems, j => j.type === i.type)) {
-                return _.find(inventoryItems, j => j.type === i.type);
-            } else return i;
+
+            let f = _.find(inventoryItems, j => j.type === i.type);
+
+            if (f) return f;
+            return i;
         });
 
-        let missions = AllMissions.BaseMissions;
+        let missions = AllMissions.AllMissionsAndInfos(this.game);
+        //TODO add mission state from react-native as well...
 
         return new GameState(placedItems, finalInventoryItems, missions, isReactNative);
     }
 
     groupItems(items, caps) : Array<LootInfo> {
         if (items) {
-            let byType = _.countBy(items, i => i.type);
+            let byType = _.countBy(items, i => i['type']);
             console.log("bytype " + JSON.stringify(byType));
             let final = _.map(Object.keys(byType), it => {
                 console.log(JSON.stringify(it));

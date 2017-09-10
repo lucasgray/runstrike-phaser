@@ -7,7 +7,7 @@ import Drone from "../models/sprites/enemies/Drone";
 export default class SmallSkirmish extends Mission {
 
     gridDescriptor: GridDescriptor;
-    name = 'small-skirmish';
+    name = 'Small Skirmish';
 
     enemyArray = [
         //TODO

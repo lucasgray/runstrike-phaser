@@ -1,6 +1,12 @@
 
 import * as _ from 'lodash';
 import Mission from "../../missions/Mission";
+import SmallSkirmish from "../../missions/SmallSkirmish";
+import LargeSkirmish from "../../missions/LargeSkirmish";
+import StoryOne from "../../missions/StoryOne";
+import StoryTwo from "../../missions/StoryTwo";
+import StoryThree from "../../missions/StoryThree";
+import BossOne from "../../missions/BossOne";
 
 //everybody has this?
 export class GameState {
@@ -10,7 +16,7 @@ export class GameState {
     //TODO more structure here too!
     inventoryLoot: Array<LootInfo>;
 
-    missionInfo: Array<MissionInfo>;
+    missionInfo: Array<[Mission, MissionInfo]>;
 
     backgroundMusic: Phaser.Sound;
     isPlayingMusic: boolean;
@@ -19,7 +25,7 @@ export class GameState {
 
     isReactNative: boolean;
 
-    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<MissionInfo>, isReactNative: boolean) {
+    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<[Mission, MissionInfo]>, isReactNative: boolean) {
         this.placedLoot = placedLoot;
         this.inventoryLoot = inventoryLoot;
         this.missionInfo = missionInfo;
@@ -89,15 +95,21 @@ export class GameState {
     }
 
     markMissionAsWon(mission: Mission) {
-        let i = _.find(this.missionInfo, i => i.name === mission.name);
-        i.beat = true;
+        let i = _.find(this.missionInfo, i => i[0].name === mission.name);
+
+        if (i == null) return;
+
+        i[1].beat = true;
 
         //TODO react native
     }
 
     markMissionAsLost(mission: Mission) {
-        let i = _.find(this.missionInfo, i => i.name === mission.name);
-        i.failedAttempts = i.failedAttempts + 1;
+        let i = _.find(this.missionInfo, i => i[0].name === mission.name);
+
+        if (i == null) return;
+
+        i[1].failedAttempts = i[1].failedAttempts + 1;
 
         //TODO react native
     }
@@ -141,12 +153,10 @@ export class AllLoots {
 
 export class MissionInfo {
 
-    name: string;
     failedAttempts: number;
     beat: boolean;
 
-    constructor(name: string, failedAttempts: number, beat: boolean) {
-        this.name = name;
+    constructor(failedAttempts: number, beat: boolean) {
         this.failedAttempts = failedAttempts;
         this.beat = beat;
     }
@@ -154,7 +164,28 @@ export class MissionInfo {
 
 export class AllMissions {
 
-    static Value = ["small-skirmish", "large-skirmish", "story-one", "story-two", "story-three", "boss-one"];
+    private static AllMissions(game: Phaser.Game) : Array<Mission> {
+        return [
+            new SmallSkirmish(game),
+            new LargeSkirmish(game),
+            new StoryOne(game),
+            new StoryTwo(game),
+            new StoryThree(game),
+            new BossOne(game)
+        ];
+    }
 
-    static BaseMissions : Array<MissionInfo> = AllMissions.Value.map(i => new MissionInfo(i, 0, false));
+    static AllMissionsAndInfos(game: Phaser.Game) : Array<[Mission, MissionInfo]> {
+
+        let missions = AllMissions.AllMissions(game);
+
+        let m = missions.map(m => {
+            let m1 : [Mission, MissionInfo] = [m, new MissionInfo(0, false)];
+
+            return m1;
+        });
+
+        return m;
+    }
+
 }

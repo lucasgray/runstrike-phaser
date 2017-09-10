@@ -8,6 +8,7 @@
     "heroku-postbuild": "webpack -p --env=prod --progress"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.74",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",

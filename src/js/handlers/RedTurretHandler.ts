@@ -25,7 +25,9 @@ export default class RedTurretHandler extends InputHandler {
 
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        if (_.find(this.gameState.inventoryLoot, i => i.type === this.lootType).amount > 0) {
+        let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
+
+        if (loot !== undefined && loot.amount > 0) {
             let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
             let turret = new RedSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);

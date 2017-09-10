@@ -23,7 +23,9 @@ export default class CocktailHandler extends InputHandler {
 
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        if (_.find(this.gameState.inventoryLoot, i => i.type === this.lootType).amount > 0) {
+        let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
+
+        if (loot !== undefined && loot.amount > 0) {
             let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');
             explosion.anchor.setTo(0.5, 0.5);
             let explosionAnimation = explosion.animations.add('fly');

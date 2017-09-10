@@ -28,77 +28,32 @@ export default class Missions extends Phaser.State {
         });
         title.anchor.setTo(0.5);
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY,
-            this.game.width * 0.8,
-            60,
-            'Small Skirmish', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new SmallSkirmish(this.game));
-            }
-        );
+        this.gameState.missionInfo.forEach((m, i) => {
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY + (70),
-            this.game.width * 0.8,
-            60,
-            'Large Skirmish', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new LargeSkirmish(this.game));
-            }
-        );
+            let beat = m[1].beat;
+            //lock this one if its not the first and you havent beat the last one
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY + (140),
-            this.game.width * 0.8,
-            60,
-            'Story I', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new StoryOne(this.game));
-            }
-        );
+            let isFirstStory = m[0].name === "Story One";
+            let isSkirmish = m[0].name.indexOf("Skirmish") !== -1;
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY + (210),
-            this.game.width * 0.8,
-            60,
-            'Story II', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new StoryTwo(this.game));
-            }
-        );
+            let shouldBeLocked = !isFirstStory && !isSkirmish && (i !== 0 ? !this.gameState.missionInfo[i-1][1].beat : false);
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY + (280),
-            this.game.width * 0.8,
-            60,
-            'Story III', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new StoryThree(this.game));
-            }
-        );
+            let name = m[0].name;
+            if (shouldBeLocked) name += "(locked)";
+            if (beat) name += "(play again)";
 
-        new Button(
-            this.game,
-            this.game.world.centerX,
-            this.game.world.centerY + (350),
-            this.game.width * 0.8,
-            60,
-            'BOSS', ()=>{
-                console.log("asking to play a mission!");
-                this.game.state.start('Setup', true, false, new BossOne(this.game));
-            }
-        );
+            let action = shouldBeLocked ? () => null : () => this.game.state.start('Setup', true, false, m[0]);
+
+            new Button(
+                this.game,
+                this.game.world.centerX,
+                this.game.world.centerY + (i * 70),
+                this.game.width * 0.8,
+                60,
+                name,
+                action
+            );
+        });
 
         new Button(
             this.game,

@@ -7,7 +7,7 @@ import Drone from "../models/sprites/enemies/Drone";
 export default class LargeSkirmish extends Mission {
 
     gridDescriptor: GridDescriptor;
-    name = 'large-skirmish';
+    name = 'Large Skirmish';
 
     enemyArray = [
         //TODO
@@ -35,7 +35,7 @@ export default class LargeSkirmish extends Mission {
     constructor(game: Phaser.Game) {
         super(game);
 
-        this.gridDescriptor = new GridDescriptor(game.width, game.height, 15, 20);
+        this.gridDescriptor = new GridDescriptor(game.width, game.height, 16, 20);
     }
 
     background = () => {

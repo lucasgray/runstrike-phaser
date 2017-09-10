@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
 import Drone from "../enemies/Drone";
+import {Enemy} from "../enemies/Enemy";
 
 abstract class Turret extends Phaser.Sprite {
 
@@ -13,7 +14,7 @@ abstract class Turret extends Phaser.Sprite {
     col: number;
 
     rotationTween: Phaser.Tween;
-    tracking: Drone;
+    tracking: Enemy;
 
     abstract range: number;
     abstract fireRate: number;
@@ -102,7 +103,7 @@ abstract class Turret extends Phaser.Sprite {
         }
     }
 
-    closestEnemy(): Drone | null {
+    closestEnemy(): Enemy | null {
 
         let spriteDistances = this.mission.enemies
             .all()
@@ -116,10 +117,11 @@ abstract class Turret extends Phaser.Sprite {
             );
 
         if (spriteDistances) {
-            let rslt = _.minBy(spriteDistances, (s) => s.distance);
-            if (rslt) {
-                return rslt.sprite;
+            let s = _.minBy(spriteDistances, (s) => s.distance);
+            if (s) {
+                return s.sprite;
             }
+            return null;
         }
 
         return null;
