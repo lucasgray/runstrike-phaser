@@ -7,6 +7,8 @@ export default class Button extends Phaser.Sprite {
     label: string;
     callback: Function;
 
+    baseSprite: Phaser.Sprite;
+
     constructor(game: Phaser.Game, x: number, y: number, width: number, height: number, label: string, callback: Function) {
         super(game, x, y);
 
@@ -35,6 +37,10 @@ export default class Button extends Phaser.Sprite {
         let sprite = this.game.add.sprite(this.x, this.y, graphics.generateTexture());
         graphics.destroy();
 
+        this.baseSprite = sprite;
+
+        this.x = sprite.x;
+        this.y = sprite.y;
         this.addChild(sprite);
 
         //text to go on button
@@ -59,17 +65,23 @@ export default class Button extends Phaser.Sprite {
             let button = this.game.add.audio('button');
             button.play();
 
-            let tweenDown = this.game.add.tween(sprite.scale).to({x: 0.8, y: 0.8}, 200, Phaser.Easing.Exponential.Out);
-            let tweenUp = this.game.add.tween(sprite.scale).to({x: 1, y: 1}, 200, Phaser.Easing.Exponential.Out);
-
-            tweenDown.chain(tweenUp);
-            tweenUp.onComplete.add(this.callback);
-
-            tweenDown.start();
+            let tween = this.doPressTween(sprite);
+            tween.onComplete.add(this.callback);
 
         }, sprite);
 
         this.game.add.existing(sprite);
+    }
+
+    doPressTween(sprite: Phaser.Sprite) {
+        let tweenDown = this.game.add.tween(sprite.scale).to({x: 0.8, y: 0.8}, 200, Phaser.Easing.Exponential.Out);
+        let tweenUp = this.game.add.tween(sprite.scale).to({x: 1, y: 1}, 200, Phaser.Easing.Exponential.Out);
+
+        tweenDown.chain(tweenUp);
+
+        tweenDown.start();
+
+        return tweenUp;
     }
 
 

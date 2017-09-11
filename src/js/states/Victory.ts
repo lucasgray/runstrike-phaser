@@ -1,5 +1,5 @@
 import {GameState} from "../models/state/GameData";
-import Button from "../models/sprites/Button";
+import Button from "../models/sprites/buttons/Button";
 import Mission from "../missions/Mission";
 
 //TODO victory and defeat could share a lot of codez

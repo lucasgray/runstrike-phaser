@@ -1,4 +1,4 @@
-import Button from "../models/sprites/Button";
+import Button from "../models/sprites/buttons/Button";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "../handlers/InputHandler";

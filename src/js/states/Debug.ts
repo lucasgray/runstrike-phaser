@@ -1,6 +1,6 @@
 
 import {GameState, LootInfo} from "../models/state/GameData";
-import Button from "../models/sprites/Button";
+import Button from "../models/sprites/buttons/Button";
 
 export default class Debug extends Phaser.State {
 
@@ -58,6 +58,9 @@ export default class Debug extends Phaser.State {
         sprite.animations.add('fly');
         sprite.animations.play('fly', 5, true);
         sprite.scale.setTo(4)
+
+        let lock = this.game.add.sprite(300, 300, 'pico-icons', 39);
+        lock.scale.setTo(8)
 
         new Button(
             this.game,

@@ -1,11 +1,6 @@
-import Button from "../models/sprites/Button";
+import Button from "../models/sprites/buttons/Button";
 import {GameState} from "../models/state/GameData";
-import LargeSkirmish from "../missions/LargeSkirmish";
-import SmallSkirmish from "../missions/SmallSkirmish";
-import StoryOne from "../missions/StoryOne";
-import StoryTwo from "../missions/StoryTwo";
-import BossOne from "../missions/BossOne";
-import StoryThree from "../missions/StoryThree";
+import MissionButton from "../models/sprites/buttons/MissionButton";
 
 export default class Missions extends Phaser.State {
 
@@ -31,27 +26,26 @@ export default class Missions extends Phaser.State {
         this.gameState.missionInfo.forEach((m, i) => {
 
             let beat = m[1].beat;
-            //lock this one if its not the first and you havent beat the last one
 
+            //lock this one if its not the first and you havent beat the last one
             let isFirstStory = m[0].name === "Story One";
             let isSkirmish = m[0].name.indexOf("Skirmish") !== -1;
 
             let shouldBeLocked = !isFirstStory && !isSkirmish && (i !== 0 ? !this.gameState.missionInfo[i-1][1].beat : false);
 
             let name = m[0].name;
-            if (shouldBeLocked) name += "(locked)";
-            if (beat) name += "(play again)";
-
             let action = shouldBeLocked ? () => null : () => this.game.state.start('Setup', true, false, m[0]);
 
-            new Button(
+            new MissionButton(
                 this.game,
                 this.game.world.centerX,
                 this.game.world.centerY + (i * 70),
                 this.game.width * 0.8,
                 60,
                 name,
-                action
+                action,
+                beat,
+                shouldBeLocked
             );
         });
 
