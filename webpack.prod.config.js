@@ -7,10 +7,6 @@ var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
 var pixi = path.join(phaserModule, 'build/custom/pixi.js')
 var p2 = path.join(phaserModule, 'build/custom/p2.js')
 
-var definePlugin = new webpack.DefinePlugin({
-    __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
-})
-
 const PATHS = {
     src: path.join(__dirname, 'src'),
     js: path.join(__dirname, 'src'),
@@ -32,7 +28,7 @@ module.exports = {
         ],
         vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
     },
-    devtool:  'cheap-module-eval-source-map',
+    devtool:  'source-map',
     output: {
         pathinfo: true,
         path: PATHS.build,
@@ -41,8 +37,19 @@ module.exports = {
     },
     watch: false,
     plugins: [
-        definePlugin,
-        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */})
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+        new webpack.optimize.UglifyJsPlugin({
+            drop_console: true,
+            minimize: true,
+            output: {
+                comments: false
+            }
+        })
     ],
     module: {
         rules: [

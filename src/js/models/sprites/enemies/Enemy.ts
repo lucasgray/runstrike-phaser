@@ -1,6 +1,6 @@
 import Mission from "../../../missions/Mission";
-import HealthBar from 'phaser-percent-bar';
 import * as _ from 'lodash';
+import PercentBar from "./PercentBar";
 
 export abstract class Enemy extends Phaser.Sprite {
 
@@ -15,7 +15,7 @@ export abstract class Enemy extends Phaser.Sprite {
 
     targetable: boolean;
 
-    healthBar: HealthBar;
+    healthBar: PercentBar;
     explodeSound: () => Phaser.Sound;
 
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
@@ -65,7 +65,7 @@ export abstract class Enemy extends Phaser.Sprite {
         this.health = health;
         this.maxHealth = health;
         //health bar starts off on top?
-        this.healthBar = this.game.add.existing(new HealthBar({
+        this.healthBar = this.game.add.existing(new PercentBar({
             game: this.game,
             host: this,
             height: 2,
