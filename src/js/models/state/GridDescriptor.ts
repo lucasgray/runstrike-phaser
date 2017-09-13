@@ -1,4 +1,25 @@
 export default class GridDescriptor {
+
+    /**
+     * How many rows should the grid be?
+     */
+    rows: number;
+
+    /**
+     * How many columns should the grid be?
+     */
+    columns: number;
+
+    /**
+     * What cells are passable by the enemy forces
+     */
+    passableTerrain: number[][];
+
+    /**
+     * What cells should we allow turret placement
+     */
+    availableForPlacement: number[][];
+
     cellWidth: number;
     cellHeight: number;
 
@@ -8,35 +29,18 @@ export default class GridDescriptor {
     gameWidth: number;
     gameHeight: number;
 
-    rows: number;
-    columns: number;
+    constructor(gameWidth: number, gameHeight: number, rows: number, columns: number, passableTerrain: number[][],
+                availableForPlacement: number[][]) {
 
-    /**
-     * What cells are passable by the enemy forces
-     */
-    passableTerrain: Array<Array<number>>;
-
-    /**
-     * What cells should we allow turret placement
-     */
-    availableForPlacement: Array<Array<number>>;
-
-    /**
-     *
-     * @param {number} gameWidth - width of entire game
-     * @param {number} gameHeight - height of entire game
-     * @param {number} rows - amount of columns
-     * @param {number} columns - amount of rows
-     */
-    constructor(gameWidth: number, gameHeight: number, rows: number, columns: number) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-
         this.rows = rows;
         this.columns = columns;
+        this.passableTerrain = passableTerrain;
+        this.availableForPlacement = availableForPlacement;
 
-        this.cellWidth = Math.floor((gameWidth) / this.rows);
-        this.cellHeight = Math.floor((gameHeight) / this.columns);
+        this.cellWidth = Math.floor((this.gameWidth) / this.rows);
+        this.cellHeight = Math.floor((this.gameHeight) / this.columns);
         this.width = this.rows * this.cellWidth;
         this.height = this.columns * this.cellHeight;
     }
