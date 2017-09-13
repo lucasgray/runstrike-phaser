@@ -59,6 +59,8 @@ abstract class Mission {
            grid[i.col][i.row] = 1;
         });
 
+        //TODO zip gridDescriptor.passableTerrain into placedItems
+
         easystar.setGrid(grid);
         easystar.setAcceptableTiles([0]);
         easystar.calculate();

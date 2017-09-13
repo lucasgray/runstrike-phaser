@@ -29,8 +29,13 @@ export default class GridDescriptor {
     gameWidth: number;
     gameHeight: number;
 
-    constructor(gameWidth: number, gameHeight: number, rows: number, columns: number, passableTerrain: number[][],
-                placeableTerrain: number[][]) {
+    constructor(
+        gameWidth: number,
+        gameHeight: number,
+        rows: number,
+        columns: number,
+        passableTerrain: number[][],
+        placeableTerrain: number[][]) {
 
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;

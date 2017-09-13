@@ -18,6 +18,8 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
         let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
 
         if (loot !== undefined && loot.amount > 0) {
+
+            //TODO add a condition to see if this is a placeable grid location or not
             let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
             let turret = this.spawnSetupTurret(grid);
