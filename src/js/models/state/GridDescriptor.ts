@@ -18,7 +18,7 @@ export default class GridDescriptor {
     /**
      * What cells should we allow turret placement
      */
-    availableForPlacement: number[][];
+    placeableTerrain: number[][];
 
     cellWidth: number;
     cellHeight: number;
@@ -30,14 +30,14 @@ export default class GridDescriptor {
     gameHeight: number;
 
     constructor(gameWidth: number, gameHeight: number, rows: number, columns: number, passableTerrain: number[][],
-                availableForPlacement: number[][]) {
+                placeableTerrain: number[][]) {
 
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.rows = rows;
         this.columns = columns;
         this.passableTerrain = passableTerrain;
-        this.availableForPlacement = availableForPlacement;
+        this.placeableTerrain = placeableTerrain;
 
         this.cellWidth = Math.floor((this.gameWidth) / this.rows);
         this.cellHeight = Math.floor((this.gameHeight) / this.columns);
