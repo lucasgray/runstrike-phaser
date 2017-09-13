@@ -10,7 +10,7 @@ export default class RedTurretHandler extends SetupTurretInputHandler {
     icon: string = 'red-turret';
     lootType: string = 'red-turret';
     spriteScaling: number = 1;
-    spawnSetupTurret = (grid) =>  new RedSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new RedSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,

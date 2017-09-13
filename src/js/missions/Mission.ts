@@ -47,9 +47,9 @@ abstract class Mission {
         let easystar = new EasyStar.js();
 
         let grid = Array<Array<number>>();
-        for (let y = 0; y < this.gridDescriptor.y; y++) {
+        for (let y = 0; y < this.gridDescriptor.columns; y++) {
             let f = Array<number>();
-            for (let x = 0; x < this.gridDescriptor.x; x++) {
+            for (let x = 0; x < this.gridDescriptor.rows; x++) {
                 f.push(0);
             }
             grid.push(f);

@@ -10,7 +10,7 @@ export default class YellowTurretHandler extends SetupTurretInputHandler {
     icon: string = 'yellow-turret';
     lootType: string = 'yellow-turret';
     spriteScaling: number = 1;
-    spawnSetupTurret = (grid) =>  new YellowSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new YellowSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,

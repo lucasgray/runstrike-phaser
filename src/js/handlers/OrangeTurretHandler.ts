@@ -10,7 +10,7 @@ export default class OrangeTurretHandler extends SetupTurretInputHandler {
     icon: string = 'orange-turret';
     lootType: string = 'orange-turret';
     spriteScaling: number = 1;
-    spawnSetupTurret = (grid) =>  new OrangeSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new OrangeSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,

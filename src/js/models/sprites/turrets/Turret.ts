@@ -26,9 +26,9 @@ abstract class Turret extends Phaser.Sprite {
 
         this.mission = mission;
 
-        //compensate for offset, then get the right cell, then place into center of cell
-        this.x = mission.gridDescriptor.offsetX + (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
-        this.y = mission.gridDescriptor.offsetY + (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
+        //get the right cell, then place into center of cell
+        this.x = (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
+        this.y = (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
 
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
 

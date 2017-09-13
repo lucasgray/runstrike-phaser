@@ -39,7 +39,7 @@ export default class LargeSkirmish extends Mission {
     }
 
     background = () => {
-        let background = new Phaser.Sprite(this.game, this.gridDescriptor.offsetX, 0, 'skirmish-background');
+        let background = new Phaser.Sprite(this.game, 0, 0, 'skirmish-background');
         background.width = this.gridDescriptor.width;
         background.height = this.gridDescriptor.height;
         background.inputEnabled = true;

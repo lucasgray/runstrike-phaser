@@ -42,9 +42,9 @@ export abstract class Enemy extends Phaser.Sprite {
     }
 
     paint(mission: Mission, row: number, col: number) {
-        //compensate for offset, then get the right cell, then place into center of cell
-        this.x = mission.gridDescriptor.offsetX + (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
-        this.y = mission.gridDescriptor.offsetY + (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
+        //get the right cell, then place into center of cell
+        this.x = (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
+        this.y = (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
 
         let defaultSize = {width: this.defaultWidth, height: this.defaultHeight};
         let scaleX = this.mission.gridDescriptor.cellWidth / defaultSize.width;
@@ -80,7 +80,7 @@ export abstract class Enemy extends Phaser.Sprite {
     }
 
     massivelyDamage() {
-        this.damage(50);
+        this.damage(300);
     }
 
     kill() {
@@ -105,7 +105,9 @@ export abstract class PathfindingEnemy extends Enemy {
     }
 
     pathfind(mission: Mission, row: number, col: number) {
-        this.mission.easystar.findPath(row, col, Math.floor(mission.gridDescriptor.x / 2), (mission.gridDescriptor.y - 1), (path) => {
+
+        //TODO base doesnt need to be in center bottom of map
+        this.mission.easystar.findPath(row, col, Math.floor(mission.gridDescriptor.rows / 2), (mission.gridDescriptor.columns - 1), (path) => {
             if (!path) {
                 console.log("The path to the destination point was not found.");
             } else {
@@ -129,8 +131,8 @@ export abstract class PathfindingEnemy extends Enemy {
             if (cur) {
 
                 //we want to move towards the CENTER of the next cell..
-                let xToGo = this.mission.gridDescriptor.offsetX + (cur.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
-                let yToGo = (cur.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
+                let xToGo = cur.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+                let yToGo = cur.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
                 //have we made it yet, or are we going for the first time?
                 if (_.every(this.path, _ => !_.seen) || (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10)) {
@@ -139,8 +141,8 @@ export abstract class PathfindingEnemy extends Enemy {
                     next = this.path.filter(_ => !_.seen)[0];
 
                     if (next) {
-                        xToGo = this.mission.gridDescriptor.offsetX + (next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2)) ;
-                        yToGo = (next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2));
+                        xToGo = next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+                        yToGo = next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
                         let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
 
@@ -165,9 +167,10 @@ export abstract class FlyingEnemy extends Enemy {
 
     flyTowardsBase() {
 
-        let xToGo = ((this.mission.gridDescriptor.x / 2) * this.mission.gridDescriptor.cellWidth)
+        //TODO base could be anywhere
+        let xToGo = ((this.mission.gridDescriptor.rows / 2) * this.mission.gridDescriptor.cellWidth)
             + (this.mission.gridDescriptor.cellWidth / 2);
-        let yToGo = ((this.mission.gridDescriptor.y - 1) * this.mission.gridDescriptor.cellHeight)
+        let yToGo = ((this.mission.gridDescriptor.columns - 1) * this.mission.gridDescriptor.cellHeight)
             + (this.mission.gridDescriptor.cellHeight / 2);
 
         let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);

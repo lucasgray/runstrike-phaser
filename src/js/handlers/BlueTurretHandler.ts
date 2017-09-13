@@ -11,7 +11,7 @@ export default class BlueTurretHandler extends SetupTurretInputHandler {
     icon: string = 'blue-turret';
     lootType: string = 'blue-turret';
     spriteScaling: number = 1;
-    spawnSetupTurret = (grid) =>  new BlueSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new BlueSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,

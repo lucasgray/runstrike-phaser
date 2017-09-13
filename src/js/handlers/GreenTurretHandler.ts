@@ -10,7 +10,7 @@ export default class GreenTurretHandler extends SetupTurretInputHandler {
     icon: string = 'green-turret';
     lootType: string = 'green-turret';
     spriteScaling: number = 1;
-    spawnSetupTurret = (grid) =>  new GreenSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new GreenSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,
