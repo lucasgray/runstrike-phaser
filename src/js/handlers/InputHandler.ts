@@ -7,7 +7,6 @@ export default abstract class InputHandler {
     mission: Mission;
     text: Phaser.Text;
 
-    //TODO later we'll want to keep a reference to all the other handlers on the current state!
     allHandlers: Array<InputHandler>;
 
     gameState: GameState;
