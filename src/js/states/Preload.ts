@@ -8,6 +8,8 @@ import Play from "./Play";
 import Defeat from "./Defeat";
 import * as _ from 'lodash';
 import Debug from "./Debug";
+import ArtTesting from "./ArtTesting";
+
 require('../../css/joystix-monospace.ttf');
 
 export default class Preload extends Phaser.State {
@@ -61,6 +63,17 @@ export default class Preload extends Phaser.State {
         this.game.load.image('retro-background', require('../../img/retro-background.jpg'));
         this.game.load.image('skirmish-background', require('../../img/skirmish-background.jpg'));
 
+        //new
+        this.game.load.image('wasteland-craters', require('../../img/wasteland-craters.png'));
+        this.game.load.image('building-01', require('../../img/building-01.png'));
+        this.game.load.image('base', require('../../img/base.png'));
+        this.game.load.image('scanlines', require('../../img/scanlines.png'));
+        this.game.load.image('screen-glare', require('../../img/screen-glare.png'));
+        this.game.load.image('border-blend', require('../../img/border-blend.png'));
+        this.game.load.image('grid', require('../../img/grid.png'));
+        this.game.load.image('turret-base', require('../../img/turret-base.png'));
+        this.game.load.image('turret-1', require('../../img/turret-1.png'));
+
         this.game.load.spritesheet('green-projectile', require('../../img/green-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('missile-projectile', require('../../img/missile-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-projectile', require('../../img/blue-projectile.png').toString(), 32, 64, 5);
@@ -77,6 +90,7 @@ export default class Preload extends Phaser.State {
         this.game.state.add('Defeat', new Defeat(s));
         this.game.state.add('Debug', new Debug(s));
 
+        this.game.state.add('ArtTesting', new ArtTesting(s));
     }
 
     update() {
