@@ -32,7 +32,7 @@ abstract class Turret extends Phaser.Sprite {
 
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
-        let defaultSize = {width: 32, height: 32};
+        let defaultSize = {width: 64, height: 64};
         let scaleX = mission.gridDescriptor.cellWidth / defaultSize.width;
         let scaleY = mission.gridDescriptor.cellHeight / defaultSize.height;
         this.anchor.setTo(0.5);

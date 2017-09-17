@@ -145,7 +145,7 @@ export class PlacedLootInfo {
 
 export class AllLoots {
 
-    static Value = ["cocktail", "blue-turret", "green-turret", "orange-turret", "yellow-turret", "red-turret"];
+    static Value = ["cocktail", "blue-turret", "green-turret", "orange-turret", "yellow-turret", "red-turret", "standard-turret"];
 
     static EmptyLoots : Array<LootInfo> = AllLoots.Value.map(i => new LootInfo(i, 0));
 

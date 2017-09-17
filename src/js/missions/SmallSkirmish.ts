@@ -55,7 +55,14 @@ export default class SmallSkirmish extends Mission {
     }
 
     background = () => {
-        let background = new Phaser.Sprite(this.game, 0, 0, 'skirmish-background');
+
+        let background = this.game.add.sprite(0,0, 'wasteland-craters');
+        // let b = this.game.add.sprite(0,0, 'building-01');
+        // b.tint = 0x71e64a;
+        // let base = this.game.add.sprite(640/2 - (64 *2),960-(64*3), 'base');
+        // base.tint = 0xe64abf;
+
+        // let background = new Phaser.Sprite(this.game, 0, 0, 'skirmish-background');
         background.width = this.gridDescriptor.width;
         background.height = this.gridDescriptor.height;
         background.inputEnabled = true;

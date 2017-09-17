@@ -31,12 +31,11 @@ export default class ArtTesting extends Phaser.State {
         s6.tint = 0xfffff;
 
 
-        let s1 = this.game.add.sprite(0,0, 'scanlines');
-        s1.alpha = .5;
+
         // let s2 = this.game.add.sprite(0,0, 'screen-glare');
         // s2.alpha = .1;
         // let s4 = this.game.add.sprite(0,0, 'border-blend');
-        let s3 = this.game.add.sprite(0,0, 'grid');
+
 
 
 

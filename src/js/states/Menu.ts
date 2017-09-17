@@ -1,6 +1,6 @@
 import Button from "../models/sprites/buttons/Button";
 import * as GameData from "../models/state/GameData";
-import Scanlines from "../filters/Scanlines";
+import Scanlines from "../effects/Scanlines";
 
 export default class Menu extends Phaser.State {
 

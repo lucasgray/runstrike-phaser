@@ -19,9 +19,10 @@ export default class BlueTurretHandler extends SetupTurretInputHandler {
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
-                y: number) {
+                y: number,
+                placementGroup: Phaser.Group) {
 
-        super(mission, gameState, allHandlers, backgroundSprite, game, x, y);
+        super(mission, gameState, allHandlers, backgroundSprite, game, x, y, placementGroup);
 
         super.paint();
     }
