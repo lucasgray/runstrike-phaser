@@ -17,10 +17,10 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
 
         let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
 
-        if (loot !== undefined && loot.amount > 0) {
+        let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
-            //TODO add a condition to see if this is a placeable grid location or not
-            let grid = this.mission.gridDescriptor.getGridLocation(pointer);
+        if (loot !== undefined && loot.amount > 0 &&
+            this.mission.gridDescriptor.placeableTerrain[grid.y][grid.x] === 0) {
 
             let turret = this.spawnSetupTurret(grid);
 
@@ -31,6 +31,7 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
 
             let place = this.game.add.audio('place-item');
             place.play();
+
         } else {
             let cantplace = this.game.add.audio('wrong-choice');
             cantplace.play();

@@ -46,22 +46,24 @@ abstract class Mission {
 
         let easystar = new EasyStar.js();
 
-        let grid = Array<Array<number>>();
+        let lootGrid = Array<Array<number>>();
         for (let y = 0; y < this.gridDescriptor.columns; y++) {
             let f = Array<number>();
             for (let x = 0; x < this.gridDescriptor.rows; x++) {
                 f.push(0);
             }
-            grid.push(f);
+            lootGrid.push(f);
         }
 
         myLoot.forEach((i) =>{
-           grid[i.col][i.row] = 1;
+           lootGrid[i.col][i.row] = 1;
         });
 
-        //TODO zip gridDescriptor.passableTerrain into placedItems
+        let allTogetherNow : number[][] = _.zipWith(lootGrid, this.gridDescriptor.passableTerrain, (i,j) => {
+            return _.zipWith(i,j, (k,l) => Math.max(k,l));
+        });
 
-        easystar.setGrid(grid);
+        easystar.setGrid(allTogetherNow);
         easystar.setAcceptableTiles([0]);
         easystar.calculate();
         easystar.enableDiagonals();

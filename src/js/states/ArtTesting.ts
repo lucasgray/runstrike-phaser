@@ -21,12 +21,12 @@ export default class ArtTesting extends Phaser.State {
         let s5 = this.game.add.sprite(64*3,64*7, 'turret-base');
         s5.tint = 0xfffff;
 
-        let shadow = this.game.add.sprite(64*3 + 32 + 4 -4, 64*7 + 32 - 12+2, 'turret-1');
+        let shadow = this.game.add.sprite(64*3 + 32 + 7 -4, 64*7 + 32 - 12+2, 'turret-1');
         shadow.anchor.set(0.5);
         shadow.tint = 0x191919;
         shadow.alpha = 0.6;
 
-        let s6 = this.game.add.sprite(64*3 + 32 + 4,64*7 + 32 - 12, 'turret-1');
+        let s6 = this.game.add.sprite(64*3 + 32 + 7,64*7 + 32 - 12, 'turret-1');
         s6.anchor.setTo(.5);
         s6.tint = 0xfffff;
 
