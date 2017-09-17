@@ -21,9 +21,10 @@ abstract class SetupTurret extends Turret {
                 gameState: GameState,
                 row: number, col: number,
                 texture: string,
-                inputHandler: InputHandler
+                inputHandler: InputHandler,
+                offsetX, offsetY
     ) {
-        super(mission, game, row, col, texture);
+        super(mission, game, row, col, texture, offsetX, offsetY);
 
         this.inputHandler = inputHandler;
 
@@ -34,7 +35,7 @@ abstract class SetupTurret extends Turret {
         this.inputEnabled = true;
     }
 
-    remove(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
+    remove(turret: Turret, pointer: Phaser.Pointer) {
 
         console.log('removing placed sprite');
 
@@ -46,7 +47,8 @@ abstract class SetupTurret extends Turret {
         this.inputHandler.updateText();
 
         //remove sprite
-        sprite.destroy();
+        turret.base.destroy();
+        turret.destroy();
     }
 }
 

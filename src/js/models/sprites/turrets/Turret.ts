@@ -20,9 +20,11 @@ abstract class Turret extends Phaser.Sprite {
     abstract fireRate: number;
     abstract shoot: () => Projectile;
 
-    constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string) {
+    base: Phaser.Sprite;
+    turret: Phaser.Sprite;
+
+    constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string, offsetX: number, offsetY: number) {
         super(game, 0, 0, '');
-        this.loadTexture(texture);
 
         this.mission = mission;
 
@@ -40,6 +42,29 @@ abstract class Turret extends Phaser.Sprite {
         this.inputEnabled = false;
 
         this.lastShot = 0;
+
+        let base = new Phaser.Sprite(game, this.x, this.y, 'turret-base');
+        base.anchor.setTo(0.5);
+        base.scale.setTo(scaleX, scaleY);
+        base.tint = 0xfffff;
+        this.game.add.existing(base);
+        this.base = base;
+
+        let turret = new Phaser.Sprite(game, offsetX, offsetY, texture);
+        this.game.physics.enable(turret, Phaser.Physics.ARCADE);
+        turret.anchor.setTo(0.5);
+        turret.scale.setTo(scaleX, scaleY);
+        turret.tint = 0xfffff;
+        this.game.add.existing(turret);
+        this.turret = turret;
+
+        let turretShadow = new Phaser.Sprite(game, offsetX - 4, offsetY + 2, texture);
+        turretShadow.anchor.set(0.5);
+        turretShadow.tint = 0x191919;
+        turretShadow.alpha = 0.6;
+
+        this.addChild(turretShadow);
+        this.addChild(turret);
     }
 
     update() {

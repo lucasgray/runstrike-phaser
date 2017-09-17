@@ -196,7 +196,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "red-turret"
+                "type": "standard-turret"
             }, "-Kj-ezDNFAwbZsdfsdfirmeGOH": {
                 "foundBy": "TODO!",
                 "foundOn": "TODO!",
@@ -205,7 +205,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "blue-turret"
+                "type": "standard-turret"
             }, "-Kj-ezDNFAwbZsdfsdfirmeGOI": {
                 "foundBy": "TODO!",
                 "foundOn": "TODO!",
@@ -214,7 +214,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "green-turret"
+                "type": "standard-turret"
             }
         }
     }

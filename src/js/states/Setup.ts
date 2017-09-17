@@ -2,22 +2,9 @@ import Button from "../models/sprites/buttons/Button";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "../handlers/InputHandler";
-import BlueTurretHandler from "../handlers/BlueTurretHandler";
-import GreenTurretHandler from "../handlers/GreenTurretHandler";
-import RedTurretHandler from "../handlers/RedTurretHandler";
-import OrangeTurretHandler from "../handlers/OrangeTurretHandler";
-import YellowTurretHandler from "../handlers/YellowTurretHandler";
-import {
-    BlueSetupTurret,
-    GreenSetupTurret,
-    RedSetupTurret,
-    YellowSetupTurret,
-    OrangeSetupTurret,
-} from "../models/sprites/turrets/setup/SetupTurrets";
-import * as _ from 'lodash';
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
-import StandardTurretHandler from "../handlers/StandardTurretHandler";
+import StandardTurretHandler from "../handlers/TurretHandlers";
 
 export default class Setup extends Phaser.State {
 
@@ -114,6 +101,7 @@ export default class Setup extends Phaser.State {
                 .buildForSetup(it.type);
 
             this.game.add.existing(turret);
+            if (turret !== undefined) this.placementGroup.add(turret.base);
             this.placementGroup.add(turret);
         });
 

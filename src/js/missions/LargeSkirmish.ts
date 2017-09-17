@@ -42,10 +42,10 @@ export default class LargeSkirmish extends Mission {
             15,
             [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -59,6 +59,10 @@ export default class LargeSkirmish extends Mission {
             ],
             [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -66,23 +70,21 @@ export default class LargeSkirmish extends Mission {
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                [1, 1, 1, 1, 1, 0, 1, 1, 1, 1]
             ]);
     }
 
     background = () => {
 
         let background = this.game.add.sprite(0,0, 'wasteland-craters');
-        // let b = this.game.add.sprite(0,0, 'building-01');
-        // b.tint = 0x71e64a;
-        // let base = this.game.add.sprite(640/2 - (64 *2),960-(64*3), 'base');
-        // base.tint = 0xe64abf;
+        let b = this.game.add.sprite(0,0, 'building-01');
+        b.tint = 0x71e64a;
+        let b2 = this.game.add.sprite(64*8,64*10, 'building-01');
+        b2.tint = 0x71e64a;
+        let base = this.game.add.sprite(640/2 - (64 *2),960-(64*3), 'base');
+        base.tint = 0xe64abf;
 
         // let background = new Phaser.Sprite(this.game, 0, 0, 'skirmish-background');
         background.width = this.gridDescriptor.width;

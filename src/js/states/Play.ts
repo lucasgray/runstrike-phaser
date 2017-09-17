@@ -4,11 +4,8 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
-import SmartGroup from "../extensions/SmartGroup";
-import Drone from "../models/sprites/enemies/Drone";
-import Projectile from "../models/sprites/projectiles/Projectile";
-import {RedTurret, YellowTurret, OrangeTurret, BlueTurret, GreenTurret} from "../models/sprites/turrets/Turrets";
 import TurretBuilder from "../models/builder/TurretBuilder";
+import StandardMap from "../effects/StandardMap";
 
 export default class Play extends Phaser.State {
 
@@ -16,6 +13,9 @@ export default class Play extends Phaser.State {
     mission: Mission;
     backgroundSprite: Phaser.Sprite;
     inputHandlers: Array<InputHandler>;
+
+    placementGroup: Phaser.Group;
+    effectsGroup: Phaser.Group;
 
     constructor(gameState: GameState) {
         super();
@@ -29,8 +29,10 @@ export default class Play extends Phaser.State {
         this.mission = mission;
         this.gameState = gameState;
 
-        mission.enemies = new SmartGroup<Drone>(this.game);
-        mission.projectiles = new SmartGroup<Projectile>(this.game);
+        this.placementGroup = new Phaser.Group(this.game);
+        this.effectsGroup = new Phaser.Group(this.game);
+
+        mission.reset();
 
         let spr = this.mission.background();
         this.game.add.existing(spr);
@@ -51,6 +53,8 @@ export default class Play extends Phaser.State {
         });
 
         this.mission.recalculateGrid(gameState.placedLoot);
+
+        this.effectsGroup = StandardMap.AddMapEffects(this.game);
 
         this.drawHealth();
         this.drawInput();

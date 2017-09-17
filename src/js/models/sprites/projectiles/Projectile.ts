@@ -3,7 +3,9 @@ import GridDescriptor from "../../state/GridDescriptor";
 
 abstract class Projectile extends Phaser.Sprite {
 
-    fromSprite: Phaser.Sprite;
+    fromX: number;
+    fromY: number;
+    angle: number;
     toSprite: Phaser.Sprite;
 
     abstract range: number;
@@ -12,12 +14,13 @@ abstract class Projectile extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract shootSound: string;
 
-    constructor(game: Phaser.Game, fromSprite: Phaser.Sprite, toSprite: Phaser.Sprite, texture: string) {
+    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, texture: string) {
 
-        super(game, fromSprite.x, fromSprite.y, texture);
+        super(game, fromX, fromY, texture);
 
-        this.game = game;
-        this.fromSprite = fromSprite;
+        this.fromX = fromX;
+        this.fromY = fromY;
+        this.angle = angle;
         this.toSprite = toSprite;
     }
 
@@ -32,7 +35,6 @@ abstract class Projectile extends Phaser.Sprite {
         this.animations.play('bullet', 8, false);
 
         this.anchor.setTo(0.5);
-        this.angle = this.fromSprite.angle;
         this.game.physics.arcade.enable(this);
 
         let halfXVelocity = this.toSprite.body.velocity.x / 2;
@@ -52,7 +54,7 @@ abstract class Projectile extends Phaser.Sprite {
      * Note: Bullet + Sprite collisions are currently handled by the Mission
      */
     update() {
-        if (Phaser.Math.distance(this.x, this.y, this.fromSprite.x, this.fromSprite.y) > this.range) {
+        if (Phaser.Math.distance(this.x, this.y, this.fromX, this.fromY) > this.range) {
             this.kill();
             this.destroy();
         }

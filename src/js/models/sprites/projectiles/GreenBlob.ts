@@ -12,7 +12,7 @@ export default class GreenBlob extends Projectile {
     shootSound: string = 'shoot';
 
     constructor(game: Phaser.Game, fromSprite: Phaser.Sprite, toSprite: Phaser.Sprite, gridDescriptor: GridDescriptor) {
-        super(game, fromSprite, toSprite, 'green-projectile');
+        super(game, fromSprite.x, fromSprite.y, fromSprite.angle, toSprite, 'green-projectile');
 
         super.paint(gridDescriptor);
     }

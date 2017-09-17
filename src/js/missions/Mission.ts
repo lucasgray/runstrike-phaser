@@ -36,8 +36,7 @@ abstract class Mission {
 
         this.game = game;
 
-        this.enemies = new SmartGroup<Enemy>(this.game);
-        this.projectiles = new SmartGroup<Projectile>(this.game);
+        this.reset();
     }
 
     recalculateGrid(placedItems: Array<PlacedLootInfo>) {
@@ -71,6 +70,17 @@ abstract class Mission {
         easystar.calculate();
 
         this.easystar = easystar;
+    }
+
+    reset() {
+        this.enemies = new SmartGroup<Drone>(this.game);
+        this.projectiles = new SmartGroup<Projectile>(this.game);
+
+        this.curEnemy = 0;
+        this.allDeployed = false;
+        this.lastDeployment = Date.now();
+
+        this.pendingFinalize = false;
     }
 
     update() {
