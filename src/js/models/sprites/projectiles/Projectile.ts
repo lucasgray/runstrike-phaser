@@ -45,8 +45,8 @@ abstract class Projectile extends Phaser.Sprite {
 
         this.angle = Phaser.Math.radToDeg(this.game.physics.arcade.moveToXY(this, toX, toY, this.speed)) + 90;
 
-        let shootAudio = this.game.add.audio(this.shootSound);
-        shootAudio.play();
+        // let shootAudio = this.game.add.audio(this.shootSound);
+        // shootAudio.play();
     }
 
     /**

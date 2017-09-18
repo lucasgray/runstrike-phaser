@@ -164,6 +164,8 @@ abstract class Mission {
             }
         });
 
+        bulletsThatCollided.forEach(it => it.destroy());
+
     }
 
     shutdown() {

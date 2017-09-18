@@ -85,7 +85,8 @@ export abstract class Enemy extends Phaser.Sprite {
 
     kill() {
         this.healthBar.hide();
-        this.explodeSound().play();
+        this.healthBar.destroy();
+        // this.explodeSound().play();
         this.targetable = false;
         this.alive = false;
 

@@ -43,22 +43,22 @@ export class StandardTurret extends Turret {
 
     init() {
 
-        let leftShootPoint = new Phaser.Sprite(this.game, 0, 0, 'pico-icons', 39);
+        let leftShootPoint = new Phaser.Sprite(this.game, 0, 0);
         leftShootPoint.anchor.setTo(.5);
         SpriteExtensions.alignInParent(
             leftShootPoint,
             this.turret,
             Phaser.TOP_LEFT,
-            StandardTurret.OFFSET_X - 16,
-            StandardTurret.OFFSET_Y + 25);
-        let rightShootPoint = new Phaser.Sprite(this.game, 0, 0, 'pico-icons', 39);
+            StandardTurret.OFFSET_X - 8,
+            StandardTurret.OFFSET_Y + 45);
+        let rightShootPoint = new Phaser.Sprite(this.game, 0, 0);
         rightShootPoint.anchor.setTo(.5);
         SpriteExtensions.alignInParent(
             rightShootPoint,
             this.turret,
             Phaser.TOP_RIGHT,
-            StandardTurret.OFFSET_X - 14,
-            StandardTurret.OFFSET_Y + 25);
+            StandardTurret.OFFSET_X - 6,
+            StandardTurret.OFFSET_Y + 45);
 
         this.game.add.existing(leftShootPoint);
         this.game.add.existing(rightShootPoint);
