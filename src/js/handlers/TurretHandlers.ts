@@ -10,6 +10,7 @@ export default class StandardTurretHandler extends SetupTurretInputHandler {
     lootType: string = 'standard-turret';
     spriteScaling: number = .8;
     spawnSetupTurret = (grid) => new StandardSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    lootPrettyName: string = 'AC 001';
 
     constructor(mission: Mission,
                 gameState: GameState,

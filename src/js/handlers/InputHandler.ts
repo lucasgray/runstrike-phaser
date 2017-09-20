@@ -14,6 +14,8 @@ export default abstract class InputHandler {
     parentSprite: Phaser.Sprite;
     backgroundSprite: Phaser.Sprite;
 
+    accentColor: string = "#03C1BF";
+
     /**
      * Icon to display inside circle
      */
@@ -26,6 +28,8 @@ export default abstract class InputHandler {
      * Optional sprite scaling property
      */
     abstract spriteScaling: number;
+
+    abstract lootPrettyName: string;
 
     x: number;
     y: number;
@@ -49,14 +53,24 @@ export default abstract class InputHandler {
     }
 
     paint() {
+
         let graphics = this.game.add.graphics(this.x, this.y);
-        graphics.beginFill(0xffffff, 1);
-        graphics.lineStyle(3, 0xF1235B);
-        graphics.drawCircle(0, 0, 60);
+        graphics.beginFill(0x000000, .6);
+        graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
+        graphics.drawRect(0, 0, this.mission.gridDescriptor.cellWidth, this.mission.gridDescriptor.cellWidth);
 
         let parentSprite = this.game.add.sprite(this.x, this.y, graphics.generateTexture());
         parentSprite.anchor.set(.5);
         graphics.destroy();
+
+        let prettyText = this.game.add.text(0, 0, this.lootPrettyName, {
+            font: '12px Joystix',
+            fill: this.accentColor,
+            align: "center"
+        });
+
+        parentSprite.addChild(prettyText);
+        SpriteExtensions.alignInParent(prettyText, parentSprite, Phaser.TOP_LEFT, 0, 14);
 
         let icon = this.game.add.sprite(0, 0, this.icon);
         icon.anchor.set(0.5);
@@ -66,9 +80,9 @@ export default abstract class InputHandler {
         parentSprite.addChild(icon);
 
         graphics = this.game.add.graphics(this.x, this.y);
-        graphics.beginFill(0xffffff, 1);
-        graphics.lineStyle(3, 0xF1235B);
-        graphics.drawCircle(0, 0, 25);
+        graphics.beginFill(0x000000, .6);
+        graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
+        graphics.drawRect(0, 0, 16, 16);
 
         let itemSprite = this.game.add.sprite(0, 0, graphics.generateTexture());
         graphics.destroy();
@@ -79,7 +93,7 @@ export default abstract class InputHandler {
 
         let text = this.game.add.text(0, 0, this.num(), {
             font: '12px Joystix',
-            fill: "#F1235B",
+            fill: this.accentColor,
             align: "center"
         });
         text.anchor.set(.5);

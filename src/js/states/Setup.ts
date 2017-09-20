@@ -5,6 +5,7 @@ import InputHandler from "../handlers/InputHandler";
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
 import StandardTurretHandler from "../handlers/TurretHandlers";
+import TurretSetupPanel from "../panels/TurretSetupPanel";
 
 export default class Setup extends Phaser.State {
 
@@ -51,13 +52,11 @@ export default class Setup extends Phaser.State {
 
     drawInputs() : Array<InputHandler> {
 
+        let setupPanel = new TurretSetupPanel(this.game, new Phaser.Point(0, this.mission.gridDescriptor.cellHeight * 4), this.mission.gridDescriptor);
+        this.placementGroup.add(setupPanel.sprite);
+
         let allTurretHandlers = Array<InputHandler>();
-        allTurretHandlers.push(new StandardTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 210, this.placementGroup));
-        // allTurretHandlers.push(new BlueTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 300, this.placementGroup));
-        // allTurretHandlers.push(new GreenTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 390, this.placementGroup));
-        // allTurretHandlers.push(new RedTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 480, this.placementGroup));
-        // allTurretHandlers.push(new OrangeTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 570, this.placementGroup));
-        // allTurretHandlers.push(new YellowTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 50, 660, this.placementGroup));
+        allTurretHandlers.push(new StandardTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 64, 320, this.placementGroup));
 
         new Button(
             this.game,

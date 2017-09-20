@@ -8,6 +8,7 @@ export default class CocktailHandler extends InputHandler {
     icon: string = 'cocktail_icon';
     lootType: string = 'cocktail';
     spriteScaling: number = .25;
+    lootPrettyName: 'cocktail';
 
     constructor(mission: Mission,
                 gameState: GameState,
