@@ -25,11 +25,13 @@ export default abstract class InputHandler {
      */
     abstract lootType: string;
     /**
+     * Pretty name to display on top
+     */
+    abstract lootPrettyName: string;
+    /**
      * Optional sprite scaling property
      */
     abstract spriteScaling: number;
-
-    abstract lootPrettyName: string;
 
     x: number;
     y: number;
@@ -74,30 +76,20 @@ export default abstract class InputHandler {
 
         let icon = this.game.add.sprite(0, 0, this.icon);
         icon.anchor.set(0.5);
-
         icon.scale.set(this.spriteScaling);
 
         parentSprite.addChild(icon);
-
-        graphics = this.game.add.graphics(this.x, this.y);
-        graphics.beginFill(0x000000, .6);
-        graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
-        graphics.drawRect(0, 0, 16, 16);
-
-        let itemSprite = this.game.add.sprite(0, 0, graphics.generateTexture());
-        graphics.destroy();
-        itemSprite.anchor.set(.5);
-        parentSprite.addChild(itemSprite);
-
-        SpriteExtensions.alignInParent(itemSprite, parentSprite, Phaser.BOTTOM_RIGHT);
 
         let text = this.game.add.text(0, 0, this.num(), {
             font: '12px Joystix',
             fill: this.accentColor,
             align: "center"
         });
-        text.anchor.set(.5);
-        itemSprite.addChild(text);
+
+        text.anchor.setTo(.5);
+        parentSprite.addChild(text);
+
+        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, -7, -2);
 
         parentSprite.inputEnabled = true;
         parentSprite.events.onInputDown.add(this.inputListener, this);
@@ -116,12 +108,12 @@ export default abstract class InputHandler {
 
         //turn all active handlers off
         this.backgroundSprite.events.onInputDown.removeAll();
-        this.allHandlers.forEach(ih =>
-            this.game.add.tween(ih.parentSprite.scale).to({x: 1.0, y: 1.0}, 400, Phaser.Easing.Exponential.In).start()
-        );
+        // this.allHandlers.forEach(ih =>
+        //     this.game.add.tween(ih.parentSprite.scale).to({x: 1.0, y: 1.0}, 400, Phaser.Easing.Exponential.In).start()
+        // );
 
         //turn this one on
-        this.game.add.tween(this.parentSprite.scale).to({x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
+        // this.game.add.tween(this.parentSprite.scale).to({x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
         let button = this.game.add.audio('button');
         button.play();
 
@@ -142,7 +134,7 @@ export default abstract class InputHandler {
         let amt = this.gameState.inventoryLoot.filter(it => it.type === this.lootType).pop();
 
         if (amt) {
-            return amt.amount + "";
+            return amt.amount > 9 ? "" + amt.amount: "0" + amt.amount;
         } else {
             return "0";
         }

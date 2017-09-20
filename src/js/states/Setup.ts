@@ -18,6 +18,8 @@ export default class Setup extends Phaser.State {
     //effects go next, so they end up on TOP of placed items!
     effectsGroup: Phaser.Group;
 
+    setupPanel: TurretSetupPanel;
+
     constructor(gameState: GameState) {
         super();
         this.gameState = gameState;
@@ -45,18 +47,18 @@ export default class Setup extends Phaser.State {
 
         console.log(this.gameState.placedLoot);
 
-        let handlers = this.drawInputs();
-
-        this.drawSetupTurrets(handlers);
+        this.drawInputs();
     }
 
-    drawInputs() : Array<InputHandler> {
+    drawInputs() {
 
-        let setupPanel = new TurretSetupPanel(this.game, new Phaser.Point(0, this.mission.gridDescriptor.cellHeight * 4), this.mission.gridDescriptor);
-        this.placementGroup.add(setupPanel.sprite);
-
-        let allTurretHandlers = Array<InputHandler>();
-        allTurretHandlers.push(new StandardTurretHandler(this.mission, this.gameState, allTurretHandlers, this.backgroundSprite, this.game, 64, 320, this.placementGroup));
+        this.setupPanel = new TurretSetupPanel(this.game,
+            new Phaser.Point(0, this.mission.gridDescriptor.cellHeight * 4),
+            this.mission,
+            this.gameState,
+            this.backgroundSprite,
+            this.placementGroup
+        );
 
         new Button(
             this.game,
@@ -69,29 +71,15 @@ export default class Setup extends Phaser.State {
                 this.state.start('Missions');
             }
         );
-
-        new Button(
-            this.game,
-            this.game.width - 80,
-            this.game.height - 40,
-            100,
-            40,
-            'Defend', () => {
-                console.log("asking to defend");
-                this.state.start('Play', true, false, this.mission, this.gameState);
-            }
-        );
-
-        return allTurretHandlers;
     }
 
-    drawSetupTurrets(handlers: Array<InputHandler>) {
+    drawSetupTurrets() {
 
         let builder = new TurretBuilder()
             .withGame(this.game)
             .andState(this.gameState)
             .andMission(this.mission)
-            .andInputHandlers(handlers);
+            .andInputHandlers(this.setupPanel.handlers);
 
         this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
 

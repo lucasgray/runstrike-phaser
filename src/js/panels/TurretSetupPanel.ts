@@ -1,5 +1,12 @@
 
 import GridDescriptor from "../models/state/GridDescriptor";
+import SetupTurretInputHandler from "../handlers/SetupTurretInputHandler";
+import StandardTurretHandler from "../handlers/TurretHandlers";
+import InputHandler from "../handlers/InputHandler";
+import Mission from "../missions/Mission";
+import {GameState} from "../models/state/GameData";
+import Button from "../models/sprites/buttons/Button";
+import SpriteExtensions from "../extensions/SpriteExtensions";
 
 export default class TurretSetupPanel {
 
@@ -13,18 +20,20 @@ export default class TurretSetupPanel {
     width: number ;
     height: number;
 
-    constructor(game: Phaser.Game, topLeft: Phaser.Point, gridDescriptor: GridDescriptor) {
+    handlers: Array<SetupTurretInputHandler>;
+
+    constructor(game: Phaser.Game, topLeft: Phaser.Point, mission: Mission, gameState: GameState, backgroundSprite: Phaser.Sprite, placementGroup: Phaser.Group) {
 
         this.game = game;
         this.topLeft = topLeft;
         this.sprite = game.add.sprite(topLeft.x, topLeft.y);
-        this.width = gridDescriptor.cellWidth * 2;
-        this.height = gridDescriptor.cellHeight * 4;
+        this.width = mission.gridDescriptor.cellWidth * 2;
+        this.height = mission.gridDescriptor.cellHeight * 4;
 
-        this.paint();
+        this.paint(mission, gameState, backgroundSprite, placementGroup);
     }
 
-    paint() {
+    paint(mission, gameState, backgroundSprite, placementGroup) {
         let graphics = this.game.add.graphics(this.topLeft.x, this.topLeft.y);
         graphics.beginFill(0x000000, .6);
         graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
@@ -32,6 +41,27 @@ export default class TurretSetupPanel {
 
         let parentSprite = this.game.add.sprite(this.topLeft.x, this.topLeft.y, graphics.generateTexture());
         graphics.destroy();
+
+        let allTurretHandlers = Array<InputHandler>();
+
+        let startX = this.topLeft.x + mission.gridDescriptor.cellWidth;
+        let startY = this.topLeft.y + mission.gridDescriptor.cellHeight;
+        allTurretHandlers.push(new StandardTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY, placementGroup));
+
+        let readyButton = new Button(
+            this.game,
+            0,
+            0,
+            85,
+            40,
+            'ready', () => {
+                console.log("asking to defend");
+                this.game.state.start('Play', true, false, mission, gameState);
+            }
+        );
+        parentSprite.addChild(readyButton.baseSprite);
+
+        SpriteExtensions.alignInParent(readyButton.baseSprite, parentSprite, Phaser.BOTTOM_CENTER, 0, -10);
     }
 
     destroy() {

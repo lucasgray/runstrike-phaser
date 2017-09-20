@@ -9,6 +9,9 @@ export default class Button extends Phaser.Sprite {
 
     baseSprite: Phaser.Sprite;
 
+    accentColor = '#03C1BF';
+    backgroundColor = '#005150';
+
     constructor(game: Phaser.Game, x: number, y: number, width: number, height: number, label: string, callback: Function) {
         super(game, x, y);
 
@@ -25,8 +28,8 @@ export default class Button extends Phaser.Sprite {
         //create graphics to make rectangle
 
         let graphics = this.game.add.graphics(this.x, this.y);
-        graphics.lineStyle(2, 0xF1235B, 1);
-        graphics.beginFill(0x000000, 1);
+        graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor), 1);
+        graphics.beginFill(Phaser.Color.hexToRGB(this.backgroundColor), .7);
         graphics.drawRect(
             this.x - (this.width / 2),
             this.y - (this.height / 2),
@@ -39,17 +42,15 @@ export default class Button extends Phaser.Sprite {
 
         this.baseSprite = sprite;
 
-        this.x = sprite.x;
-        this.y = sprite.y;
         this.addChild(sprite);
 
         //text to go on button
 
         let text = this.game.add.text(0, 0, this.label, {
-            font: 'Righteous',
-            fill: 'white',
+            font: 'Joystix',
+            fill: this.accentColor,
             align: 'center',
-            fontSize: this.height * 0.7
+            fontSize: this.height * 0.4
         });
 
         text.anchor.setTo(0.5);
