@@ -6,6 +6,7 @@ import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
+import SmartGroup from "../extensions/SmartGroup";
 
 export default class Play extends Phaser.State {
 
@@ -14,7 +15,6 @@ export default class Play extends Phaser.State {
     backgroundSprite: Phaser.Sprite;
     inputHandlers: Array<InputHandler>;
 
-    placementGroup: Phaser.Group;
     effectsGroup: Phaser.Group;
 
     constructor(gameState: GameState) {
@@ -29,14 +29,11 @@ export default class Play extends Phaser.State {
         this.mission = mission;
         this.gameState = gameState;
 
-        this.placementGroup = new Phaser.Group(this.game);
-        this.effectsGroup = new Phaser.Group(this.game);
-
         mission.reset();
 
         let spr = this.mission.background();
-        this.game.add.existing(spr);
         spr.sendToBack();
+        this.game.add.existing(spr);
         this.backgroundSprite = spr;
 
         let builder = new TurretBuilder()
@@ -49,30 +46,18 @@ export default class Play extends Phaser.State {
                 .at({row: it.row, col: it.col})
                 .buildForPlay(it.type);
 
-            this.game.add.existing(turret);
+            if (turret) {
+                this.game.add.existing(turret);
+                this.mission.turrets.add(turret.base);
+                this.mission.turrets.add(turret);
+            }
         });
 
         this.mission.recalculateGrid(gameState.placedLoot);
 
         this.effectsGroup = StandardMap.AddMapEffects(this.game);
 
-        this.drawHealth();
         this.drawInput();
-    }
-
-    drawHealth() {
-        //Draw rectangles for health of enemy army
-        // this.graphics.beginFill(0x00FF00);
-        // this.graphics.lineStyle(2, 0x0000FF, 1);
-        // this.graphics.drawRect(0, 0, 80, 1080);
-
-        // let w = this.game.world.width;
-        // let h = this.game.world.height;
-
-        //Draw rectangles for health of player army
-        // this.graphics.beginFill(0x00FF00);
-        // this.graphics.lineStyle(2, 0x0000FF, 1);
-        // this.graphics.drawRect(w-80, 0, 80, 1080);
     }
 
     drawInput() {

@@ -57,6 +57,7 @@ abstract class Turret extends Phaser.Sprite {
         turret.tint = 0xfffff;
         this.game.add.existing(turret);
         this.turret = turret;
+        this.addChild(turret);
 
         let turretShadow = new Phaser.Sprite(game, offsetX - 4, offsetY + 2, texture);
         turretShadow.anchor.set(0.5);

@@ -90,6 +90,9 @@ export default class LargeSkirmish extends Mission {
         background.width = this.gridDescriptor.width;
         background.height = this.gridDescriptor.height;
         background.inputEnabled = true;
+        background.addChild(b);
+        background.addChild(b2);
+        background.addChild(base);
 
         return background;
     }

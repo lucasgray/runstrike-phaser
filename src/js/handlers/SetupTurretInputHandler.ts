@@ -10,19 +10,14 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
 
     abstract spawnSetupTurret: (grid: {x: number, y: number}) => SetupTurret;
 
-    placementGroup : Phaser.Group;
-
     constructor(mission: Mission,
                 gameState: GameState,
                 allHandlers: Array<InputHandler>,
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
-                y: number,
-                placementGroup : Phaser.Group) {
+                y: number) {
         super(mission, gameState, allHandlers, backgroundSprite, game, x, y);
-
-        this.placementGroup = placementGroup;
     }
 
      /**
@@ -41,10 +36,9 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
             this.mission.gridDescriptor.placeableTerrain[grid.y][grid.x] === 0) {
 
             let turret = this.spawnSetupTurret(grid);
-
             this.game.add.existing(turret);
-            this.placementGroup.add(turret.base);
-            this.placementGroup.add(turret);
+            this.mission.turrets.add(turret.base);
+            this.mission.turrets.add(turret);
 
             this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
             this.updateText();

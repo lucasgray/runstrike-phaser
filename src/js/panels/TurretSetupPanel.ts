@@ -7,6 +7,7 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import Button from "../models/sprites/buttons/Button";
 import SpriteExtensions from "../extensions/SpriteExtensions";
+import StandardMap from "../effects/StandardMap";
 
 export default class TurretSetupPanel {
 
@@ -22,7 +23,7 @@ export default class TurretSetupPanel {
 
     handlers: Array<SetupTurretInputHandler>;
 
-    constructor(game: Phaser.Game, topLeft: Phaser.Point, mission: Mission, gameState: GameState, backgroundSprite: Phaser.Sprite, placementGroup: Phaser.Group) {
+    constructor(game: Phaser.Game, topLeft: Phaser.Point, mission: Mission, gameState: GameState, backgroundSprite: Phaser.Sprite) {
 
         this.game = game;
         this.topLeft = topLeft;
@@ -30,10 +31,10 @@ export default class TurretSetupPanel {
         this.width = mission.gridDescriptor.cellWidth * 2;
         this.height = mission.gridDescriptor.cellHeight * 4;
 
-        this.paint(mission, gameState, backgroundSprite, placementGroup);
+        this.paint(mission, gameState, backgroundSprite);
     }
 
-    paint(mission, gameState, backgroundSprite, placementGroup) {
+    paint(mission, gameState, backgroundSprite) {
         let graphics = this.game.add.graphics(this.topLeft.x, this.topLeft.y);
         graphics.beginFill(0x000000, .6);
         graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
@@ -46,7 +47,7 @@ export default class TurretSetupPanel {
 
         let startX = this.topLeft.x + mission.gridDescriptor.cellWidth;
         let startY = this.topLeft.y + mission.gridDescriptor.cellHeight;
-        allTurretHandlers.push(new StandardTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY, placementGroup));
+        allTurretHandlers.push(new StandardTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY));
 
         let readyButton = new Button(
             this.game,

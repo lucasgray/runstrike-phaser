@@ -8,6 +8,8 @@ import * as _ from 'lodash';
 import Lurker from "../models/sprites/enemies/Lurker";
 import Shield from "../models/sprites/enemies/Shield";
 import {Enemy} from "../models/sprites/enemies/Enemy";
+import Turret from "../models/sprites/turrets/Turret";
+import StandardMap from "../effects/StandardMap";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -23,8 +25,12 @@ abstract class Mission {
     game: Phaser.Game;
     easystar: EasyStar.js;
 
+    //for now, leave this as just a group. we don't use it to iterate over turrets yet
+    //and turrets have the weird thing with base/turret cant be children etc
+    turrets: Phaser.Group;
     enemies: SmartGroup<Enemy>;
     projectiles: SmartGroup<Projectile>;
+    projectiles2: Phaser.Group;
 
     curEnemy: number = 0;
     allDeployed: boolean;
@@ -66,15 +72,30 @@ abstract class Mission {
         easystar.setAcceptableTiles([0]);
         easystar.calculate();
         easystar.enableDiagonals();
-        easystar.enableCornerCutting();
+        easystar.disableCornerCutting();
         easystar.calculate();
 
         this.easystar = easystar;
     }
 
     reset() {
+
+        if (this.enemies) {
+            this.enemies.destroy(true);
+        }
+        if (this.turrets) {
+            this.turrets.destroy(true);
+        }
+        if (this.projectiles) {
+            this.projectiles.destroy(true);
+        }
+
+        this.turrets = new Phaser.Group(this.game);
+        this.game.add.existing(this.turrets);
         this.enemies = new SmartGroup<Drone>(this.game);
+        this.game.add.existing(this.enemies);
         this.projectiles = new SmartGroup<Projectile>(this.game);
+        this.game.add.existing(this.projectiles);
 
         this.curEnemy = 0;
         this.allDeployed = false;

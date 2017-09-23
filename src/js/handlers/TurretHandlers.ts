@@ -18,10 +18,9 @@ export default class StandardTurretHandler extends SetupTurretInputHandler {
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
-                y: number,
-                placementGroup: Phaser.Group) {
+                y: number) {
 
-        super(mission, gameState, allHandlers, backgroundSprite, game, x, y, placementGroup);
+        super(mission, gameState, allHandlers, backgroundSprite, game, x, y);
 
         super.paint();
     }
