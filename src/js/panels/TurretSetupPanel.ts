@@ -43,11 +43,12 @@ export default class TurretSetupPanel {
         let parentSprite = this.game.add.sprite(this.topLeft.x, this.topLeft.y, graphics.generateTexture());
         graphics.destroy();
 
-        let allTurretHandlers = Array<InputHandler>();
+        let allTurretHandlers = Array<SetupTurretInputHandler>();
 
         let startX = this.topLeft.x + mission.gridDescriptor.cellWidth;
         let startY = this.topLeft.y + mission.gridDescriptor.cellHeight;
         allTurretHandlers.push(new StandardTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY));
+        this.handlers = allTurretHandlers;
 
         let readyButton = new Button(
             this.game,
