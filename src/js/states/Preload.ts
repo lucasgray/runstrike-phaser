@@ -74,6 +74,9 @@ export default class Preload extends Phaser.State {
         this.game.load.image('turret-base', require('../../img/turret-base.png'));
         this.game.load.image('turret-1', require('../../img/turret-1.png'));
 
+        this.game.load.image('blue-spark', require('../../img/blue.png'));
+        this.game.load.image('red-spark', require('../../img/red.png'));
+
         this.game.load.spritesheet('green-projectile', require('../../img/green-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('missile-projectile', require('../../img/missile-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-projectile', require('../../img/blue-projectile.png').toString(), 32, 64, 5);

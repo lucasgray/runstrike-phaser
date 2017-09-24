@@ -59,6 +59,32 @@ export default class Debug extends Phaser.State {
         sprite.animations.play('fly', 5, true);
         sprite.scale.setTo(4)
 
+        let emitter = this.game.add.emitter(250,250, 100);
+        emitter.makeParticles('blue-spark');
+        emitter.gravity.setTo(0,0);
+        emitter.maxParticleSpeed.x = 700;
+        emitter.minParticleSpeed.x = -700;
+        emitter.maxParticleSpeed.y = 700;
+        emitter.minParticleSpeed.y = -700;
+        emitter.setScale(.5, .05, .5, .05, 500, Phaser.Easing.Cubic.Out);
+        emitter.start(true, 500, undefined, 10);
+
+        // emitter0.spee(-800, 800);
+        // emitter0.setEmitAngle(0, 360);
+        // emitter0.setScale(0.5, 0);
+        // emitter0.setBlendMode(Phaser.BlendModes.SCREEN);
+        // emitter0.enabled = false;
+        // emitter0.life = 0.6;
+        // emitter0.gravityY = 800;
+        // emitter1.setSpeed(-800, 800);
+        // emitter1.setEmitAngle(0, 360);
+        // emitter1.setScale(0.3, 0);
+        // emitter1.setBlendMode(Phaser.BlendModes.SCREEN);
+        // emitter1.enabled = false;
+        // emitter1.life = 0.3;
+        // emitter1.gravityY = 800;
+
+
         let lock = this.game.add.sprite(300, 300, 'pico-icons', 39);
         lock.scale.setTo(8)
 
