@@ -47,6 +47,10 @@ abstract class Projectile extends Phaser.Sprite {
 
         // let shootAudio = this.game.add.audio(this.shootSound);
         // shootAudio.play();
+
+        this.checkWorldBounds = true;
+        this.outOfBoundsKill = true;
+        this.events.onOutOfBounds.add(a => a.destroy());
     }
 
     /**
