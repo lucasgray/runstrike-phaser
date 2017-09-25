@@ -189,9 +189,6 @@ abstract class Mission {
                 bullet.kill();
             }
         });
-
-        bulletsThatCollided.forEach(it => it.destroy());
-
     }
 
     playDeathEmitter(x: number, y: number) {
