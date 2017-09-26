@@ -94,6 +94,9 @@ export default class Preload extends Phaser.State {
         this.game.state.add('Debug', new Debug(s));
 
         this.game.state.add('ArtTesting', new ArtTesting(s));
+
+        this.game.time.desiredFps = 40;
+        this.game.forceSingleUpdate = false;
     }
 
     update() {
