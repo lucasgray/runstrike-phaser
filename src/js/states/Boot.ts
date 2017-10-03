@@ -18,8 +18,6 @@ export default class Boot extends Phaser.State {
 
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-
         this.game.state.add('Preload', new Preload());
         this.state.start('Preload');
     }

@@ -13,6 +13,7 @@ export default class Menu extends Phaser.State {
     }
 
     create() {
+        
         if (!this.gameState.backgroundMusic || !this.gameState.hasStartedMusic) {
             this.gameState.backgroundMusic = this.game.add.audio('backgroundMusic');
             this.gameState.backgroundMusic.play();
