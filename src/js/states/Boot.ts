@@ -10,8 +10,8 @@ export default class Boot extends Phaser.State {
 
     preload() {
         this.game.stage.backgroundColor = '#000';
-        this.load.image('loaderBg', require('../../img/loader-bg.png'));
-        this.load.image('loaderBar', require('../../img/loader-bar.png'));
+        this.load.image('loaderBg', require('../../img/ui/loader-bg.png'));
+        this.load.image('loaderBar', require('../../img/ui/loader-bar.png'));
     }
 
     create() {
