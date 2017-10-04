@@ -25,14 +25,27 @@ export class StandardTurret extends Turret {
 
         let shootPoint = this.doLeft? this.leftShootPoint: this.rightShootPoint;
 
-        return new SmallRocket(
-            this.game,
-            shootPoint.world.x,
-            shootPoint.world.y,
-            this.angle,
-            this.tracking,
-            this.mission.gridDescriptor
-        );
+        let bullet = this.mission.projectiles.getFirstDead(true);
+        if (bullet) {
+            bullet.reset(shootPoint.world.x, shootPoint.world.y);
+            bullet.fromX = shootPoint.world.x;
+            bullet.fromY = shootPoint.world.y;
+            bullet.angle = this.angle;
+            bullet.toSprite = this.tracking;
+            bullet.gridDescriptor = this.mission.gridDescriptor;
+            bullet.paint(this.mission.gridDescriptor);
+            return bullet;
+        } else {
+            console.log('created...');
+            return new SmallRocket(
+                this.game,
+                shootPoint.world.x,
+                shootPoint.world.y,
+                this.angle,
+                this.tracking,
+                this.mission.gridDescriptor
+            );
+        }
     };
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {

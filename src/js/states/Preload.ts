@@ -47,41 +47,41 @@ export default class Preload extends Phaser.State {
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
-        this.game.load.image('cocktail_icon', require('../../img/cocktail.png'));
-        this.game.load.image('grenade_icon', require('../../img/grenade.png'));
-        this.game.load.spritesheet('drone', require('../../img/drone-sm.png').toString(), 32, 32, 3);
-        this.game.load.spritesheet('lurker', require('../../img/LurkerA.png').toString(), 16, 16, 5);
-        this.game.load.spritesheet('shield', require('../../img/ShieldF.png').toString(), 16, 16, 4);
-        this.game.load.spritesheet('hack', require('../../img/hack.png').toString(), 128, 128, 3);
-        this.game.load.spritesheet('explosion', require('../../img/explosion.png').toString(), 86, 86);
-        this.game.load.image('bullet', require('../../img/bullet.png'));
-        this.game.load.image('blue-turret', require('../../img/turret.png'));
-        this.game.load.image('yellow-turret', require('../../img/yellow-turret.png'));
-        this.game.load.image('red-turret', require('../../img/red-turret.png'));
-        this.game.load.image('orange-turret', require('../../img/orange-turret.png'));
-        this.game.load.image('green-turret', require('../../img/green-turret.png'));
-        this.game.load.image('retro-background', require('../../img/retro-background.jpg'));
-        this.game.load.image('skirmish-background', require('../../img/skirmish-background.jpg'));
+        this.game.load.image('cocktail_icon', require('../../img/ui/cocktail.png'));
+        this.game.load.image('grenade_icon', require('../../img/deprecated/grenade.png'));
+        this.game.load.spritesheet('drone', require('../../img/enemies/drone-sm.png').toString(), 32, 32, 3);
+        this.game.load.spritesheet('lurker', require('../../img/enemies/LurkerA.png').toString(), 16, 16, 5);
+        this.game.load.spritesheet('shield', require('../../img/enemies/ShieldF.png').toString(), 16, 16, 4);
+        this.game.load.spritesheet('hack', require('../../img/deprecated/hack.png').toString(), 128, 128, 3);
+        this.game.load.spritesheet('explosion', require('../../img/effects/explosion.png').toString(), 86, 86);
+        this.game.load.image('bullet', require('../../img/projectiles/bullet.png'));
+        this.game.load.image('blue-turret', require('../../img/turrets/turret.png'));
+        this.game.load.image('yellow-turret', require('../../img/turrets/yellow-turret.png'));
+        this.game.load.image('red-turret', require('../../img/turrets/red-turret.png'));
+        this.game.load.image('orange-turret', require('../../img/turrets/orange-turret.png'));
+        this.game.load.image('green-turret', require('../../img/turrets/green-turret.png'));
+        this.game.load.image('retro-background', require('../../img/backgrounds/retro-background.jpg'));
+        this.game.load.image('skirmish-background', require('../../img/deprecated/skirmish-background.jpg'));
 
         //new
-        this.game.load.image('wasteland-craters', require('../../img/wasteland-craters.png'));
-        this.game.load.image('building-01', require('../../img/building-01.png'));
-        this.game.load.image('base', require('../../img/base.png'));
-        this.game.load.image('scanlines', require('../../img/scanlines.png'));
-        this.game.load.image('screen-glare', require('../../img/screen-glare.png'));
-        this.game.load.image('border-blend', require('../../img/border-blend.png'));
-        this.game.load.image('grid', require('../../img/grid.png'));
-        this.game.load.image('turret-base', require('../../img/turret-base.png'));
-        this.game.load.image('turret-1', require('../../img/turret-1.png'));
+        this.game.load.image('wasteland-craters', require('../../img/backgrounds/wasteland-craters.jpg'));
+        this.game.load.image('building-01', require('../../img/backgrounds/building-01.png'));
+        this.game.load.image('base', require('../../img/backgrounds/base.png'));
+        this.game.load.image('scanlines', require('../../img/effects/scanlines-multiply.png'));
+        this.game.load.image('screen-glare', require('../../img/effects/screen-glare.jpg'));
+        this.game.load.image('border-blend', require('../../img/effects/border-blend.png'));
+        this.game.load.image('grid', require('../../img/effects/grid.png'));
+        this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
+        this.game.load.image('turret-1', require('../../img/turrets/turret-1.png'));
 
-        this.game.load.image('blue-spark', require('../../img/blue.png'));
-        this.game.load.image('red-spark', require('../../img/red.png'));
+        this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
+        this.game.load.image('red-spark', require('../../img/particles/red.png'));
 
-        this.game.load.spritesheet('green-projectile', require('../../img/green-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('missile-projectile', require('../../img/missile-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('blue-projectile', require('../../img/blue-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('blue-missile-projectile', require('../../img/blue-missile-projectile.png').toString(), 32, 32, 5);
-        this.game.load.spritesheet('pico-icons', require('../../img/pico-icons.png').toString(), 8, 8);
+        this.game.load.spritesheet('green-projectile', require('../../img/projectiles/green-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('missile-projectile', require('../../img/projectiles/missile-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('blue-projectile', require('../../img/projectiles/blue-projectile.png').toString(), 32, 64, 5);
+        this.game.load.spritesheet('blue-missile-projectile', require('../../img/projectiles/blue-missile-projectile.png').toString(), 32, 32, 5);
+        this.game.load.spritesheet('pico-icons', require('../../img/ui/pico-icons.png').toString(), 8, 8);
 
         let s  = this.makeGameData();
 

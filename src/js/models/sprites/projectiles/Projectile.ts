@@ -47,18 +47,20 @@ abstract class Projectile extends Phaser.Sprite {
 
         // let shootAudio = this.game.add.audio(this.shootSound);
         // shootAudio.play();
+
+        this.checkWorldBounds = true;
+        this.outOfBoundsKill = true;
     }
 
     /**
      * Cull if the projectile gets too far away from the base.
      * Note: Bullet + Sprite collisions are currently handled by the Mission
      */
-    update() {
-        if (Phaser.Math.distance(this.x, this.y, this.fromX, this.fromY) > this.range) {
-            this.kill();
-            this.destroy();
-        }
-    }
+    // update() {
+        // if (Phaser.Math.distance(this.x, this.y, this.fromX, this.fromY) > this.range) {
+        //     this.kill();
+        // }
+    // }
 
 }
 
