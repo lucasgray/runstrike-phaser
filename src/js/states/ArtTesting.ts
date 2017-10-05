@@ -1,6 +1,7 @@
 
 
 import {GameState} from "../models/state/GameData";
+import StandardMap from "../effects/StandardMap";
 
 export default class ArtTesting extends Phaser.State {
 
@@ -37,7 +38,7 @@ export default class ArtTesting extends Phaser.State {
         // let s4 = this.game.add.sprite(0,0, 'border-blend');
 
 
-
+        StandardMap.AddMapEffects(this.game);
 
     }
 

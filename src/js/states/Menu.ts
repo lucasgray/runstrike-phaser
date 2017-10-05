@@ -1,6 +1,7 @@
 import Button from "../models/sprites/buttons/Button";
 import * as GameData from "../models/state/GameData";
 import Scanlines from "../effects/Scanlines";
+import StandardMap from "../effects/StandardMap";
 
 export default class Menu extends Phaser.State {
 
@@ -13,7 +14,7 @@ export default class Menu extends Phaser.State {
     }
 
     create() {
-        
+
         if (!this.gameState.backgroundMusic || !this.gameState.hasStartedMusic) {
             this.gameState.backgroundMusic = this.game.add.audio('backgroundMusic');
             this.gameState.backgroundMusic.play();
@@ -67,10 +68,8 @@ export default class Menu extends Phaser.State {
             this.game.world.centerY + 325,
             this.game.width * 0.8,
             60,
-            'art testing',
-            () => {
-
-                this.state.start('ArtTesting');
+            'turn off blue', () => {
+                StandardMap.disallowBlue();
             }
         );
     }
