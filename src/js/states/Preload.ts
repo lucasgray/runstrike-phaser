@@ -67,10 +67,13 @@ export default class Preload extends Phaser.State {
         this.game.load.image('wasteland-craters', require('../../img/backgrounds/wasteland-craters.jpg'));
         this.game.load.image('building-01', require('../../img/backgrounds/building-01.png'));
         this.game.load.image('base', require('../../img/backgrounds/base.png'));
-        this.game.load.image('scanlines', require('../../img/effects/scanlines-multiply.png'));
+        this.game.load.image('scanlines', require('../../img/effects/scanlines.png'));
         this.game.load.image('screen-glare', require('../../img/effects/screen-glare.jpg'));
-        this.game.load.image('border-blend', require('../../img/effects/border-blend.png'));
+        this.game.load.image('border-blend', require('../../img/effects/border-blend.jpg'));
+        this.game.load.image('vignette', require('../../img/effects/vignette.jpg'));
         this.game.load.image('grid', require('../../img/effects/grid.png'));
+        this.game.load.image('lut', require('../../img/effects/lut.png'));
+
         this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
         this.game.load.image('turret-1', require('../../img/turrets/turret-1.png'));
 
