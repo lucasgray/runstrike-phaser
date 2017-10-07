@@ -1,6 +1,7 @@
 import Mission from "../../../missions/Mission";
 import * as _ from 'lodash';
 import PercentBar from "./PercentBar";
+import Projectile from "../projectiles/Projectile";
 
 export abstract class Enemy extends Phaser.Sprite {
 
@@ -75,8 +76,9 @@ export abstract class Enemy extends Phaser.Sprite {
         }));
     }
 
-    shot() {
+    shot(by: Projectile) {
         this.damage(20);
+        by.playShotFx();
     }
 
     massivelyDamage() {

@@ -55,11 +55,11 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('hack', require('../../img/deprecated/hack.png').toString(), 128, 128, 3);
         this.game.load.spritesheet('explosion', require('../../img/effects/explosion.png').toString(), 86, 86);
         this.game.load.image('bullet', require('../../img/projectiles/bullet.png'));
-        this.game.load.image('blue-turret', require('../../img/turrets/turret.png'));
-        this.game.load.image('yellow-turret', require('../../img/turrets/yellow-turret.png'));
-        this.game.load.image('red-turret', require('../../img/turrets/red-turret.png'));
-        this.game.load.image('orange-turret', require('../../img/turrets/orange-turret.png'));
-        this.game.load.image('green-turret', require('../../img/turrets/green-turret.png'));
+        this.game.load.image('blue-turret', require('../../img/turrets/deprecated/turret.png'));
+        this.game.load.image('yellow-turret', require('../../img/turrets/deprecated/yellow-turret.png'));
+        this.game.load.image('red-turret', require('../../img/turrets/deprecated/red-turret.png'));
+        this.game.load.image('orange-turret', require('../../img/turrets/deprecated/orange-turret.png'));
+        this.game.load.image('green-turret', require('../../img/turrets/deprecated/green-turret.png'));
         this.game.load.image('retro-background', require('../../img/backgrounds/retro-background.jpg'));
         this.game.load.image('skirmish-background', require('../../img/deprecated/skirmish-background.jpg'));
 
@@ -75,7 +75,11 @@ export default class Preload extends Phaser.State {
         this.game.load.image('lut', require('../../img/effects/lut.png'));
 
         this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
-        this.game.load.image('turret-1', require('../../img/turrets/turret-1.png'));
+        this.game.load.image('turret-1', require('../../img/turrets/turret-aa.png'));
+
+        this.game.load.image('aa-shot-01', require('../../img/projectiles/aa-shot-01.png'));
+        this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
+        this.game.load.spritesheet('weapon-explosion-sm', require('../../img/effects/weapon-explosion-sm.png').toString(), 65, 65, 4);
 
         this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
         this.game.load.image('red-spark', require('../../img/particles/red.png'));

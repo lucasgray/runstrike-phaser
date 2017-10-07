@@ -8,8 +8,6 @@ import * as _ from 'lodash';
 import Lurker from "../models/sprites/enemies/Lurker";
 import Shield from "../models/sprites/enemies/Shield";
 import {Enemy} from "../models/sprites/enemies/Enemy";
-import Turret from "../models/sprites/turrets/Turret";
-import StandardMap from "../effects/StandardMap";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -182,11 +180,11 @@ abstract class Mission {
         let bulletsThatCollided = Array<Phaser.Sprite>();
 
         //this is NOT an observer!  It fires once in the update loop.
-        this.game.physics.arcade.overlap(this.projectiles, this.enemies, (bullet, sprite) => {
-            if(sprite.alive && sprite.targetable && bulletsThatCollided.indexOf(bullet) == -1){
-                sprite.shot();
-                bulletsThatCollided.push(bullet);
-                bullet.kill();
+        this.game.physics.arcade.overlap(this.projectiles, this.enemies, (projectile: Projectile, sprite) => {
+            if(sprite.alive && sprite.targetable && bulletsThatCollided.indexOf(projectile) == -1){
+                sprite.shot(projectile);
+                bulletsThatCollided.push(projectile);
+                projectile.kill();
             }
         });
     }

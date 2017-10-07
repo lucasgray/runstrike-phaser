@@ -3,7 +3,7 @@ import {GameState} from "../state/GameData";
 import InputHandler from "../../handlers/InputHandler";
 import {StandardSetupTurret} from "../sprites/turrets/setup/SetupTurrets";
 import * as _ from 'lodash';
-import {StandardTurret} from "../sprites/turrets/Turrets";
+import {AutoTurret} from "../sprites/turrets/Turrets";
 
 export default class TurretBuilder {
 
@@ -77,7 +77,7 @@ export default class TurretBuilder {
     buildForPlay(type: string) {
 
         if (type.toLowerCase() == 'standard-turret') {
-            return new StandardTurret(this.mission, this.game, this.row, this.col);
+            return new AutoTurret(this.mission, this.game, this.row, this.col);
         }
         //
         // if (type.toLowerCase() == 'blue-turret') {

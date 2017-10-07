@@ -127,7 +127,7 @@ abstract class Turret extends Phaser.Sprite {
         }
     }
 
-    closestEnemy(): Enemy | null {
+    closestEnemy(): Enemy | undefined {
 
         let spriteDistances = this.mission.enemies
             .all()
@@ -145,10 +145,10 @@ abstract class Turret extends Phaser.Sprite {
             if (s) {
                 return s.sprite;
             }
-            return null;
+            return undefined;
         }
 
-        return null;
+        return undefined;
     }
 
 }

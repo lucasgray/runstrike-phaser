@@ -7,9 +7,9 @@ export default class StandardMap {
 
     static AddMapEffects(game: Phaser.Game) : Phaser.Group {
 
-        // let s1 = game.add.tileSprite(0, 0, game.width, game.height, 'scanlines');
-        // s1.alpha = .25;
-        // s1.blendMode = PIXI.blendModes.MULTIPLY;
+        let s1 = game.add.tileSprite(0, 0, game.width, game.height, 'scanlines');
+        s1.alpha = .25;
+        s1.blendMode = PIXI.blendModes.MULTIPLY;
         let s3 = game.add.sprite(0,0, 'grid');
         let s4 = game.add.sprite(0,0, 'border-blend');
         s4.blendMode = PIXI.blendModes.MULTIPLY;
@@ -22,13 +22,13 @@ export default class StandardMap {
         s5.alpha = .25;
 
         let grouped = new Phaser.Group(game);
-        // grouped.add(s1);
+        grouped.add(s1);
         grouped.add(s3);
         grouped.add(s4);
         grouped.add(s45);
         grouped.add(s5);
 
-        StandardMap.setupShader(game);
+        // StandardMap.setupShader(game);
 
         return grouped;
     }

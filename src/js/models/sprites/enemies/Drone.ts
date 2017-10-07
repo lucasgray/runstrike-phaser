@@ -25,7 +25,7 @@ export default class Drone extends FlyingEnemy {
             this.alive = false;
 
             let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
-            explosion.anchor.setTo(0.2, 0.2);
+            explosion.anchor.setTo(0.5);
             explosion.scale.setTo(0.2, 0.2);
             let explosionAnimation = explosion.animations.add('fly');
             explosion.animations.play('fly', 30, false);
