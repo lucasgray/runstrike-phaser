@@ -85,6 +85,9 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
         this.game.load.spritesheet('weapon-explosion-sm', require('../../img/effects/weapon-explosion-sm.png').toString(), 65, 65, 4);
 
+        this.game.load.image('explosion-flare', require('../../img/effects/explosion-flare-01.png'));
+        this.game.load.image('explosion-shockwave', require('../../img/effects/explosion-shockwave-01.png'));
+
         this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
         this.game.load.image('red-spark', require('../../img/particles/red.png'));
 

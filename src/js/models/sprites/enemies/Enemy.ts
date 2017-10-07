@@ -19,6 +19,8 @@ export abstract class Enemy extends Phaser.Sprite {
     healthBar: PercentBar;
     explodeSound: () => Phaser.Sound;
 
+    deathSequences: DeathSequences;
+
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, 0, 0, texture);
 
@@ -28,6 +30,8 @@ export abstract class Enemy extends Phaser.Sprite {
 
         this.randomVelocity =  speed + (Math.random() * 30);
         this.targetable = true;
+
+        this.deathSequences = new DeathSequences(this);
 
         this.explodeSound = () => {
 
@@ -182,4 +186,39 @@ export abstract class FlyingEnemy extends Enemy {
         this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
     }
 
+}
+
+class DeathSequences {
+
+    enemy: Enemy;
+    game: Phaser.Game;
+
+    constructor(enemy: Enemy) {
+        this.enemy = enemy;
+        this.game = enemy.game;
+    }
+
+    basicDeathSequence() : void {
+
+        let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
+        // let flare = this.game.add.sprite(enemy.x, enemy.y, 'explosion-flare');
+
+        shockwave.anchor.setTo(.5);
+        // flare.anchor.setTo(.5);
+
+        shockwave.scale.setTo(0);
+        // flare.scale.setTo(0);
+
+
+        let fallTween = this.game.add.tween(shockwave.scale).to({x: 1, y: 1}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let rotateTween = this.game.add.tween(shockwave.angle).to(360, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween = this.game.add.tween(shockwave.alpha).to(0, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+
+        alphaTween.onComplete.add(() => shockwave.destroy());
+
+        // this.game.add.tween(shockwave).to({angle: 360}, 2400, Phaser.Easing.Linear.None,
+        //     true, 0);
+        // this.game.add.tween(shockwave).to({alpha: 0}, 2400, Phaser.Easing.Linear.None,
+        //     true, 0);
+    }
 }
