@@ -1,15 +1,13 @@
 import Mission from "../../../missions/Mission";
 import Turret from "./Turret";
 import Projectile from "../projectiles/Projectile";
-import BlueBlob from "../projectiles/BlueBlob";
-import SmallRocket from "../projectiles/SmallRocket";
-import GreenBlob from "../projectiles/GreenBlob";
+import { AutoShot } from "../projectiles/Projectiles";
 import SpriteExtensions from "../../../extensions/SpriteExtensions";
 
-export class StandardTurret extends Turret {
+export class AutoTurret extends Turret {
 
-    range: number = 300;
-    fireRate: number = 200;
+    range: number = 400;
+    fireRate: number = 150;
 
     leftShootPoint: Phaser.Sprite;
     rightShootPoint: Phaser.Sprite;
@@ -19,11 +17,17 @@ export class StandardTurret extends Turret {
     static OFFSET_X = 9;
     static OFFSET_Y = -15;
 
+    static SHOOT_POINT_LEFT_X = 9;
+    static SHOOT_POINT_RIGHT_X = -2;
+    static SHOOT_POINT_Y = 48;
+
     shoot: () => Projectile = () => {
 
         this.doLeft = !this.doLeft;
 
         let shootPoint = this.doLeft? this.leftShootPoint: this.rightShootPoint;
+
+        this.makeMuzzleFlash(shootPoint);
 
         let bullet = this.mission.projectiles.getFirstDead(true);
         if (bullet) {
@@ -36,20 +40,20 @@ export class StandardTurret extends Turret {
             bullet.paint(this.mission.gridDescriptor);
             return bullet;
         } else {
-            console.log('created...');
-            return new SmallRocket(
+            return new AutoShot(
                 this.game,
                 shootPoint.world.x,
                 shootPoint.world.y,
                 this.angle,
                 this.tracking,
-                this.mission.gridDescriptor
+                this.mission.gridDescriptor,
+                this.mission.projectileExplosions
             );
         }
     };
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-        super(mission, game, row, col, 'turret-1', StandardTurret.OFFSET_X, StandardTurret.OFFSET_Y);
+        super(mission, game, row, col, 'turret-1', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
 
         this.init();
     }
@@ -62,16 +66,16 @@ export class StandardTurret extends Turret {
             leftShootPoint,
             this.turret,
             Phaser.TOP_LEFT,
-            StandardTurret.OFFSET_X - 8,
-            StandardTurret.OFFSET_Y + 45);
+            AutoTurret.OFFSET_X - AutoTurret.SHOOT_POINT_LEFT_X,
+            AutoTurret.OFFSET_Y + AutoTurret.SHOOT_POINT_Y);
         let rightShootPoint = new Phaser.Sprite(this.game, 0, 0);
         rightShootPoint.anchor.setTo(.5);
         SpriteExtensions.alignInParent(
             rightShootPoint,
             this.turret,
             Phaser.TOP_RIGHT,
-            StandardTurret.OFFSET_X - 6,
-            StandardTurret.OFFSET_Y + 45);
+            AutoTurret.OFFSET_X + AutoTurret.SHOOT_POINT_RIGHT_X,
+            AutoTurret.OFFSET_Y + AutoTurret.SHOOT_POINT_Y);
 
         this.game.add.existing(leftShootPoint);
         this.game.add.existing(rightShootPoint);
@@ -85,64 +89,28 @@ export class StandardTurret extends Turret {
         this.doLeft = true;
     }
 
+    private makeMuzzleFlash(shootPoint: Phaser.Sprite) {
+
+        let muzzleFlash : Phaser.Sprite = this.mission.muzzleFlashes.getFirstDead(false);
+
+        if (muzzleFlash) {
+            muzzleFlash.reset(shootPoint.world.x, shootPoint.world.y);
+            muzzleFlash.resetFrame();
+        } else {
+            muzzleFlash = new Phaser.Sprite(this.game, shootPoint.world.x, shootPoint.world.y, 'weapon-muzzleflash');
+            this.game.add.existing(muzzleFlash);
+            muzzleFlash.animations.add('a');
+        }
+
+        muzzleFlash.anchor.setTo(.5);
+        muzzleFlash.angle = this.angle;
+        let anim = muzzleFlash.animations.play('a', 40, false);
+        anim.onComplete.add(() => muzzleFlash.kill());
+        this.mission.muzzleFlashes.add(muzzleFlash);
+    }
+
 }
 
-// export class BlueTurret extends Turret {
-//
-//     range: number = 300;
-//     fireRate: number = 900;
-//     shoot: () => Projectile = () => new BlueBlob(this.game, this, this.tracking, this.mission.gridDescriptor);
-//
-//     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-//         super(mission, game, row, col, 'blue-turret');
-//     }
-//
-// }
-//
-// export class RedTurret extends Turret {
-//
-//     range: number = 300;
-//     fireRate: number = 500;
-//     shoot: () => Projectile = () => new SmallRocket(this.game, this, this.tracking, this.mission.gridDescriptor);
-//
-//     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-//         super(mission, game, row, col, 'red-turret');
-//     }
-//
-// }
-//
-// export class YellowTurret extends Turret {
-//
-//     range: number = 300;
-//     fireRate: number = 500;
-//     shoot: () => Projectile = () => new SmallRocket(this.game, this, this.tracking, this.mission.gridDescriptor);
-//
-//     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-//         super(mission, game, row, col, 'yellow-turret');
-//     }
-//
-// }
-//
-// export class OrangeTurret extends Turret {
-//
-//     range: number = 300;
-//     fireRate: number = 500;
-//     shoot: () => Projectile = () => new SmallRocket(this.game, this, this.tracking, this.mission.gridDescriptor);
-//
-//     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-//         super(mission, game, row, col, 'orange-turret');
-//     }
-//
-// }
-//
-// export class GreenTurret extends Turret {
-//
-//     range: number = 300;
-//     fireRate: number = 900;
-//     shoot: () => Projectile = () => new GreenBlob(this.game, this, this.tracking, this.mission.gridDescriptor);
-//
-//     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-//         super(mission, game, row, col, 'green-turret');
-//     }
+// export default class HeavyTurret extends Turret {
 //
 // }

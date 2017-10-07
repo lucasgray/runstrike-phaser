@@ -5,7 +5,7 @@ import {GameState} from "../../../state/GameData";
 import InputHandler from "../../../../handlers/InputHandler";
 import Mission from "../../../../missions/Mission";
 import Projectile from "../../projectiles/Projectile";
-import BlueBlob from "../../projectiles/BlueBlob";
+import { AutoShot } from "../../projectiles/Projectiles";
 
 abstract class SetupTurret extends Turret {
 
@@ -15,7 +15,7 @@ abstract class SetupTurret extends Turret {
     //todo dont really need these
     range: number = 0;
     fireRate: number = 0;
-    shoot: () => Projectile = () => new BlueBlob(this.game, this, this.tracking, this.mission.gridDescriptor);
+    shoot: () => Projectile = () => new AutoShot(this.game, 0, 0, 0, this.tracking, this.mission.gridDescriptor, this.mission.projectileExplosions);
 
     constructor(mission: Mission, game: Phaser.Game,
                 gameState: GameState,

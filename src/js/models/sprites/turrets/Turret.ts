@@ -46,7 +46,6 @@ abstract class Turret extends Phaser.Sprite {
         let base = new Phaser.Sprite(game, this.x, this.y, 'turret-base');
         base.anchor.setTo(0.5);
         base.scale.setTo(scaleX, scaleY);
-        base.tint = 0xfffff;
         this.game.add.existing(base);
         this.base = base;
 
@@ -54,7 +53,6 @@ abstract class Turret extends Phaser.Sprite {
         this.game.physics.enable(turret, Phaser.Physics.ARCADE);
         turret.anchor.setTo(0.5);
         turret.scale.setTo(scaleX, scaleY);
-        turret.tint = 0xfffff;
         this.game.add.existing(turret);
         this.turret = turret;
         this.addChild(turret);
@@ -129,7 +127,7 @@ abstract class Turret extends Phaser.Sprite {
         }
     }
 
-    closestEnemy(): Enemy | null {
+    closestEnemy(): Enemy | undefined {
 
         let spriteDistances = this.mission.enemies
             .all()
@@ -147,10 +145,10 @@ abstract class Turret extends Phaser.Sprite {
             if (s) {
                 return s.sprite;
             }
-            return null;
+            return undefined;
         }
 
-        return null;
+        return undefined;
     }
 
 }

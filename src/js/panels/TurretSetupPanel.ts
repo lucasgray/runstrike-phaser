@@ -62,8 +62,10 @@ export default class TurretSetupPanel {
             }
         );
         parentSprite.addChild(readyButton.baseSprite);
-
         SpriteExtensions.alignInParent(readyButton.baseSprite, parentSprite, Phaser.BOTTOM_CENTER, 0, -10);
+
+
+
     }
 
     destroy() {

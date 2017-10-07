@@ -7,6 +7,8 @@ abstract class Projectile extends Phaser.Sprite {
     fromY: number;
     angle: number;
     toSprite: Phaser.Sprite;
+    scaleFactor: number = 1;
+    projectileExplosionGroup: Phaser.Group;
 
     abstract range: number;
     abstract speed: number;
@@ -14,7 +16,7 @@ abstract class Projectile extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract shootSound: string;
 
-    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, texture: string) {
+    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, texture: string, projectileExplosionGroup: Phaser.Group) {
 
         super(game, fromX, fromY, texture);
 
@@ -22,13 +24,14 @@ abstract class Projectile extends Phaser.Sprite {
         this.fromY = fromY;
         this.angle = angle;
         this.toSprite = toSprite;
+        this.projectileExplosionGroup = projectileExplosionGroup;
     }
 
     paint(gridDescriptor: GridDescriptor) {
 
         let defaultSize = {width: this.defaultWidth, height: this.defaultHeight};
-        let scaleX = gridDescriptor.cellWidth / defaultSize.width;
-        let scaleY = gridDescriptor.cellHeight / defaultSize.height;
+        let scaleX = (gridDescriptor.cellWidth / defaultSize.width) * this.scaleFactor;
+        let scaleY = (gridDescriptor.cellHeight / defaultSize.height) * this.scaleFactor;
         this.scale.setTo(scaleX, scaleY);
 
         this.animations.add('bullet');
@@ -62,6 +65,7 @@ abstract class Projectile extends Phaser.Sprite {
         // }
     // }
 
+    abstract playShotFx(): void
 }
 
 export default Projectile;
