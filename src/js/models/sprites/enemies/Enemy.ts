@@ -211,8 +211,8 @@ class DeathSequences {
 
 
         let fallTween = this.game.add.tween(shockwave.scale).to({x: 1, y: 1}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let rotateTween = this.game.add.tween(shockwave.angle).to(360, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let alphaTween = this.game.add.tween(shockwave.alpha).to(0, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let rotateTween = this.game.add.tween(shockwave).to({angle: 359}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
 
         alphaTween.onComplete.add(() => shockwave.destroy());
 
