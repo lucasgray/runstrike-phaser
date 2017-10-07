@@ -20,7 +20,7 @@ abstract class Turret extends Phaser.Sprite {
     abstract fireRate: number;
     abstract shoot: () => Projectile;
 
-    base: Phaser.Sprite;
+    base: Phaser.Group;
     turret: Phaser.Sprite;
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string, offsetX: number, offsetY: number) {
@@ -43,25 +43,32 @@ abstract class Turret extends Phaser.Sprite {
 
         this.lastShot = 0;
 
+        let baseShadow = new Phaser.Sprite(game, this.x - 4, this.y + 2, 'turret-base');
+        baseShadow.anchor.set(0.5);
+        baseShadow.tint = 0x191919;
+        baseShadow.alpha = 0.6;
+        baseShadow.blendMode = PIXI.blendModes.LUMINOSITY;
+        baseShadow.scale.setTo(scaleX, scaleY);
+
         let base = new Phaser.Sprite(game, this.x, this.y, 'turret-base');
         base.anchor.setTo(0.5);
         base.scale.setTo(scaleX, scaleY);
-        this.game.add.existing(base);
-        this.base = base;
 
         let turret = new Phaser.Sprite(game, offsetX, offsetY, texture);
         this.game.physics.enable(turret, Phaser.Physics.ARCADE);
         turret.anchor.setTo(0.5);
         turret.scale.setTo(scaleX, scaleY);
-        this.game.add.existing(turret);
         this.turret = turret;
-        this.addChild(turret);
 
         let turretShadow = new Phaser.Sprite(game, offsetX - 4, offsetY + 2, texture);
         turretShadow.anchor.set(0.5);
         turretShadow.tint = 0x191919;
         turretShadow.alpha = 0.6;
         turretShadow.blendMode = PIXI.blendModes.LUMINOSITY;
+
+        this.base = new Phaser.Group(this.game);
+        this.base.add(baseShadow);
+        this.base.add(base);
 
         this.addChild(turretShadow);
         this.addChild(turret);

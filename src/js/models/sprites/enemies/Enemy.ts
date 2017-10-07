@@ -205,19 +205,26 @@ class DeathSequences {
         this.game.camera.shake(0.002, 300);
 
         let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
-        // let flare = this.game.add.sprite(enemy.x, enemy.y, 'explosion-flare');
+        let flare = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-flare');
 
         shockwave.anchor.setTo(.5);
-        // flare.anchor.setTo(.5);
+        flare.anchor.setTo(.5);
 
         shockwave.scale.setTo(0);
-        // flare.scale.setTo(0);
+        flare.scale.setTo(0);
+        flare.alpha = .5;
 
-        let fallTween = this.game.add.tween(shockwave.scale).to({x: 1, y: 1}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let rotateTween = this.game.add.tween(shockwave).to({angle: 359}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let fallTween = this.game.add.tween(shockwave.scale).to({x: 1.5, y: 1.5}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let rotateTween = this.game.add.tween(shockwave).to({angle: 1000}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
+
+        let fallTween2 = this.game.add.tween(flare.scale).to({x: 1.5, y: 1.5}, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
+        fallTween2.onComplete.add(() => this.game.add.tween(flare.scale).to({x: 0, y: 0}, 300, Phaser.Easing.Linear.None, true, 0, 0, false));
+        let rotateTween2 = this.game.add.tween(flare).to({angle: -500}, 600, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween2 = this.game.add.tween(flare).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true, 300, 0, false);
 
         alphaTween.onComplete.add(() => shockwave.destroy());
+        alphaTween2.onComplete.add(() => flare.destroy());
 
         // this.game.add.tween(shockwave).to({angle: 360}, 2400, Phaser.Easing.Linear.None,
         //     true, 0);
