@@ -28,6 +28,8 @@ abstract class Mission {
     turrets: Phaser.Group;
     enemies: SmartGroup<Enemy>;
     projectiles: SmartGroup<Projectile>;
+    muzzleFlashes: Phaser.Group;
+    projectileExplosions: Phaser.Group;
 
     deathEmitter1: Phaser.Particles.Arcade.Emitter;
     deathEmitter2: Phaser.Particles.Arcade.Emitter;
@@ -96,6 +98,10 @@ abstract class Mission {
         this.game.add.existing(this.enemies);
         this.projectiles = new SmartGroup<Projectile>(this.game);
         this.game.add.existing(this.projectiles);
+        this.muzzleFlashes = new Phaser.Group(this.game);
+        this.game.add.existing(this.muzzleFlashes);
+        this.projectileExplosions = new Phaser.Group(this.game);
+        this.game.add.existing(this.projectileExplosions);
 
         this.curEnemy = 0;
         this.allDeployed = false;

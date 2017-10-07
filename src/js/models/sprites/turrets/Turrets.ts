@@ -1,7 +1,7 @@
 import Mission from "../../../missions/Mission";
 import Turret from "./Turret";
 import Projectile from "../projectiles/Projectile";
-import {AutoShot, SmallRocket} from "../projectiles/Projectiles";
+import { AutoShot } from "../projectiles/Projectiles";
 import SpriteExtensions from "../../../extensions/SpriteExtensions";
 
 export class AutoTurret extends Turret {
@@ -46,7 +46,8 @@ export class AutoTurret extends Turret {
                 shootPoint.world.y,
                 this.angle,
                 this.tracking,
-                this.mission.gridDescriptor
+                this.mission.gridDescriptor,
+                this.mission.projectileExplosions
             );
         }
     };
@@ -89,13 +90,23 @@ export class AutoTurret extends Turret {
     }
 
     private makeMuzzleFlash(shootPoint: Phaser.Sprite) {
-        let muzzleFlash = new Phaser.Sprite(this.game, shootPoint.world.x, shootPoint.world.y, 'weapon-muzzleflash');
+
+        let muzzleFlash : Phaser.Sprite = this.mission.muzzleFlashes.getFirstDead(false);
+
+        if (muzzleFlash) {
+            muzzleFlash.reset(shootPoint.world.x, shootPoint.world.y);
+            muzzleFlash.resetFrame();
+        } else {
+            muzzleFlash = new Phaser.Sprite(this.game, shootPoint.world.x, shootPoint.world.y, 'weapon-muzzleflash');
+            this.game.add.existing(muzzleFlash);
+            muzzleFlash.animations.add('a');
+        }
+
         muzzleFlash.anchor.setTo(.5);
         muzzleFlash.angle = this.angle;
-        this.game.add.existing(muzzleFlash);
-        let anim = muzzleFlash.animations.add('a');
-        muzzleFlash.animations.play('a', 40, false);
-        anim.onComplete.add(() => muzzleFlash.destroy());
+        let anim = muzzleFlash.animations.play('a', 40, false);
+        anim.onComplete.add(() => muzzleFlash.kill());
+        this.mission.muzzleFlashes.add(muzzleFlash);
     }
 
 }

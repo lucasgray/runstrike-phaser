@@ -8,6 +8,7 @@ abstract class Projectile extends Phaser.Sprite {
     angle: number;
     toSprite: Phaser.Sprite;
     scaleFactor: number = 1;
+    projectileExplosionGroup: Phaser.Group;
 
     abstract range: number;
     abstract speed: number;
@@ -15,7 +16,7 @@ abstract class Projectile extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract shootSound: string;
 
-    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, texture: string) {
+    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, texture: string, projectileExplosionGroup: Phaser.Group) {
 
         super(game, fromX, fromY, texture);
 
@@ -23,6 +24,7 @@ abstract class Projectile extends Phaser.Sprite {
         this.fromY = fromY;
         this.angle = angle;
         this.toSprite = toSprite;
+        this.projectileExplosionGroup = projectileExplosionGroup;
     }
 
     paint(gridDescriptor: GridDescriptor) {
