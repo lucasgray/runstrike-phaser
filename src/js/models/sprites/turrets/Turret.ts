@@ -61,6 +61,7 @@ abstract class Turret extends Phaser.Sprite {
         turretShadow.anchor.set(0.5);
         turretShadow.tint = 0x191919;
         turretShadow.alpha = 0.6;
+        turretShadow.blendMode = PIXI.blendModes.LUMINOSITY;
 
         this.addChild(turretShadow);
         this.addChild(turret);

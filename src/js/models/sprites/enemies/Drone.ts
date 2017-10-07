@@ -24,11 +24,12 @@ export default class Drone extends FlyingEnemy {
         fallTween.onComplete.add(() => {
             this.alive = false;
 
-            let explosion = this.game.add.sprite(this.x, this.y, 'explosion');
+            let explosion = new Phaser.Sprite(this.game, this.x, this.y, 'explosion');
+            this.mission.doodads.add(explosion);
             explosion.anchor.setTo(0.5);
             explosion.scale.setTo(0.2, 0.2);
-            let explosionAnimation = explosion.animations.add('fly');
-            explosion.animations.play('fly', 30, false);
+            let explosionAnimation = explosion.animations.add('a');
+            explosion.animations.play('a', 30, false);
             explosionAnimation.onComplete.add(() => {
                 explosion.destroy();
                 this.destroy();

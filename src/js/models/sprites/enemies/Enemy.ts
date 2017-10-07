@@ -202,7 +202,7 @@ class DeathSequences {
 
     basicDeathSequence() : void {
 
-        this.game.camera.shake(0.002, 200);
+        this.game.camera.shake(0.002, 300);
 
         let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
         // let flare = this.game.add.sprite(enemy.x, enemy.y, 'explosion-flare');
@@ -212,7 +212,6 @@ class DeathSequences {
 
         shockwave.scale.setTo(0);
         // flare.scale.setTo(0);
-
 
         let fallTween = this.game.add.tween(shockwave.scale).to({x: 1, y: 1}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
         let rotateTween = this.game.add.tween(shockwave).to({angle: 359}, 1500, Phaser.Easing.Linear.None, true, 0, 0, false);
@@ -231,6 +230,6 @@ class DeathSequences {
         spr.anchor.setTo(.5);
         spr.angle = rot;
         this.game.add.existing(spr);
-        this.mission.debris.add(spr);
+        this.mission.doodads.add(spr);
     }
 }

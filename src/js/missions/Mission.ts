@@ -30,7 +30,7 @@ abstract class Mission {
     projectiles: SmartGroup<Projectile>;
     muzzleFlashes: Phaser.Group;
     projectileExplosions: Phaser.Group;
-    debris: Phaser.Group;
+    doodads: Phaser.Group;
 
     curEnemy: number = 0;
     allDeployed: boolean;
@@ -95,12 +95,12 @@ abstract class Mission {
         if (this.projectileExplosions) {
             this.projectileExplosions.destroy(true);
         }
-        if (this.debris) {
-            this.debris.destroy(true);
+        if (this.doodads) {
+            this.doodads.destroy(true);
         }
 
-        this.debris = new Phaser.Group(this.game);
-        this.game.add.existing(this.debris);
+        this.doodads = new Phaser.Group(this.game);
+        this.game.add.existing(this.doodads);
         this.turrets = new Phaser.Group(this.game);
         this.game.add.existing(this.turrets);
         this.enemies = new SmartGroup<Drone>(this.game);
