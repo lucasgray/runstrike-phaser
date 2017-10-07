@@ -19,7 +19,7 @@ export default class Shield extends PathfindingEnemy {
     kill() {
         super.kill();
 
-        this.mission.playDeathEmitter(this.x, this.y);
+        this.deathSequences.basicDeathSequence();
 
         this.destroy();
 

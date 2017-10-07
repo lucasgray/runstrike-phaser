@@ -5,9 +5,8 @@ import * as _ from 'lodash';
 
 export default class CocktailHandler extends InputHandler {
 
-    icon: string = 'cocktail_icon';
+    icon: string = 'auto-turret-ui';
     lootType: string = 'cocktail';
-    spriteScaling: number = .25;
     lootPrettyName: 'cocktail';
 
     constructor(mission: Mission,

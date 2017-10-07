@@ -1,12 +1,9 @@
 import Button from "../models/sprites/buttons/Button";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import InputHandler from "../handlers/InputHandler";
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
-import StandardTurretHandler from "../handlers/TurretHandlers";
 import TurretSetupPanel from "../panels/TurretSetupPanel";
-import SmartGroup from "../extensions/SmartGroup";
 
 export default class Setup extends Phaser.State {
 

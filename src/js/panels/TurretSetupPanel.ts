@@ -1,13 +1,9 @@
-
-import GridDescriptor from "../models/state/GridDescriptor";
 import SetupTurretInputHandler from "../handlers/SetupTurretInputHandler";
-import StandardTurretHandler from "../handlers/TurretHandlers";
-import InputHandler from "../handlers/InputHandler";
+import { StandardTurretHandler, HeavyTurretHandler} from "../handlers/TurretHandlers";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import Button from "../models/sprites/buttons/Button";
 import SpriteExtensions from "../extensions/SpriteExtensions";
-import StandardMap from "../effects/StandardMap";
 
 export default class TurretSetupPanel {
 
@@ -48,6 +44,7 @@ export default class TurretSetupPanel {
         let startX = this.topLeft.x + mission.gridDescriptor.cellWidth;
         let startY = this.topLeft.y + mission.gridDescriptor.cellHeight;
         allTurretHandlers.push(new StandardTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY));
+        allTurretHandlers.push(new HeavyTurretHandler(mission, gameState, allTurretHandlers, backgroundSprite, this.game, startX, startY + 85));
         this.handlers = allTurretHandlers;
 
         let readyButton = new Button(
@@ -63,9 +60,6 @@ export default class TurretSetupPanel {
         );
         parentSprite.addChild(readyButton.baseSprite);
         SpriteExtensions.alignInParent(readyButton.baseSprite, parentSprite, Phaser.BOTTOM_CENTER, 0, -10);
-
-
-
     }
 
     destroy() {

@@ -30,9 +30,7 @@ abstract class Mission {
     projectiles: SmartGroup<Projectile>;
     muzzleFlashes: Phaser.Group;
     projectileExplosions: Phaser.Group;
-
-    deathEmitter1: Phaser.Particles.Arcade.Emitter;
-    deathEmitter2: Phaser.Particles.Arcade.Emitter;
+    debris: Phaser.Group;
 
     curEnemy: number = 0;
     allDeployed: boolean;
@@ -91,7 +89,18 @@ abstract class Mission {
         if (this.projectiles) {
             this.projectiles.destroy(true);
         }
+        if (this.muzzleFlashes) {
+            this.muzzleFlashes.destroy(true);
+        }
+        if (this.projectileExplosions) {
+            this.projectileExplosions.destroy(true);
+        }
+        if (this.debris) {
+            this.debris.destroy(true);
+        }
 
+        this.debris = new Phaser.Group(this.game);
+        this.game.add.existing(this.debris);
         this.turrets = new Phaser.Group(this.game);
         this.game.add.existing(this.turrets);
         this.enemies = new SmartGroup<Drone>(this.game);
@@ -108,9 +117,6 @@ abstract class Mission {
         this.lastDeployment = Date.now();
 
         this.pendingFinalize = false;
-
-        this.deathEmitter1 = this.game.add.emitter(0, 0, 100);
-        this.deathEmitter2 = this.game.add.emitter(0, 0, 100);
     }
 
     update() {
@@ -193,34 +199,6 @@ abstract class Mission {
                 projectile.kill();
             }
         });
-    }
-
-    playDeathEmitter(x: number, y: number) {
-
-        this.deathEmitter1.x = x;
-        this.deathEmitter1.y = y;
-        this.deathEmitter2.x = x;
-        this.deathEmitter2.y = y;
-
-        this.deathEmitter1.makeParticles('blue-spark');
-        this.deathEmitter1.gravity.setTo(0,0);
-        this.deathEmitter1.maxParticleSpeed.x = 700;
-        this.deathEmitter1.minParticleSpeed.x = -700;
-        this.deathEmitter1.maxParticleSpeed.y = 700;
-        this.deathEmitter1.minParticleSpeed.y = -700;
-        this.deathEmitter1.setScale(.5, .05, .5, .05, 500, Phaser.Easing.Cubic.Out);
-        this.deathEmitter1.start(true, 500, undefined, 10);
-
-        this.deathEmitter2.makeParticles('red-spark');
-        this.deathEmitter2.gravity.setTo(0,0);
-        this.deathEmitter2.maxParticleSpeed.x = 700;
-        this.deathEmitter2.minParticleSpeed.x = -700;
-        this.deathEmitter2.maxParticleSpeed.y = 700;
-        this.deathEmitter2.minParticleSpeed.y = -700;
-        this.deathEmitter2.setScale(.5, .05, .5, .05, 500, Phaser.Easing.Cubic.Out);
-        this.deathEmitter2.start(true, 500, undefined, 10);
-
-        this.game.camera.shake(0.002, 200);
     }
 
     shutdown() {

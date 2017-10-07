@@ -6,6 +6,8 @@
  */
 export default class SmartGroup<T extends Phaser.Sprite> extends Phaser.Group {
 
+    //TODO augment to allow smart sprite pooling
+
     private tees: Array<T>;
 
     constructor(game: Phaser.Game) {
