@@ -18,13 +18,29 @@ export class AutoShot extends Projectile {
 
     playShotFx(): void {
 
+        //arcade collision is good enough for us, p2 is more resource intensive
+        //lets just make it look more like the collision happened closer to the body
+
+        let goalX = this.toSprite.x;
+        let goalY = this.toSprite.y;
+
+        let diceRollX = Phaser.Math.random(.5, .7);
+        let diceRollY = Phaser.Math.random(.5, .7);
+
+        let curX = this.x;
+        let curY = this.y;
+
+        //amt needed to get exactly there, plus/minus some randomness
+        let diffX = (goalX - curX) * diceRollX;
+        let diffY = (goalY - curY) * diceRollY;
+
         let fx : Phaser.Sprite = this.projectileExplosionGroup.getFirstDead(false);
 
         if (fx) {
-            fx.reset(this.x, this.y);
+            fx.reset(this.x + diffX, this.y + diffY);
             fx.resetFrame();
         } else {
-            fx = new Phaser.Sprite(this.game, this.x, this.y, 'weapon-explosion-sm');
+            fx = new Phaser.Sprite(this.game, this.x + diffX, this.y + diffY, 'weapon-explosion-sm');
             this.game.add.existing(fx);
             fx.animations.add('a');
         }
