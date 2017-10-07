@@ -14,7 +14,7 @@ export default abstract class InputHandler {
     parentSprite: Phaser.Sprite;
     backgroundSprite: Phaser.Sprite;
 
-    accentColor: string = "#03C1BF";
+    accentColor: string = "#2cfefd";
 
     /**
      * Icon to display inside circle
@@ -24,14 +24,6 @@ export default abstract class InputHandler {
      * Key to look for when updating what is left of the type of loot we have
      */
     abstract lootType: string;
-    /**
-     * Pretty name to display on top
-     */
-    abstract lootPrettyName: string;
-    /**
-     * Optional sprite scaling property
-     */
-    abstract spriteScaling: number;
 
     x: number;
     y: number;
@@ -55,41 +47,19 @@ export default abstract class InputHandler {
     }
 
     paint() {
-
-        let graphics = this.game.add.graphics(this.x, this.y);
-        graphics.beginFill(0x000000, .6);
-        graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
-        graphics.drawRect(0, 0, this.mission.gridDescriptor.cellWidth, this.mission.gridDescriptor.cellWidth);
-
-        let parentSprite = this.game.add.sprite(this.x, this.y, graphics.generateTexture());
+        let parentSprite = this.game.add.sprite(this.x, this.y, this.icon);
         parentSprite.anchor.set(.5);
-        graphics.destroy();
-
-        let prettyText = this.game.add.text(0, 0, this.lootPrettyName, {
-            font: '12px Joystix',
-            fill: this.accentColor,
-            align: "center"
-        });
-
-        parentSprite.addChild(prettyText);
-        SpriteExtensions.alignInParent(prettyText, parentSprite, Phaser.TOP_LEFT, 0, 14);
-
-        let icon = this.game.add.sprite(0, 0, this.icon);
-        icon.anchor.set(0.5);
-        icon.scale.set(this.spriteScaling);
-
-        parentSprite.addChild(icon);
 
         let text = this.game.add.text(0, 0, this.num(), {
-            font: '12px Joystix',
+            font: '10px Joystix',
             fill: this.accentColor,
-            align: "center"
+            align: "right"
         });
 
-        text.anchor.setTo(.5);
+        text.anchor.setTo(1,0);
         parentSprite.addChild(text);
 
-        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, -7, -2);
+        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, 0, 6);
 
         parentSprite.inputEnabled = true;
         parentSprite.events.onInputDown.add(this.inputListener, this);

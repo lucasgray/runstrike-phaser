@@ -20,11 +20,12 @@ export class AutoShot extends Projectile {
 
         //arcade collision is good enough for us, p2 is more resource intensive
         //lets just make it look more like the collision happened closer to the body
+        //TODO probs should abstract this concept if i like it
 
         let goalX = this.toSprite.x;
         let goalY = this.toSprite.y;
 
-        let diceRollX = Phaser.Math.random(.5, .7);
+        let diceRollX = Phaser.Math.random(.3, .8);
         let diceRollY = Phaser.Math.random(.5, .7);
 
         let curX = this.x;

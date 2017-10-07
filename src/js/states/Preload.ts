@@ -76,6 +76,10 @@ export default class Preload extends Phaser.State {
 
         this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
         this.game.load.image('turret-1', require('../../img/turrets/turret-aa.png'));
+        this.game.load.image('turret-heavy', require('../../img/turrets/turret-heavy.png'));
+
+        this.game.load.image('auto-turret-ui', require('../../img/ui/auto-turret-ui.png'));
+        this.game.load.image('heavy-turret-ui', require('../../img/ui/heavy-turret-ui.png'));
 
         this.game.load.image('aa-shot-01', require('../../img/projectiles/aa-shot-01.png'));
         this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
