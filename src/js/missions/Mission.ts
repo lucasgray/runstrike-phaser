@@ -219,6 +219,8 @@ abstract class Mission {
         this.deathEmitter2.minParticleSpeed.y = -700;
         this.deathEmitter2.setScale(.5, .05, .5, .05, 500, Phaser.Easing.Cubic.Out);
         this.deathEmitter2.start(true, 500, undefined, 10);
+
+        this.game.camera.shake(0.002, 200);
     }
 
     shutdown() {
