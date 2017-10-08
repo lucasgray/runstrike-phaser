@@ -77,7 +77,7 @@ export abstract class Enemy extends Phaser.Sprite {
     }
 
     shot(by: Projectile) {
-        this.damage(20);
+        this.damage(10);
         by.playShotFx();
     }
 
