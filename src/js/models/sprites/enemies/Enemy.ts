@@ -11,6 +11,7 @@ export abstract class Enemy extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract animationFrameRate: number;
     abstract rotatingSprite: boolean;
+    scaleFactor = 1;
 
     randomVelocity: number;
 
@@ -28,7 +29,7 @@ export abstract class Enemy extends Phaser.Sprite {
 
         this.mission = mission;
 
-        this.randomVelocity =  speed + (Math.random() * 30);
+        this.randomVelocity =  speed + (Math.random() * (speed * .2));
         this.targetable = true;
 
         this.deathSequences = new DeathSequences(this, this.mission);
@@ -52,11 +53,13 @@ export abstract class Enemy extends Phaser.Sprite {
         this.y = (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
 
         let defaultSize = {width: this.defaultWidth, height: this.defaultHeight};
-        let scaleX = this.mission.gridDescriptor.cellWidth / defaultSize.width;
-        let scaleY = this.mission.gridDescriptor.cellHeight / defaultSize.height;
+        let scaleX = (this.mission.gridDescriptor.cellWidth / defaultSize.width) * this.scaleFactor;
+        let scaleY = (this.mission.gridDescriptor.cellHeight / defaultSize.height) * this.scaleFactor;
 
-        this.animations.add('move');
-        this.animations.play('move', this.animationFrameRate, true);
+        if (this.animationFrameRate != -1) {
+            this.animations.add('move');
+            this.animations.play('move', this.animationFrameRate, true);
+        }
         this.scale.setTo(scaleX, scaleY);
         this.anchor.setTo(0.5, 0.5);
 
@@ -70,14 +73,7 @@ export abstract class Enemy extends Phaser.Sprite {
         this.health = health;
         this.maxHealth = health;
         //health bar starts off on top?
-        this.healthBar = this.game.add.existing(new PercentBar({
-            game: this.game,
-            host: this,
-            height: 2,
-            width: this.width / this.scale.x,
-            xOffset: - (this.width / 2),
-            yOffset: - ((this.height / this.scale.y) / 2) - ((this.height / this.scale.y) * .2)
-        }));
+        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this, this.scaleFactor));
     }
 
     shot(by: Projectile) {

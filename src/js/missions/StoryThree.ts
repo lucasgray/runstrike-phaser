@@ -29,8 +29,6 @@ export default class StoryThree extends Mission {
         this.gridDescriptor = new GridDescriptor(
             game.width,
             game.height,
-            8,
-            12,
             [
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 0, 0, 0, 0, 1],

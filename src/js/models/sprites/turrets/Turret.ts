@@ -57,7 +57,6 @@ abstract class Turret extends Phaser.Sprite {
         let turret = new Phaser.Sprite(game, offsetX, offsetY, texture);
         this.game.physics.enable(turret, Phaser.Physics.ARCADE);
         turret.anchor.setTo(0.5);
-        turret.scale.setTo(scaleX, scaleY);
         this.turret = turret;
 
         let turretShadow = new Phaser.Sprite(game, offsetX - 4, offsetY + 2, texture);

@@ -15,7 +15,7 @@ require('../../css/joystix-monospace.ttf');
 export default class Preload extends Phaser.State {
 
     create() {
-        this.game.renderer.renderSession.roundPixels = true;
+        this.game.renderer.renderSession.roundPixels = false;
     }
 
     preload() {
@@ -84,6 +84,10 @@ export default class Preload extends Phaser.State {
         this.game.load.image('debris-01', require('../../img/effects/debris-01.png'));
         this.game.load.image('debris-02', require('../../img/effects/debris-02.png'));
         this.game.load.image('debris-03', require('../../img/effects/debris-03.png'));
+
+        this.game.load.image('ship-01', require('../../img/enemies/ship-01.png'));
+        this.game.load.image('ship-02', require('../../img/enemies/ship-02.png'));
+        this.game.load.image('ship-03', require('../../img/enemies/ship-03.png'));
 
         this.game.load.image('aa-shot-01', require('../../img/projectiles/aa-shot-01.png'));
         this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);

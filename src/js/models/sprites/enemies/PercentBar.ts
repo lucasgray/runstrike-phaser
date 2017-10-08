@@ -1,83 +1,75 @@
 import 'phaser'
+import SpriteExtensions from "../../../extensions/SpriteExtensions";
 
 export default class PercentBar extends Phaser.Sprite {
-    bg: any;
-    opts: any;
-    bar: any;
 
-    constructor (opts: any) {
-        super(opts.game, opts.x || 0, opts.y || 0, opts.key || '', opts.frame || '')
+    outerFrame: Phaser.Sprite;
+    bg: Phaser.Sprite;
+    bar: Phaser.Sprite;
+
+    game: Phaser.Game;
+    host: Phaser.Sprite;
+    positioningHost: Phaser.Sprite;
+
+    yOffsetScale: number;
+
+    constructor (game: Phaser.Game, host: Phaser.Sprite, positioningHost: Phaser.Sprite, yOffsetScale: number) {
+        super(game, positioningHost.x, positioningHost.y);
+
+        this.host = host;
+        this.positioningHost = positioningHost;
+        this.yOffsetScale = yOffsetScale;
 
         // add 1x1 white pixel to cache if necessary
-        if (!opts.game.cache.checkImageKey('white1x1pixel')) {
+        if (!game.cache.checkImageKey('white1x1pixel')) {
             // loads 1x1 white gif from data URI
-            opts.game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=')
-            opts.game.load.onLoadComplete.add(() => this.runCreation(opts))
-            opts.game.load.start()
+            game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=');
+            game.load.onLoadComplete.add(() => this.runCreation());
+            game.load.start()
         } else {
-            this.runCreation(opts)
+            this.runCreation()
         }
     }
 
-    // this has to be in a separate function so that the white1x1pixel sprite can load asynchronously
-    runCreation (opts) {
-        // set sprites, if applicable
-        if (!opts.bgSprite && opts.sprite) {
-            opts.bgSprite = opts.sprite
-            opts.fgSprite = opts.sprite
-        }
+    runCreation() {
 
-        // Prep watch, if unset
-        if (!opts.watch) {
-            opts.watch = {}
-        }
+        this.width = this.positioningHost.width;
+        this.height = 4;
 
-        // Save watch.host, if unset
-        if (opts.watch && !opts.watch.host) {
-            opts.watch.host = opts.host
-        }
+        // let graphics = this.game.add.graphics(0,0);
+        // graphics.lineStyle(1, Phaser.Color.hexToRGB('#03C1BF'), 1);
+        // graphics.fillAlpha = 0;
+        // graphics.drawRect(
+        //     0,
+        //     0,
+        //     this.width,
+        //     this.height
+        // );
+        // let frame = this.game.add.sprite(-1, -1, graphics.generateTexture());
+        // graphics.destroy();
+        // this.positioningHost.addChild(frame);
+        // SpriteExtensions.alignInParent(frame, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
 
-        // Save width
-        let width = 0
-        if (opts.bgSprite) {
-            // Look for the background sprite's width first
-            width = this.game.cache.getImage(opts.bgSprite).width
-            // Let the user override with the `width` option
-            width = opts.width || width
-        } else {
-            width = opts.width || opts.host.width
-        }
+        this.outerFrame = this.game.make.sprite(0, 0, 'white1x1pixel');
+        this.outerFrame.width = this.width + 2;
+        this.outerFrame.height = this.height + 2;
+        this.outerFrame.tint = Phaser.Color.hexToRGB('#03C1BF');
+        this.positioningHost.addChild(this.outerFrame);
+        SpriteExtensions.alignInParent(this.outerFrame, this.positioningHost, Phaser.TOP_LEFT, 1, 6 + (5 * this.yOffsetScale));
 
-        // Save height
-        let height = 0
-        if (opts.bgSprite) {
-            // Look for the background sprite's height first
-            height = this.game.cache.getImage(opts.bgSprite).height
-            // Let the user override with the `width` option
-            height = opts.height || height
-        } else {
-            height = opts.height || 10
-        }
+        this.bg = this.game.make.sprite(0, 0, 'white1x1pixel');
+        this.bg.width = this.width;
+        this.bg.height = this.height;
+        this.bg.tint = Phaser.Color.hexToRGB('#005150');
+        this.positioningHost.addChild(this.bg);
+        SpriteExtensions.alignInParent(this.bg, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
 
-        // Background to progress bar
-        const x = (opts.host.width / 2 - width / 2) + (opts.xOffset || 0)
-        this.bg = opts.host.addChild(this.game.make.sprite(x, opts.hasOwnProperty('yOffset') ? opts.yOffset : -25, opts.bgSprite || 'white1x1pixel'))
-        this.bg.width = width
-        this.bg.height = height
-        this.bg.tint = opts.hasOwnProperty('bgTint') ? opts.bgTint : Phaser.Color.hexToRGB('#005150')
-
-        // Foreground
-        let fgSprite = opts.fgSprite || 'white1x1pixel'
-        this.bar = opts.host.addChild(this.game.make.sprite(x, opts.hasOwnProperty('yOffset') ? opts.yOffset : -25, fgSprite))
-        this.bar.width = width
-        this.bar.height = height
-        this.bar.tint = opts.hasOwnProperty('fgTint') ? opts.fgTint : Phaser.Color.hexToRGB('#03C1BF')
-
-        // Crop
-        this.cropRect = new Phaser.Rectangle(0, 0, width, height)
-
-        // Save options
-        this.opts = opts
+        this.bar = this.game.make.sprite(0, 0,'white1x1pixel');
+        this.bar.width = this.width;
+        this.bar.height = this.height;
+        this.bar.tint = Phaser.Color.hexToRGB('#03C1BF');
+        this.positioningHost.addChild(this.bar);
+        SpriteExtensions.alignInParent(this.bar, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
     }
 
     show(){
@@ -93,16 +85,12 @@ export default class PercentBar extends Phaser.Sprite {
     }
 
     update () {
-        super.update()
-        if (this.opts && this.opts.watch) {
-            const newWidth = this.bg.width * (this.opts.watch.host[this.opts.watch.value || 'health'] / (this.opts.watch.max || this.opts.watch.host.maxHealth))
+        super.update();
 
-            if (this.opts.resize || (!this.opts.bgSprite && !this.opts.fgSprite)) {
-                this.bar.width = newWidth
-            } else {
-                this.cropRect.width = newWidth
-                this.bar.crop(this.cropRect)
-            }
+        if (this.positioningHost && this.host && this.bg && this.bar) {
+            // this.cropRect.width = this.bg.width * (this.host.health / (this.host.maxHealth));
+            // this.bar.crop(this.cropRect, true);
+            this.bar.width = this.bg.width * (this.host.health / (this.host.maxHealth));
         }
     }
 }
