@@ -222,10 +222,18 @@ abstract class Mission {
                 if (c === 1) {
                     let hatch = new Phaser.Sprite(this.game, ci * this.gridDescriptor.cellWidth, ri * this.gridDescriptor.cellHeight, 'unplaceable-grid');
                     hatch.alpha = .25;
+                    let defaultSize = {width: 64, height: 64};
+                    let scaleX = (this.gridDescriptor.cellWidth / defaultSize.width);
+                    let scaleY = (this.gridDescriptor.cellHeight / defaultSize.height);
+                    hatch.scale.setTo(scaleX, scaleY);
                     this.game.add.existing(hatch);
                 } else {
                     let empty = new Phaser.Sprite(this.game, ci * this.gridDescriptor.cellWidth, ri * this.gridDescriptor.cellHeight, 'empty-grid');
                     empty.alpha = .25;
+                    let defaultSize = {width: 64, height: 64};
+                    let scaleX = (this.gridDescriptor.cellWidth / defaultSize.width);
+                    let scaleY = (this.gridDescriptor.cellHeight / defaultSize.height);
+                    empty.scale.setTo(scaleX, scaleY);
                     this.game.add.existing(empty);
                 }
             });
