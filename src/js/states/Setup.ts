@@ -36,9 +36,7 @@ export default class Setup extends Phaser.State {
         spr.sendToBack();
         this.backgroundSprite = spr;
 
-        //TODO draw legal placement markers here!
-
-
+        this.mission.addSetupGuidelines();
 
         console.log(this.gameState.placedLoot);
 

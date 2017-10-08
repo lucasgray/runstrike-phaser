@@ -74,6 +74,9 @@ export default class Preload extends Phaser.State {
         this.game.load.image('grid', require('../../img/effects/grid.png'));
         this.game.load.image('lut', require('../../img/effects/lut.png'));
 
+        this.game.load.image('empty-grid', require('../../img/ui/GridCell_empty.png'));
+        this.game.load.image('unplaceable-grid', require('../../img/ui/GridCell_hatchedAA.png'));
+
         this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
         this.game.load.image('turret-1', require('../../img/turrets/turret-aa.png'));
         this.game.load.image('turret-heavy', require('../../img/turrets/turret-heavy.png'));

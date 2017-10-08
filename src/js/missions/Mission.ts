@@ -216,6 +216,22 @@ abstract class Mission {
         });
     }
 
+    addSetupGuidelines() {
+        this.gridDescriptor.placeableTerrain.forEach((r,ri) => {
+            r.forEach((c,ci) => {
+                if (c === 1) {
+                    let hatch = new Phaser.Sprite(this.game, ci * this.gridDescriptor.cellWidth, ri * this.gridDescriptor.cellHeight, 'unplaceable-grid');
+                    hatch.alpha = .25;
+                    this.game.add.existing(hatch);
+                } else {
+                    let empty = new Phaser.Sprite(this.game, ci * this.gridDescriptor.cellWidth, ri * this.gridDescriptor.cellHeight, 'empty-grid');
+                    empty.alpha = .25;
+                    this.game.add.existing(empty);
+                }
+            });
+        });
+    }
+
     shutdown() {
         this.enemies.destroy();
         this.projectiles.destroy();

@@ -10,7 +10,7 @@ export default class StandardMap {
         let s1 = game.add.tileSprite(0, 0, game.width, game.height, 'scanlines');
         s1.alpha = .50;
         s1.blendMode = PIXI.blendModes.MULTIPLY;
-        let s3 = game.add.sprite(0,0, 'grid');
+        // let s3 = game.add.sprite(0,0, 'grid');
         let s4 = game.add.sprite(0,0, 'border-blend');
         s4.blendMode = PIXI.blendModes.MULTIPLY;
         s4.alpha = .75;
@@ -23,7 +23,7 @@ export default class StandardMap {
 
         let grouped = new Phaser.Group(game);
         grouped.add(s1);
-        grouped.add(s3);
+        // grouped.add(s3);
         grouped.add(s4);
         grouped.add(s45);
         grouped.add(s5);
