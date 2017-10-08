@@ -15,7 +15,7 @@ export default class ShipOne extends PathfindingEnemy {
     healthBarHost = () => this.ship;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, '', 20);
+        super(game, mission, '', 40);
 
         this.paint(mission, row, col);
         this.addHealthbar(1200);
