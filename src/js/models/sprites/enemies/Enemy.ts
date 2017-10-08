@@ -29,7 +29,7 @@ export abstract class Enemy extends Phaser.Sprite {
 
         this.mission = mission;
 
-        this.randomVelocity =  speed + (Math.random() * (speed * .2));
+        this.randomVelocity =  speed + (Math.random() * (speed * .4));
         this.targetable = true;
 
         this.deathSequences = new DeathSequences(this, this.mission);

@@ -33,22 +33,8 @@ export default class PercentBar extends Phaser.Sprite {
 
     runCreation() {
 
-        this.width = this.positioningHost.width;
-        this.height = 4;
-
-        // let graphics = this.game.add.graphics(0,0);
-        // graphics.lineStyle(1, Phaser.Color.hexToRGB('#03C1BF'), 1);
-        // graphics.fillAlpha = 0;
-        // graphics.drawRect(
-        //     0,
-        //     0,
-        //     this.width,
-        //     this.height
-        // );
-        // let frame = this.game.add.sprite(-1, -1, graphics.generateTexture());
-        // graphics.destroy();
-        // this.positioningHost.addChild(frame);
-        // SpriteExtensions.alignInParent(frame, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
+        this.width = this.positioningHost.width * ( 1 / this.positioningHost.scale.x);
+        this.height = (this.positioningHost.height * ( 1 / this.positioningHost.scale.y)) / 16;
 
         this.outerFrame = this.game.make.sprite(0, 0, 'white1x1pixel');
         this.outerFrame.width = this.width + 2;
@@ -81,7 +67,7 @@ export default class PercentBar extends Phaser.Sprite {
     }
 
     setAlpha(newAlpha){
-        this.bg.alpha = this.bar.alpha = newAlpha
+        this.bg.alpha = this.bar.alpha = this.outerFrame.alpha = newAlpha
     }
 
     update () {

@@ -9,6 +9,8 @@ import Lurker from "../models/sprites/enemies/Lurker";
 import Shield from "../models/sprites/enemies/Shield";
 import {Enemy} from "../models/sprites/enemies/Enemy";
 import ShipOne from "../models/sprites/enemies/ShipOne";
+import ShipTwo from "../models/sprites/enemies/ShipTwo";
+import ShipThree from "../models/sprites/enemies/ShipThree";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -154,6 +156,14 @@ abstract class Mission {
                 this.enemies.add(sprite);
             } else if (this.enemyArray[this.curEnemy]['type'] == "ShipOne") {
                 let sprite = new ShipOne(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+                this.game.add.existing(sprite);
+                this.enemies.add(sprite);
+            } else if (this.enemyArray[this.curEnemy]['type'] == "ShipTwo") {
+                let sprite = new ShipTwo(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
+                this.game.add.existing(sprite);
+                this.enemies.add(sprite);
+            } else if (this.enemyArray[this.curEnemy]['type'] == "ShipThree") {
+                let sprite = new ShipThree(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
                 this.game.add.existing(sprite);
                 this.enemies.add(sprite);
             }

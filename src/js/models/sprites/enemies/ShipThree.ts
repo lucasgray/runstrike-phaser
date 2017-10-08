@@ -2,10 +2,10 @@ import Mission from "../../../missions/Mission";
 import {PathfindingEnemy} from "./Enemy";
 import PercentBar from "./PercentBar";
 
-export default class ShipOne extends PathfindingEnemy {
+export default class ShipThree extends PathfindingEnemy {
 
-    defaultWidth = 89;
-    defaultHeight = 77;
+    defaultWidth = 88;
+    defaultHeight = 69;
     animationFrameRate = -1;
     rotatingSprite = false;
     scaleFactor = 1.35;
@@ -15,10 +15,10 @@ export default class ShipOne extends PathfindingEnemy {
     healthBarHost = () => this.ship;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, '', 20);
+        super(game, mission, '', 30);
 
         this.paint(mission, row, col);
-        this.addHealthbar(1200);
+        this.addHealthbar(800);
         this.pathfind(mission, row, col);
 
         //hide us
@@ -36,12 +36,12 @@ export default class ShipOne extends PathfindingEnemy {
         super.paint(mission, row, col);
 
         //show tweening ship
-        let ship = new Phaser.Sprite(this.game, 0, 0, 'ship-01');
+        let ship = new Phaser.Sprite(this.game, 0, 0, 'ship-03');
         ship.angle = this.angle;
         ship.rotation = this.rotation;
         ship.anchor.setTo(.5);
 
-        let shipShadow = new Phaser.Sprite(this.game, -4, 2, 'ship-01');
+        let shipShadow = new Phaser.Sprite(this.game, -4, 2, 'ship-03');
         shipShadow.anchor.set(0.5);
         shipShadow.tint = 0x191919;
         shipShadow.alpha = 0.6;
