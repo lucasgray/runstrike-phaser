@@ -123,6 +123,9 @@ abstract class Turret extends Phaser.Sprite {
         //shoot if we havent shot in over a second (give or take some randomness,
         //and we're tracking a body,
         //and that body is relatively close to us
+
+        // game.time.physicsElapsedMS //TODO
+
         if (Date.now() - this.lastShot > (this.fireRate + (Math.random() * 200))
             && this.tracking && this.tracking.alive && this.tracking.body.velocity
             && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
