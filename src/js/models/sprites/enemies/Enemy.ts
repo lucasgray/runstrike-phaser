@@ -200,19 +200,23 @@ class DeathSequences {
 
         this.game.camera.shake(0.002, 300);
 
-        let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
         let flare = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-flare');
+        let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
+
 
         shockwave.anchor.setTo(.5);
         flare.anchor.setTo(.5);
 
         shockwave.scale.setTo(0);
+        // shockwave.alpha = .8;
         flare.scale.setTo(0);
-        flare.alpha = .5;
+        // flare.alpha = .5;
 
-        let fallTween = this.game.add.tween(shockwave.scale).to({x: 1.5, y: 1.5}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let rotateTween = this.game.add.tween(shockwave).to({angle: 1000}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 3000, Phaser.Easing.Linear.None, true, 0, 0, false);
+        shockwave.blendMode = PIXI.blendModes.ADD;
+        flare.blendMode = PIXI.blendModes.ADD;
+
+        let fallTween = this.game.add.tween(shockwave.scale).to({x: 3, y: 3}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
 
         let fallTween2 = this.game.add.tween(flare.scale).to({x: 1.5, y: 1.5}, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
         fallTween2.onComplete.add(() => this.game.add.tween(flare.scale).to({x: 0, y: 0}, 300, Phaser.Easing.Linear.None, true, 0, 0, false));

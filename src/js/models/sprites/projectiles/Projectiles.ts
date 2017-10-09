@@ -6,7 +6,7 @@ export class AutoShot extends Projectile {
     defaultWidth: number = 26;
     defaultHeight: number = 26;
     range: number = 500;
-    speed: number = 700;
+    speed: number = 1400;
     shootSound: string = 'shoot';
     scaleFactor = .8;
 
