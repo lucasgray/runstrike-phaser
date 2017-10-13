@@ -14,6 +14,7 @@ abstract class Projectile extends Phaser.Sprite {
     abstract defaultWidth: number;
     abstract defaultHeight: number;
     abstract shootSound: string;
+    abstract damageAmount: number;
 
     constructor(game: Phaser.Game, fromX: number, fromY: number, toSprite: Phaser.Sprite, texture: string, projectileExplosionGroup: Phaser.Group) {
 

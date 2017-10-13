@@ -2,10 +2,11 @@ import Mission from "../../../missions/Mission";
 import * as _ from 'lodash';
 import PercentBar from "./PercentBar";
 import Projectile from "../projectiles/Projectile";
-import Turret from "../turrets/Turret";
 import {AutoShot} from "../projectiles/Projectiles";
+import {Targetable, WeaponSystem} from "../../state/WeaponSystem";
+import DeathSequences from "../../../effects/DeathSequences";
 
-export abstract class Enemy extends Phaser.Sprite {
+export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
     mission: Mission;
 
@@ -13,12 +14,6 @@ export abstract class Enemy extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract animationFrameRate: number;
     abstract rotatingSprite: boolean;
-
-    //TODO make a "TargetingComputer" class that holds these and can shoot?
-    fireRate = 450;
-    lastShot: number;
-    tracking: Turret;
-    range = 200;
 
     scaleFactor = 1;
 
@@ -29,7 +24,11 @@ export abstract class Enemy extends Phaser.Sprite {
     healthBar: PercentBar;
     explodeSound: () => Phaser.Sound;
 
+    weaponSystem: WeaponSystem;
     deathSequences: DeathSequences;
+
+    range: 450;
+    fireRate: 200;
 
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, 0, 0, texture);
@@ -55,7 +54,7 @@ export abstract class Enemy extends Phaser.Sprite {
             return sound;
         };
 
-        this.lastShot = Date.now();
+        this.weaponSystem = new WeaponSystem(this, this.mission, this.range, this.fireRate, mission.turrets, mission.enemyProjectiles, this.shoot);
     }
 
     paint(mission: Mission, row: number, col: number) {
@@ -88,12 +87,8 @@ export abstract class Enemy extends Phaser.Sprite {
     }
 
     shot(by: Projectile) {
-        this.damage(10);
+        this.damage(by.damageAmount);
         by.playShotFx();
-    }
-
-    massivelyDamage() {
-        this.damage(300);
     }
 
     kill() {
@@ -108,77 +103,31 @@ export abstract class Enemy extends Phaser.Sprite {
 
     update() {
         super.update();
-
-        this.maybeShoot();
+        this.weaponSystem.update();
     }
 
-    maybeShoot() {
-
-        let sprite = this.closestFriendly();
-
-        if (!sprite) return;
-
-        if (sprite !== this.tracking || !this.tracking.alive) {
-            this.tracking = sprite;
-        }
-
-        if (Date.now() - this.lastShot > (this.fireRate + (Math.random() * 200))
-            && this.tracking && this.tracking.alive
-            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
-
-            let projectile = this.shoot();
-            this.game.add.existing(projectile);
-            this.mission.enemyProjectiles.add(projectile);
-            this.lastShot = Date.now();
-        }
-    }
-
-    shoot() {
-        let bullet = this.mission.enemyProjectiles.getFirstDead(true);
+    shoot = (to: Targetable, mission: Mission) => {
+        let bullet = mission.enemyProjectiles.getFirstDead(true);
 
         if (bullet) {
             bullet.reset(this.x, this.y);
             bullet.fromX = this.x;
             bullet.fromY = this.y;
             bullet.angle = this.angle;
-            bullet.toSprite = this.tracking;
-            bullet.gridDescriptor = this.mission.gridDescriptor;
-            bullet.paint(this.mission.gridDescriptor);
+            bullet.toSprite = to;
+            bullet.gridDescriptor = mission.gridDescriptor;
+            bullet.paint(mission.gridDescriptor);
             return bullet;
         } else {
             return new AutoShot(
                 this.game,
                 this.x,
                 this.y,
-                this.tracking,
-                this.mission.gridDescriptor,
-                this.mission.projectileExplosions
+                to,
+                mission.gridDescriptor,
+                mission.projectileExplosions
             );
         }
-    }
-
-    closestFriendly(): Turret | undefined {
-
-        let spriteDistances = this.mission.turrets
-            .all()
-            .filter(s => s.alive)
-            .map((sprite) => {
-                    return {
-                        distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
-                        sprite: sprite
-                    };
-                }
-            );
-
-        if (spriteDistances) {
-            let s = _.minBy(spriteDistances, (s) => s.distance);
-            if (s) {
-                return s.sprite;
-            }
-            return undefined;
-        }
-
-        return undefined;
     }
 }
 
@@ -273,61 +222,4 @@ export abstract class FlyingEnemy extends Enemy {
         this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
     }
 
-}
-
-class DeathSequences {
-
-    enemy: Enemy;
-    game: Phaser.Game;
-    mission: Mission;
-
-    constructor(enemy: Enemy, mission: Mission) {
-        this.enemy = enemy;
-        this.game = enemy.game;
-        this.mission = mission;
-    }
-
-    basicDeathSequence() : void {
-
-        this.game.camera.shake(0.002, 300);
-
-        let flare = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-flare');
-        let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
-
-
-        shockwave.anchor.setTo(.5);
-        flare.anchor.setTo(.5);
-
-        shockwave.scale.setTo(0);
-        // shockwave.alpha = .8;
-        flare.scale.setTo(0);
-        // flare.alpha = .5;
-
-        shockwave.blendMode = PIXI.blendModes.ADD;
-        flare.blendMode = PIXI.blendModes.ADD;
-
-        let fallTween = this.game.add.tween(shockwave.scale).to({x: 3, y: 3}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
-
-        let fallTween2 = this.game.add.tween(flare.scale).to({x: 1.5, y: 1.5}, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
-        fallTween2.onComplete.add(() => this.game.add.tween(flare.scale).to({x: 0, y: 0}, 300, Phaser.Easing.Linear.None, true, 0, 0, false));
-        let rotateTween2 = this.game.add.tween(flare).to({angle: -500}, 600, Phaser.Easing.Linear.None, true, 0, 0, false);
-        let alphaTween2 = this.game.add.tween(flare).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true, 300, 0, false);
-
-        alphaTween.onComplete.add(() => shockwave.destroy());
-        alphaTween2.onComplete.add(() => flare.destroy());
-
-        // this.game.add.tween(shockwave).to({angle: 360}, 2400, Phaser.Easing.Linear.None,
-        //     true, 0);
-        // this.game.add.tween(shockwave).to({alpha: 0}, 2400, Phaser.Easing.Linear.None,
-        //     true, 0);
-
-        let debris = 'debris-0' + Math.floor(Phaser.Math.random(1, 4));
-        let rot = Phaser.Math.random(0,360);
-        let spr = new Phaser.Sprite(this.game, this.enemy.x, this.enemy.y, debris);
-        spr.anchor.setTo(.5);
-        spr.angle = rot;
-        this.game.add.existing(spr);
-        this.mission.doodads.add(spr);
-    }
 }

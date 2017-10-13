@@ -4,27 +4,31 @@ import Mission from "../../../missions/Mission";
 import Drone from "../enemies/Drone";
 import {Enemy} from "../enemies/Enemy";
 import PercentBar from "../enemies/PercentBar";
+import {Targetable, WeaponSystem} from "../../state/WeaponSystem";
 
-abstract class Turret extends Phaser.Sprite {
+abstract class Turret extends Phaser.Sprite implements Targetable {
 
     mission: Mission;
 
-    lastShot: number;
+    abstract range: number;
+    abstract fireRate: number;
 
     row: number;
     col: number;
 
     rotationTween: Phaser.Tween;
-    tracking: Enemy;
 
-    abstract range: number;
-    abstract fireRate: number;
-    abstract shoot: () => Projectile;
-
+    //base is base + shadow, turret is just the top of the turret
     base: Phaser.Group;
     turret: Phaser.Sprite;
 
     healthBar: PercentBar;
+
+    targetable = true;
+
+    weaponSystem: WeaponSystem;
+
+    abstract shoot: (to: Targetable, mission: Mission) => Projectile;
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string, offsetX: number, offsetY: number) {
         super(game, 0, 0, '');
@@ -43,8 +47,6 @@ abstract class Turret extends Phaser.Sprite {
         this.anchor.setTo(0.5);
         this.scale.setTo(scaleX, scaleY);
         this.inputEnabled = false;
-
-        this.lastShot = 0;
 
         let baseShadow = new Phaser.Sprite(game, this.x - 4, this.y + 2, 'turret-base');
         baseShadow.anchor.set(0.5);
@@ -76,6 +78,10 @@ abstract class Turret extends Phaser.Sprite {
         this.addChild(turret);
     }
 
+    makeWeaponSystem(range: number, fireRate: number, mission: Mission, shoot: (to: Targetable, mission: Mission) => Projectile) {
+        this.weaponSystem = new WeaponSystem(this, mission, range, fireRate, mission.enemies, mission.friendlyProjectiles, shoot);
+    }
+
     addHealthbar(health: number) {
         this.health = health;
         this.maxHealth = health;
@@ -97,8 +103,9 @@ abstract class Turret extends Phaser.Sprite {
 
         //just periodically shoot on a timer
 
+        //doRotation needs to be first, it determines if we need to tween a rotation to the next sprite
         this.doRotation();
-        this.maybeShoot();
+        this.weaponSystem.update();
     }
 
     doRotation() {
@@ -106,13 +113,12 @@ abstract class Turret extends Phaser.Sprite {
         //if we're rotating to a tween do nothing
         if (this.rotationTween && this.rotationTween.isRunning) return;
 
-        let sprite = this.closestEnemy();
+        let sprite = this.weaponSystem.closestTargetable();
 
         if (!sprite) return;
 
         //if its a new sprite or the current tracking sprite is dead, tween the rotation to it
-        if (sprite !== this.tracking || !this.tracking.alive) {
-            this.tracking = sprite;
+        if (sprite !== this.weaponSystem.tracking || !this.weaponSystem.tracking || !this.weaponSystem.tracking.alive) {
 
             //where we need to be
             let angle = Phaser.Math.radToDeg(Phaser.Math.angleBetween(this.x, this.y, sprite.x, sprite.y)) + 90;
@@ -129,47 +135,6 @@ abstract class Turret extends Phaser.Sprite {
         }
     }
 
-    maybeShoot() {
-        //shoot if we havent shot in over a second (give or take some randomness,
-        //and we're tracking a body,
-        //and that body is relatively close to us
-
-        // game.time.physicsElapsedMS //TODO
-
-        if (Date.now() - this.lastShot > (this.fireRate + (Math.random() * 200))
-            && this.tracking && this.tracking.alive && this.tracking.body.velocity
-            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
-
-            let projectile = this.shoot();
-            this.game.add.existing(projectile);
-            this.mission.friendlyProjectiles.add(projectile);
-            this.lastShot = Date.now();
-        }
-    }
-
-    closestEnemy(): Enemy | undefined {
-
-        let spriteDistances = this.mission.enemies
-            .all()
-            .filter(s => s.alive && s.targetable)
-            .map((sprite) => {
-                    return {
-                        distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
-                        sprite: sprite
-                    };
-                }
-            );
-
-        if (spriteDistances) {
-            let s = _.minBy(spriteDistances, (s) => s.distance);
-            if (s) {
-                return s.sprite;
-            }
-            return undefined;
-        }
-
-        return undefined;
-    }
     //
     // destroy() {
     //     super.destroy();

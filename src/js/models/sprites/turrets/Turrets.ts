@@ -3,11 +3,12 @@ import Turret from "./Turret";
 import Projectile from "../projectiles/Projectile";
 import { AutoShot } from "../projectiles/Projectiles";
 import SpriteExtensions from "../../../extensions/SpriteExtensions";
+import {Targetable} from "../../state/WeaponSystem";
 
 export class AutoTurret extends Turret {
 
-    range: number = 400;
-    fireRate: number = 150;
+    range: number = 800;
+    fireRate: number = 100;
 
     leftShootPoint: Phaser.Sprite;
     rightShootPoint: Phaser.Sprite;
@@ -21,7 +22,7 @@ export class AutoTurret extends Turret {
     static SHOOT_POINT_RIGHT_X = -2;
     static SHOOT_POINT_Y = 48;
 
-    shoot: () => Projectile = () => {
+    shoot = (to: Targetable, mission: Mission) => {
 
         this.doLeft = !this.doLeft;
 
@@ -29,13 +30,13 @@ export class AutoTurret extends Turret {
 
         this.makeMuzzleFlash(shootPoint);
 
-        let bullet = this.mission.friendlyProjectiles.getFirstDead(true);
+        let bullet = mission.friendlyProjectiles.getFirstDead(true);
         if (bullet) {
             bullet.reset(shootPoint.world.x, shootPoint.world.y);
             bullet.fromX = shootPoint.world.x;
             bullet.fromY = shootPoint.world.y;
             bullet.angle = this.angle;
-            bullet.toSprite = this.tracking;
+            bullet.toSprite = to;
             bullet.gridDescriptor = this.mission.gridDescriptor;
             bullet.paint(this.mission.gridDescriptor);
             return bullet;
@@ -44,7 +45,7 @@ export class AutoTurret extends Turret {
                 this.game,
                 shootPoint.world.x,
                 shootPoint.world.y,
-                this.tracking,
+                to,
                 this.mission.gridDescriptor,
                 this.mission.projectileExplosions
             );
@@ -56,6 +57,7 @@ export class AutoTurret extends Turret {
 
         this.init();
         this.addHealthbar(1000);
+        this.makeWeaponSystem(this.range, this.fireRate, this.mission, this.shoot);
     }
 
     init() {

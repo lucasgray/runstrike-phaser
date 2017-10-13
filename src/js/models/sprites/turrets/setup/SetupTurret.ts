@@ -15,7 +15,7 @@ abstract class SetupTurret extends Turret {
     //todo dont really need these
     range: number = 0;
     fireRate: number = 0;
-    shoot: () => Projectile = () => new AutoShot(this.game, 0, 0, this.tracking, this.mission.gridDescriptor, this.mission.projectileExplosions);
+    shoot: () => Projectile = () => new AutoShot(this.game, 0, 0, this, this.mission.gridDescriptor, this.mission.projectileExplosions);
 
     constructor(mission: Mission, game: Phaser.Game,
                 gameState: GameState,
@@ -34,6 +34,10 @@ abstract class SetupTurret extends Turret {
 
         this.inputEnabled = true;
     }
+
+    update() { }
+
+    doRotation () { }
 
     remove(turret: Turret, pointer: Phaser.Pointer) {
 
