@@ -2,6 +2,8 @@ import Mission from "../../../missions/Mission";
 import * as _ from 'lodash';
 import PercentBar from "./PercentBar";
 import Projectile from "../projectiles/Projectile";
+import Turret from "../turrets/Turret";
+import {AutoShot} from "../projectiles/Projectiles";
 
 export abstract class Enemy extends Phaser.Sprite {
 
@@ -11,6 +13,13 @@ export abstract class Enemy extends Phaser.Sprite {
     abstract defaultHeight: number;
     abstract animationFrameRate: number;
     abstract rotatingSprite: boolean;
+
+    //TODO make a "TargetingComputer" class that holds these and can shoot?
+    fireRate = 450;
+    lastShot: number;
+    tracking: Turret;
+    range = 200;
+
     scaleFactor = 1;
 
     randomVelocity: number;
@@ -45,6 +54,8 @@ export abstract class Enemy extends Phaser.Sprite {
 
             return sound;
         };
+
+        this.lastShot = Date.now();
     }
 
     paint(mission: Mission, row: number, col: number) {
@@ -73,7 +84,7 @@ export abstract class Enemy extends Phaser.Sprite {
         this.health = health;
         this.maxHealth = health;
         //health bar starts off on top?
-        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this, this.scaleFactor));
+        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this, 5, this.scaleFactor, Phaser.TOP_LEFT));
     }
 
     shot(by: Projectile) {
@@ -93,6 +104,81 @@ export abstract class Enemy extends Phaser.Sprite {
         this.alive = false;
 
         return this;
+    }
+
+    update() {
+        super.update();
+
+        this.maybeShoot();
+    }
+
+    maybeShoot() {
+
+        let sprite = this.closestFriendly();
+
+        if (!sprite) return;
+
+        if (sprite !== this.tracking || !this.tracking.alive) {
+            this.tracking = sprite;
+        }
+
+        if (Date.now() - this.lastShot > (this.fireRate + (Math.random() * 200))
+            && this.tracking && this.tracking.alive
+            && Phaser.Math.distance(this.x, this.y, this.tracking.x, this.tracking.y) < this.range) {
+
+            let projectile = this.shoot();
+            this.game.add.existing(projectile);
+            this.mission.enemyProjectiles.add(projectile);
+            this.lastShot = Date.now();
+        }
+    }
+
+    shoot() {
+        let bullet = this.mission.enemyProjectiles.getFirstDead(true);
+
+        if (bullet) {
+            bullet.reset(this.x, this.y);
+            bullet.fromX = this.x;
+            bullet.fromY = this.y;
+            bullet.angle = this.angle;
+            bullet.toSprite = this.tracking;
+            bullet.gridDescriptor = this.mission.gridDescriptor;
+            bullet.paint(this.mission.gridDescriptor);
+            return bullet;
+        } else {
+            return new AutoShot(
+                this.game,
+                this.x,
+                this.y,
+                this.tracking,
+                this.mission.gridDescriptor,
+                this.mission.projectileExplosions
+            );
+        }
+    }
+
+    closestFriendly(): Turret | undefined {
+
+        let spriteDistances = this.mission.turrets
+            .all()
+            .filter(s => s.alive)
+            .map((sprite) => {
+                    return {
+                        distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
+                        sprite: sprite
+                    };
+                }
+            );
+
+        if (spriteDistances) {
+            let s = _.minBy(spriteDistances, (s) => s.distance);
+            if (s) {
+                return s.sprite;
+            }
+            return undefined;
+        }
+
+        return undefined;
     }
 }
 
@@ -123,6 +209,11 @@ export abstract class PathfindingEnemy extends Enemy {
     }
 
     update() {
+        super.update();
+        this.doPathfinding();
+    }
+
+    doPathfinding() {
         if (this.alive && this.targetable && this.path && this.path.length > 0 && _.some(this.path, _ => !_.seen)) {
 
             //if we're in the process of moving from loc a to b, keep going
@@ -134,8 +225,8 @@ export abstract class PathfindingEnemy extends Enemy {
             if (cur) {
 
                 //we want to move towards the CENTER of the next cell..
-                let xToGo = cur.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-                let yToGo = cur.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+                let xToGo = cur.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+                let yToGo = cur.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
                 //have we made it yet, or are we going for the first time?
                 if (_.every(this.path, _ => !_.seen) || (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10)) {
@@ -144,8 +235,8 @@ export abstract class PathfindingEnemy extends Enemy {
                     next = this.path.filter(_ => !_.seen)[0];
 
                     if (next) {
-                        xToGo = next.x * this.mission.gridDescriptor.cellWidth +  Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-                        yToGo = next.y * this.mission.gridDescriptor.cellHeight +  Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+                        xToGo = next.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+                        yToGo = next.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
                         let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
 

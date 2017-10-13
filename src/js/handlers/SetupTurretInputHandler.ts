@@ -37,8 +37,8 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
 
             let turret = this.spawnSetupTurret(grid);
             this.game.add.existing(turret);
-            this.mission.turrets.add(turret.base);
             this.mission.turrets.add(turret);
+            this.mission.doodads.add(turret.base);
 
             this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
             this.updateText();

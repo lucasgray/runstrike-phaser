@@ -10,8 +10,8 @@ export class AutoShot extends Projectile {
     shootSound: string = 'shoot';
     scaleFactor = .8;
 
-    constructor(game: Phaser.Game, fromX: number, fromY: number, angle: number, toSprite: Phaser.Sprite, gridDescriptor: GridDescriptor, projectileExplosionGroup: Phaser.Group) {
-        super(game, fromX, fromY, angle, toSprite, 'aa-shot-01', projectileExplosionGroup);
+    constructor(game: Phaser.Game, fromX: number, fromY: number, toSprite: Phaser.Sprite, gridDescriptor: GridDescriptor, projectileExplosionGroup: Phaser.Group) {
+        super(game, fromX, fromY, toSprite, 'aa-shot-01', projectileExplosionGroup);
 
         super.paint(gridDescriptor);
     }

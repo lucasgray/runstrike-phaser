@@ -29,7 +29,7 @@ export class AutoTurret extends Turret {
 
         this.makeMuzzleFlash(shootPoint);
 
-        let bullet = this.mission.projectiles.getFirstDead(true);
+        let bullet = this.mission.friendlyProjectiles.getFirstDead(true);
         if (bullet) {
             bullet.reset(shootPoint.world.x, shootPoint.world.y);
             bullet.fromX = shootPoint.world.x;
@@ -44,7 +44,6 @@ export class AutoTurret extends Turret {
                 this.game,
                 shootPoint.world.x,
                 shootPoint.world.y,
-                this.angle,
                 this.tracking,
                 this.mission.gridDescriptor,
                 this.mission.projectileExplosions
@@ -56,6 +55,7 @@ export class AutoTurret extends Turret {
         super(mission, game, row, col, 'turret-1', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
 
         this.init();
+        this.addHealthbar(1000);
     }
 
     init() {

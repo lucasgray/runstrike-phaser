@@ -12,13 +12,17 @@ export default class PercentBar extends Phaser.Sprite {
     positioningHost: Phaser.Sprite;
 
     yOffsetScale: number;
+    yOffset: number;
+    positioning: number;
 
-    constructor (game: Phaser.Game, host: Phaser.Sprite, positioningHost: Phaser.Sprite, yOffsetScale: number) {
+    constructor (game: Phaser.Game, host: Phaser.Sprite, positioningHost: Phaser.Sprite, yOffset: number, yOffsetScale: number, positioning: number) {
         super(game, positioningHost.x, positioningHost.y);
 
         this.host = host;
         this.positioningHost = positioningHost;
+        this.yOffset = yOffset;
         this.yOffsetScale = yOffsetScale;
+        this.positioning = positioning;
 
         // add 1x1 white pixel to cache if necessary
         if (!game.cache.checkImageKey('white1x1pixel')) {
@@ -33,7 +37,7 @@ export default class PercentBar extends Phaser.Sprite {
 
     runCreation() {
 
-        this.width = this.positioningHost.width * ( 1 / this.positioningHost.scale.x);
+        this.width = this.positioningHost.width * ( 1 / this.positioningHost.scale.x) - 4;
         this.height = (this.positioningHost.height * ( 1 / this.positioningHost.scale.y)) / 16;
 
         this.outerFrame = this.game.make.sprite(0, 0, 'white1x1pixel');
@@ -41,21 +45,24 @@ export default class PercentBar extends Phaser.Sprite {
         this.outerFrame.height = this.height + 2;
         this.outerFrame.tint = Phaser.Color.hexToRGB('#03C1BF');
         this.positioningHost.addChild(this.outerFrame);
-        SpriteExtensions.alignInParent(this.outerFrame, this.positioningHost, Phaser.TOP_LEFT, 1, 6 + (5 * this.yOffsetScale));
+        SpriteExtensions.alignInParent(this.outerFrame, this.positioningHost, this.positioning, 1,
+            1 + this.yOffset + (this.yOffset * this.yOffsetScale));
 
         this.bg = this.game.make.sprite(0, 0, 'white1x1pixel');
         this.bg.width = this.width;
         this.bg.height = this.height;
         this.bg.tint = Phaser.Color.hexToRGB('#005150');
         this.positioningHost.addChild(this.bg);
-        SpriteExtensions.alignInParent(this.bg, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
+        SpriteExtensions.alignInParent(this.bg, this.positioningHost, this.positioning, 0,
+            this.yOffset + (this.yOffset * this.yOffsetScale));
 
         this.bar = this.game.make.sprite(0, 0,'white1x1pixel');
         this.bar.width = this.width;
         this.bar.height = this.height;
         this.bar.tint = Phaser.Color.hexToRGB('#03C1BF');
         this.positioningHost.addChild(this.bar);
-        SpriteExtensions.alignInParent(this.bar, this.positioningHost, Phaser.TOP_LEFT, 0, 5 + (5 * this.yOffsetScale));
+        SpriteExtensions.alignInParent(this.bar, this.positioningHost, this.positioning, 0,
+            this.yOffset + (this.yOffset * this.yOffsetScale));
     }
 
     show(){

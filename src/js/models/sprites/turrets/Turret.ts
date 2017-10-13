@@ -3,6 +3,7 @@ import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
 import Drone from "../enemies/Drone";
 import {Enemy} from "../enemies/Enemy";
+import PercentBar from "../enemies/PercentBar";
 
 abstract class Turret extends Phaser.Sprite {
 
@@ -22,6 +23,8 @@ abstract class Turret extends Phaser.Sprite {
 
     base: Phaser.Group;
     turret: Phaser.Sprite;
+
+    healthBar: PercentBar;
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number, texture: string, offsetX: number, offsetY: number) {
         super(game, 0, 0, '');
@@ -71,6 +74,13 @@ abstract class Turret extends Phaser.Sprite {
 
         this.addChild(turretShadow);
         this.addChild(turret);
+    }
+
+    addHealthbar(health: number) {
+        this.health = health;
+        this.maxHealth = health;
+        //health bar starts off on top?
+        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this.base.getFirstExists(true), 10, 1.45, Phaser.BOTTOM_CENTER));
     }
 
     update() {
@@ -132,7 +142,7 @@ abstract class Turret extends Phaser.Sprite {
 
             let projectile = this.shoot();
             this.game.add.existing(projectile);
-            this.mission.projectiles.add(projectile);
+            this.mission.friendlyProjectiles.add(projectile);
             this.lastShot = Date.now();
         }
     }
@@ -160,7 +170,17 @@ abstract class Turret extends Phaser.Sprite {
 
         return undefined;
     }
-
+    //
+    // destroy() {
+    //     super.destroy();
+    //
+    //     this.turret.destroy();
+    //     this.base.destroy();
+    // }
+    shot(by: Projectile) {
+        this.damage(10);
+        by.playShotFx();
+    }
 }
 
 export default Turret;

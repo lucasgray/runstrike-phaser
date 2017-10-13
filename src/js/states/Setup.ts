@@ -82,8 +82,8 @@ export default class Setup extends Phaser.State {
 
             if (turret) {
                 this.game.add.existing(turret);
-                this.mission.turrets.add(turret.base);
                 this.mission.turrets.add(turret);
+                this.mission.doodads.add(turret.base);
 
             }
 

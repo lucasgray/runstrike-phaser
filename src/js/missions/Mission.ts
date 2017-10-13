@@ -11,6 +11,7 @@ import {Enemy} from "../models/sprites/enemies/Enemy";
 import ShipOne from "../models/sprites/enemies/ShipOne";
 import ShipTwo from "../models/sprites/enemies/ShipTwo";
 import ShipThree from "../models/sprites/enemies/ShipThree";
+import Turret from "../models/sprites/turrets/Turret";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -26,11 +27,10 @@ abstract class Mission {
     game: Phaser.Game;
     easystar: EasyStar.js;
 
-    //for now, leave this as just a group. we don't use it to iterate over turrets yet
-    //and turrets have the weird thing with base/turret cant be children etc
-    turrets: Phaser.Group;
+    turrets: SmartGroup<Turret>;
     enemies: SmartGroup<Enemy>;
-    projectiles: SmartGroup<Projectile>;
+    friendlyProjectiles: SmartGroup<Projectile>;
+    enemyProjectiles: SmartGroup<Projectile>;
     muzzleFlashes: Phaser.Group;
     projectileExplosions: Phaser.Group;
     doodads: Phaser.Group;
@@ -89,8 +89,11 @@ abstract class Mission {
         if (this.turrets) {
             this.turrets.destroy(true);
         }
-        if (this.projectiles) {
-            this.projectiles.destroy(true);
+        if (this.friendlyProjectiles) {
+            this.friendlyProjectiles.destroy(true);
+        }
+        if (this.enemyProjectiles) {
+            this.enemyProjectiles.destroy(true);
         }
         if (this.muzzleFlashes) {
             this.muzzleFlashes.destroy(true);
@@ -104,12 +107,14 @@ abstract class Mission {
 
         this.doodads = new Phaser.Group(this.game);
         this.game.add.existing(this.doodads);
-        this.turrets = new Phaser.Group(this.game);
+        this.turrets = new SmartGroup<Turret>(this.game);
         this.game.add.existing(this.turrets);
         this.enemies = new SmartGroup<Drone>(this.game);
         this.game.add.existing(this.enemies);
-        this.projectiles = new SmartGroup<Projectile>(this.game);
-        this.game.add.existing(this.projectiles);
+        this.friendlyProjectiles = new SmartGroup<Projectile>(this.game);
+        this.game.add.existing(this.friendlyProjectiles);
+        this.enemyProjectiles = new SmartGroup<Projectile>(this.game);
+        this.game.add.existing(this.enemyProjectiles);
         this.muzzleFlashes = new Phaser.Group(this.game);
         this.game.add.existing(this.muzzleFlashes);
         this.projectileExplosions = new Phaser.Group(this.game);
@@ -128,7 +133,7 @@ abstract class Mission {
 
         this.deploy();
 
-        this.checkBulletCollisions();
+        this.checkProjectileCollisions();
 
         if (!this.pendingFinalize) {
             this.pendingFinalize = this.checkWinOrLose();
@@ -142,6 +147,7 @@ abstract class Mission {
 
             console.log('new enemy');
 
+            //TODO builder
             if (this.enemyArray[this.curEnemy]['type'] == "Drone") {
                 let sprite = new Drone(this.game, this, this.enemyArray[this.curEnemy]['at'], 0);
                 this.game.add.existing(sprite);
@@ -202,15 +208,26 @@ abstract class Mission {
         } else return false;
     }
 
-    checkBulletCollisions() {
+    checkProjectileCollisions() {
 
-        let bulletsThatCollided = Array<Phaser.Sprite>();
+        let friendlyProjectilesThatCollided = Array<Phaser.Sprite>();
 
         //this is NOT an observer!  It fires once in the update loop.
-        this.game.physics.arcade.overlap(this.projectiles, this.enemies, (projectile: Projectile, sprite) => {
-            if(sprite.alive && sprite.targetable && bulletsThatCollided.indexOf(projectile) == -1){
+        this.game.physics.arcade.overlap(this.friendlyProjectiles, this.enemies, (projectile: Projectile, sprite: Enemy) => {
+            if(sprite.alive && sprite.targetable && friendlyProjectilesThatCollided.indexOf(projectile) == -1){
                 sprite.shot(projectile);
-                bulletsThatCollided.push(projectile);
+                friendlyProjectilesThatCollided.push(projectile);
+                projectile.kill();
+            }
+        });
+
+        let enemyProjectilesThatCollided = Array<Phaser.Sprite>();
+
+        //this is NOT an observer!  It fires once in the update loop.
+        this.game.physics.arcade.overlap(this.enemyProjectiles, this.turrets, (projectile: Projectile, sprite: Turret) => {
+            if(sprite.alive && enemyProjectilesThatCollided.indexOf(projectile) == -1){
+                sprite.shot(projectile);
+                enemyProjectilesThatCollided.push(projectile);
                 projectile.kill();
             }
         });
@@ -242,7 +259,7 @@ abstract class Mission {
 
     shutdown() {
         this.enemies.destroy();
-        this.projectiles.destroy();
+        this.friendlyProjectiles.destroy();
     }
 }
 

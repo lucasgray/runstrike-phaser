@@ -12,8 +12,6 @@ export default class ShipThree extends PathfindingEnemy {
 
     ship: Phaser.Sprite;
 
-    healthBarHost = () => this.ship;
-
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, mission, '', 25);
 
@@ -29,7 +27,7 @@ export default class ShipThree extends PathfindingEnemy {
         this.health = health;
         this.maxHealth = health;
         //health bar starts off on top?
-        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this.ship, this.scaleFactor));
+        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this.ship, 5, this.scaleFactor, Phaser.TOP_CENTER));
     }
 
     paint(mission: Mission, row: number, col: number) {
