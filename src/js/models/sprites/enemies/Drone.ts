@@ -6,6 +6,8 @@ export default class Drone extends FlyingEnemy {
     defaultWidth: number = 32;
     defaultHeight: number = 32;
     animationFrameRate: number = 15;
+    range = 200;
+    fireRate = 150;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, mission, 'drone', 50);

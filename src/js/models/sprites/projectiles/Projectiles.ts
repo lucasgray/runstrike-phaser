@@ -26,8 +26,8 @@ export class AutoShot extends Projectile {
         let goalX = this.toSprite.x;
         let goalY = this.toSprite.y;
 
-        let diceRollX = Phaser.Math.random(.3, .8);
-        let diceRollY = Phaser.Math.random(.5, .7);
+        let diceRollX = Phaser.Math.random(.2, .8);
+        let diceRollY = Phaser.Math.random(.4, .7);
 
         let curX = this.x;
         let curY = this.y;

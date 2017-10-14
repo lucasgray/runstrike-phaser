@@ -9,6 +9,8 @@ export default class ShipTwo extends PathfindingEnemy {
     animationFrameRate = -1;
     rotatingSprite = false;
     scaleFactor = 1.35;
+    range = 200;
+    fireRate = 150;
 
     ship: Phaser.Sprite;
 
@@ -17,6 +19,7 @@ export default class ShipTwo extends PathfindingEnemy {
 
         this.paint(mission, row, col);
         this.addHealthbar(4000);
+        this.makeWeaponSystem();
         this.pathfind(mission, row, col);
 
         //hide us

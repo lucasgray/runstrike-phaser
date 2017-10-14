@@ -7,6 +7,8 @@ export default class Shield extends PathfindingEnemy {
     defaultHeight: number = 16;
     animationFrameRate: number = 5;
     rotatingSprite: boolean = false;
+    range = 200;
+    fireRate = 150;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
         super(game, mission, 'shield', 10);

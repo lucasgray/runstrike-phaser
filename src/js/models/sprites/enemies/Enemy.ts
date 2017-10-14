@@ -27,8 +27,8 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     weaponSystem: WeaponSystem;
     deathSequences: DeathSequences;
 
-    range: 450;
-    fireRate: 200;
+    abstract range: number;
+    abstract fireRate: number;
 
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, 0, 0, texture);
@@ -53,8 +53,10 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
             return sound;
         };
+    }
 
-        this.weaponSystem = new WeaponSystem(this, this.mission, this.range, this.fireRate, mission.turrets, mission.enemyProjectiles, this.shoot);
+    makeWeaponSystem() {
+        this.weaponSystem = new WeaponSystem(this, this.mission, this.range, this.fireRate, this.mission.turrets, this.mission.enemyProjectiles, this.shoot);
     }
 
     paint(mission: Mission, row: number, col: number) {
