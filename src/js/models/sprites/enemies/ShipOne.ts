@@ -18,7 +18,7 @@ export default class ShipOne extends PathfindingEnemy {
         super(game, mission, '', 20);
 
         this.paint(mission, row, col);
-        this.addHealthbar(600);
+        this.addHealthbar(6000);
         this.makeWeaponSystem();
         this.pathfindToBase(mission, row, col);
 

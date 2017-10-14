@@ -85,7 +85,6 @@ abstract class Mission {
 
         easystar.setGrid(allTogetherNow);
         easystar.setAcceptableTiles([0]);
-        easystar.calculate();
         easystar.enableDiagonals();
         easystar.disableCornerCutting();
         easystar.calculate();
@@ -99,7 +98,6 @@ abstract class Mission {
 
         easystar.setGrid(this.gridDescriptor.passableTerrain);
         easystar.setAcceptableTiles([0]);
-        easystar.calculate();
         easystar.enableDiagonals();
         easystar.disableCornerCutting();
         easystar.calculate();
@@ -156,6 +154,7 @@ abstract class Mission {
     update() {
 
         this.totalGrid.calculate();
+        this.passableTerrainGrid.calculate();
 
         this.deploy();
 

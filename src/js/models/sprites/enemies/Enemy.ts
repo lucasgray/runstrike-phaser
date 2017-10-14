@@ -176,7 +176,7 @@ export abstract class PathfindingEnemy extends Enemy {
         var toGoX = Math.floor(mission.gridDescriptor.rows / 2);
         var toGoY = Math.floor(mission.gridDescriptor.columns - 1);
 
-        this.mission.totalGrid.findPath(row, col, toGoX, toGoY, (path) => {
+        mission.totalGrid.findPath(row, col, toGoX, toGoY, (path) => {
             if (!path) {
                 console.log("The path to the base is blocked.  Going into closed path mode");
 
@@ -244,17 +244,52 @@ export abstract class PathfindingEnemy extends Enemy {
 
     doClosedPathPathfinding() {
         //do basically open path, unless we're have just entered the range of a turret!
-
         if (this.pathToBase.length > 0 && _.some(this.pathToBase, _ => !_.seen)) {
 
-            let closest = this.mission.turrets.getClosestTo(this);
+            let closest = this.closestTurret();
 
-            if (closest && closest.alive && Phaser.Math.distance(this.x, this.y, closest.x, closest.y) < this.range) {
-                this.pathToBase = []; //we're done!!
+            if (closest && closest.alive && Phaser.Math.distance(this.x, this.y, closest.x, closest.y) < this.range - 4) {
+
+                let randomX = Phaser.Math.random(-2, 2);
+                let randomY = Phaser.Math.random(-2, 2);
+
+                this.pathToBase = []; //we're done!! ...... for now
+
+                //add one more little step
+                let t = this.game.add.tween(this).to({x: this.x + randomX, y: this.y + randomY}, 200);
+                t.start();
+                t.onComplete.add(_ => {
+                    this.body.velocity.x = 0;
+                    this.body.velocity.y = 0;
+                });
+
             } else {
                 this.doOpenPathPathfinding();
             }
         }
+    }
+
+    closestTurret() {
+        let spriteDistances = this.mission.turrets
+            .all()
+            .filter(s => s.alive && s.targetable)
+            .map((sprite) => {
+                    return {
+                        distance: Math.abs(sprite.x - this.x) + Math.abs(sprite.y - this.y),
+                        sprite: sprite
+                    };
+                }
+            );
+
+        if (spriteDistances) {
+            let s = _.minBy(spriteDistances, (s) => s.distance);
+            if (s) {
+                return s.sprite;
+            }
+            return undefined;
+        }
+
+        return undefined;
     }
 
     handleTurretKilled() {

@@ -56,7 +56,7 @@ export class AutoTurret extends Turret {
         super(mission, game, row, col, 'turret-1', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
 
         this.init();
-        this.addHealthbar(100);
+        this.addHealthbar(1000);
         this.makeWeaponSystem(this.range, this.fireRate, this.mission, this.shoot);
     }
 
