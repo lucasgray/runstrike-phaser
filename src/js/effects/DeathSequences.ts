@@ -1,15 +1,16 @@
-import {Enemy} from "../models/sprites/enemies/Enemy";
+
 import Mission from "../missions/Mission";
+import {Targetable} from "../models/state/WeaponSystem";
 
 export default class DeathSequences {
 
-    enemy: Enemy;
+    targetable: Targetable;
     game: Phaser.Game;
     mission: Mission;
 
-    constructor(enemy: Enemy, mission: Mission) {
-        this.enemy = enemy;
-        this.game = enemy.game;
+    constructor(targetable: Targetable, mission: Mission) {
+        this.targetable = targetable;
+        this.game = targetable.game;
         this.mission = mission;
     }
 
@@ -17,8 +18,8 @@ export default class DeathSequences {
 
         this.game.camera.shake(0.005, 300);
 
-        let flare = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-flare');
-        let shockwave = this.game.add.sprite(this.enemy.x, this.enemy.y, 'explosion-shockwave');
+        let flare = this.game.add.sprite(this.targetable.x, this.targetable.y, 'explosion-flare');
+        let shockwave = this.game.add.sprite(this.targetable.x, this.targetable.y, 'explosion-shockwave');
 
 
         shockwave.anchor.setTo(.5);
@@ -59,7 +60,7 @@ export default class DeathSequences {
 
         let debris = 'debris-0' + Math.floor(Phaser.Math.random(1, 4));
         // let rot = Phaser.Math.random(0,360);
-        let spr = new Phaser.Sprite(this.game, this.enemy.x, this.enemy.y, debris);
+        let spr = new Phaser.Sprite(this.game, this.targetable.x, this.targetable.y, debris);
         spr.anchor.setTo(.5);
         // spr.angle = rot;
         this.game.add.existing(spr);

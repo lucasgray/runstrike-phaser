@@ -6,9 +6,9 @@ export default class Dialogue {
 
         // //buid caption box
         // //image
-        // let image = options.game.add.sprite(options.enemy.row, options.enemy.col, options.enemy.image);
+        // let image = options.game.add.sprite(options.targetable.row, options.targetable.col, options.targetable.image);
         // image.options = options;
-        // image.showUntil = Date.now() + options.enemy.showFor;
+        // image.showUntil = Date.now() + options.targetable.showFor;
         // //text
         // image.update = this.update;
         // return image;

@@ -13,13 +13,13 @@
 //         g.endFill();
 //         g.inputEnabled = true;
 //         g.options = options;
-//         g.showUntil = Date.now() + options.enemy.showFor;
+//         g.showUntil = Date.now() + options.targetable.showFor;
 //
 //         //text
-//         g.messages = options.enemy.messages;
+//         g.messages = options.targetable.messages;
 //         g.messageIndex = 0;
 //
-//         g.showLineFor = options.enemy.showFor / g.messages.length;
+//         g.showLineFor = options.targetable.showFor / g.messages.length;
 //
 //         let text = g.options.game.add.text(32, 380, g.messages[0], { font: "30pt Righteous", fill: "#19cb65", stroke: "#119f4e", strokeThickness: 2 });
 //         g.text = text;

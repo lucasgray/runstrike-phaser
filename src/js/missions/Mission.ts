@@ -7,12 +7,13 @@ import Projectile from "../models/sprites/projectiles/Projectile";
 import * as _ from 'lodash';
 import Lurker from "../models/sprites/enemies/Lurker";
 import Shield from "../models/sprites/enemies/Shield";
-import {Enemy} from "../models/sprites/enemies/Enemy";
 import ShipOne from "../models/sprites/enemies/ShipOne";
 import ShipTwo from "../models/sprites/enemies/ShipTwo";
 import ShipThree from "../models/sprites/enemies/ShipThree";
 import Turret from "../models/sprites/turrets/Turret";
-import * as EasyStar  from "easystarjs";
+import * as EasyStar from "easystarjs";
+import {Targetable} from "../models/state/WeaponSystem";
+import {Enemy} from "../models/sprites/enemies/Enemy";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -177,7 +178,7 @@ abstract class Mission {
         if (!this.allDeployed &&
             ((Date.now() - this.lastDeployment > this.enemyArray[this.curEnemy]['delay'] || this.enemyArray[this.curEnemy]['delay'] == 0))) {
 
-            console.log('new enemy');
+            console.log('new targetable');
 
             //TODO builder
             if (this.enemyArray[this.curEnemy]['type'] == "Drone") {

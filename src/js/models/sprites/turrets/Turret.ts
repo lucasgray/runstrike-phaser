@@ -1,10 +1,9 @@
 import * as _ from 'lodash';
 import Projectile from '../projectiles/Projectile';
 import Mission from "../../../missions/Mission";
-import Drone from "../enemies/Drone";
-import {Enemy} from "../enemies/Enemy";
 import PercentBar from "../enemies/PercentBar";
 import {Targetable, WeaponSystem} from "../../state/WeaponSystem";
+import DeathSequences from "../../../effects/DeathSequences";
 
 abstract class Turret extends Phaser.Sprite implements Targetable {
 
@@ -27,6 +26,7 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
     targetable = true;
 
     weaponSystem: WeaponSystem;
+    deathSequences: DeathSequences;
 
     abstract shoot: (to: Targetable, mission: Mission) => Projectile;
 
@@ -76,6 +76,8 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
 
         this.addChild(turretShadow);
         this.addChild(turret);
+
+        this.deathSequences = new DeathSequences(this, this.mission);
     }
 
     makeWeaponSystem(range: number, fireRate: number, mission: Mission, shoot: (to: Targetable, mission: Mission) => Projectile) {
@@ -91,10 +93,10 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
 
     update() {
 
-        //turrets should always be aiming (rotating) towards the current enemy,
+        //turrets should always be aiming (rotating) towards the current targetable,
         //then when the timer is up it shoots!
 
-        //we either have a current enemy or we dont. if we do, and its alive,
+        //we either have a current targetable or we dont. if we do, and its alive,
         //rotate with it
 
         //if we dont. and there are others alive, start moving towards that one (slowly)
@@ -147,6 +149,7 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
 
         let whereAmI = this.mission.gridDescriptor.getGridLocation({x: this.x, y: this.y});
         this.mission.gameState.unplaceItem('turret-1', this.mission.name, whereAmI.x, whereAmI.y);
+        this.deathSequences.basicDeathSequence();
 
         this.healthBar.destroy();
         this.mission.sendTurretKilled();

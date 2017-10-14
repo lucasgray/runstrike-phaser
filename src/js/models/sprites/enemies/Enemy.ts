@@ -138,7 +138,7 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 enum PathfindingMode { OpenPath, ClosedPath }
 
 /**
- * Pathfinding enemy will operate in pure A* if there is an open path to the destination
+ * Pathfinding targetable will operate in pure A* if there is an open path to the destination
  * After pathfindToBase is called, we'll periodically march towards our destination, shooting
  * as we go.
  *

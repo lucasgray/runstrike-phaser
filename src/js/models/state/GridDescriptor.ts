@@ -11,7 +11,7 @@ export default class GridDescriptor {
     columns: number;
 
     /**
-     * What cells are passable by the enemy forces
+     * What cells are passable by the targetable forces
      */
     passableTerrain: number[][];
 
