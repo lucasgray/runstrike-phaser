@@ -130,33 +130,38 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
                 mission.projectileExplosions
             );
         }
-    }
+    };
+
+    handleTurretKilled() {}
 }
 
+enum PathfindingMode { OpenPath, ClosedPath }
+
+/**
+ * Pathfinding enemy will operate in pure A* if there is an open path to the destination
+ * After pathfindToBase is called, we'll periodically march towards our destination, shooting
+ * as we go.
+ *
+ * If there is a CLOSED path to the destination, we try to pathfind again, as if the turrets don't exist.
+ * When this happens, we switch the pathfindingMode which is very important.  If we're in "ClosedPath"
+ * pathfinding mode, we stop the moment a turret is in range and keep shooting at it until that is
+ * no longer true.
+ *
+ * When a turret dies, we should try to reset pathfinding to see if we can change modes back.
+ */
 export abstract class PathfindingEnemy extends Enemy {
 
     lastCalculation: number;
-    path: {x: number; y: number, seen: boolean}[];
+
+    pathfindingMode: PathfindingMode;
+
+    pathToBase: {x: number; y: number, seen: boolean}[];
 
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, mission, texture, speed);
 
+
         this.lastCalculation = 0;
-    }
-
-    pathfind(mission: Mission, row: number, col: number) {
-
-        //TODO base doesnt need to be in center bottom of map
-        this.mission.easystar.findPath(row, col, Math.floor(mission.gridDescriptor.rows / 2), (mission.gridDescriptor.columns - 1), (path) => {
-            if (!path) {
-                console.log("The path to the destination point was not found.");
-            } else {
-                console.log("easystar success. ");
-                path.forEach((p) => console.log(JSON.stringify(p)));
-                this.path = path.map(i => { return {...i, seen: false}});
-            }
-            this.lastCalculation = Date.now();
-        });
     }
 
     update() {
@@ -164,41 +169,98 @@ export abstract class PathfindingEnemy extends Enemy {
         this.doPathfinding();
     }
 
+    pathfindToBase(mission: Mission, row: number, col: number) {
+
+        //TODO base doesnt need to be in center bottom of map
+
+        var toGoX = Math.floor(mission.gridDescriptor.rows / 2);
+        var toGoY = Math.floor(mission.gridDescriptor.columns - 1);
+
+        this.mission.totalGrid.findPath(row, col, toGoX, toGoY, (path) => {
+            if (!path) {
+                console.log("The path to the base is blocked.  Going into closed path mode");
+
+                this.mission.passableTerrainGrid.findPath(row, col, toGoX, toGoY, (closedPath) => {
+                    console.log("closed path success. ");
+                    // path.forEach((p) => console.log(JSON.stringify(p)));
+                    this.pathfindingMode = PathfindingMode.ClosedPath;
+                    this.pathToBase = closedPath.map(i => { return {...i, seen: false}});
+                });
+            } else {
+                console.log("open path success. ");
+                // path.forEach((p) => console.log(JSON.stringify(p)));
+                this.pathfindingMode = PathfindingMode.OpenPath;
+                this.pathToBase = path.map(i => { return {...i, seen: false}});
+            }
+            this.lastCalculation = Date.now();
+        });
+    }
+
     doPathfinding() {
-        if (this.alive && this.targetable && this.path && this.path.length > 0 && _.some(this.path, _ => !_.seen)) {
+        if (this.alive && this.targetable
+            && this.pathToBase && this.pathToBase.length > 0
+            && _.some(this.pathToBase, _ => !_.seen)) {
 
-            //if we're in the process of moving from loc a to b, keep going
-            //otherwise prep the next step
+            if (this.pathfindingMode === PathfindingMode.OpenPath) {
+                this.doOpenPathPathfinding();
+            } else {
+                this.doClosedPathPathfinding();
+            }
+        }
+    }
 
-            let cur = this.path.filter(_ => !_.seen)[0];
-            let next = cur;
+    doOpenPathPathfinding() {
+        //if we're in the process of moving from loc a to b, keep going
+        //otherwise prep the next step
 
-            if (cur) {
+        let cur = this.pathToBase.filter(_ => !_.seen)[0];
 
-                //we want to move towards the CENTER of the next cell..
-                let xToGo = cur.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-                let yToGo = cur.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+        if (cur) {
 
-                //have we made it yet, or are we going for the first time?
-                if (_.every(this.path, _ => !_.seen) || (Math.abs(xToGo - this.x) < 10 && Math.abs(yToGo - this.y) < 10)) {
-                    console.log('got to next!');
-                    cur.seen = true;
-                    next = this.path.filter(_ => !_.seen)[0];
+            //we want to move towards the CENTER of the next cell..
+            let xToGo = cur.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+            let yToGo = cur.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
-                    if (next) {
-                        xToGo = next.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-                        yToGo = next.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+            //have we made it yet, or are we going for the first time?
+            if (_.every(this.pathToBase, _ => !_.seen) || Phaser.Math.distance(this.x, this.y, xToGo, yToGo) < 10) {
+                console.log('got to next!');
+                cur.seen = true;
+                let next = this.pathToBase.filter(_ => !_.seen)[0];
 
-                        let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+                if (next) {
+                    xToGo = next.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
+                    yToGo = next.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
 
-                        if (this.rotatingSprite) {
-                            let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
-                            this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
-                        }
+                    let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+
+                    if (this.rotatingSprite) {
+                        let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
+                        this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
                     }
                 }
             }
         }
+    }
+
+    doClosedPathPathfinding() {
+        //do basically open path, unless we're have just entered the range of a turret!
+
+        if (this.pathToBase.length > 0 && _.some(this.pathToBase, _ => !_.seen)) {
+
+            let closest = this.mission.turrets.getClosestTo(this);
+
+            if (closest && closest.alive && Phaser.Math.distance(this.x, this.y, closest.x, closest.y) < this.range) {
+                this.pathToBase = []; //we're done!!
+            } else {
+                this.doOpenPathPathfinding();
+            }
+        }
+    }
+
+    handleTurretKilled() {
+        this.pathToBase = [];
+        var whereImAt = this.mission.gridDescriptor.getGridLocation({x:this.x, y:this.y});
+        this.pathfindToBase(this.mission, whereImAt.x, whereImAt.y);
     }
 }
 

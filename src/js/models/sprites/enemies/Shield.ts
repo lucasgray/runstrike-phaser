@@ -15,7 +15,7 @@ export default class Shield extends PathfindingEnemy {
 
         this.paint(mission, row, col);
         this.addHealthbar(1000);
-        this.pathfind(mission, row, col);
+        this.pathfindToBase(mission, row, col);
     }
 
     kill() {

@@ -2,14 +2,14 @@ import SetupTurretInputHandler from "./SetupTurretInputHandler";
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import InputHandler from "./InputHandler";
-import {StandardSetupTurret} from "../models/sprites/turrets/setup/SetupTurrets";
+import {TurretOne} from "../models/sprites/turrets/setup/SetupTurrets";
 
 export class StandardTurretHandler extends SetupTurretInputHandler {
 
     icon: string = 'auto-turret-ui';
-    lootType: string = 'standard-turret';
+    lootType: string = 'turret-1';
     spriteScaling: number = .8;
-    spawnSetupTurret = (grid) => new StandardSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new TurretOne(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,
@@ -30,7 +30,7 @@ export class HeavyTurretHandler extends SetupTurretInputHandler {
     icon: string = 'heavy-turret-ui';
     lootType: string = 'standard-turret';
     spriteScaling: number = .8;
-    spawnSetupTurret = (grid) => new StandardSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, this);
+    spawnSetupTurret = (grid) => new TurretOne(this.mission, this.game, this.gameState, grid.x, grid.y, this);
 
     constructor(mission: Mission,
                 gameState: GameState,

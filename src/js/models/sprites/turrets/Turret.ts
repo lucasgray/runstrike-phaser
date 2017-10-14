@@ -135,13 +135,26 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         }
     }
 
-    //
-    // destroy() {
-    //     super.destroy();
-    //
-    //     this.turret.destroy();
-    //     this.base.destroy();
-    // }
+    destroy() {
+        super.destroy();
+
+        this.turret.destroy();
+        this.base.destroy();
+    }
+
+    kill() {
+        super.kill();
+
+        let whereAmI = this.mission.gridDescriptor.getGridLocation({x: this.x, y: this.y});
+        this.mission.gameState.unplaceItem('turret-1', this.mission.name, whereAmI.x, whereAmI.y);
+
+        this.healthBar.destroy();
+        this.mission.sendTurretKilled();
+
+        this.destroy();
+
+        return this;
+    }
     shot(by: Projectile) {
         this.damage(10);
         by.playShotFx();

@@ -29,6 +29,7 @@ export class WeaponSystem {
         this.mission = mission;
         this.range = range;
         this.fireRate = fireRate;
+
         this.targetingGroup = targetingGroup;
         this.projectileGroup = projectileGroup;
         this.shoot = shoot;
@@ -36,7 +37,9 @@ export class WeaponSystem {
     }
 
     update() {
-        this.maybeShoot();
+        if (this.attachedTo.alive) {
+            this.maybeShoot();
+        }
     }
 
     maybeShoot() {

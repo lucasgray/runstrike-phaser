@@ -10,7 +10,7 @@ export default class ShipOne extends PathfindingEnemy {
     rotatingSprite = false;
     scaleFactor = 1.35;
     range = 200;
-    fireRate = 150;
+    fireRate = 20;
 
     ship: Phaser.Sprite;
 
@@ -18,9 +18,9 @@ export default class ShipOne extends PathfindingEnemy {
         super(game, mission, '', 20);
 
         this.paint(mission, row, col);
-        this.addHealthbar(2400);
+        this.addHealthbar(600);
         this.makeWeaponSystem();
-        this.pathfind(mission, row, col);
+        this.pathfindToBase(mission, row, col);
 
         //hide us
         this.visible = true;

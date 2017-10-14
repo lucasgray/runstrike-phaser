@@ -22,6 +22,7 @@ export default class LargeSkirmish extends Mission {
 
     constructor(game: Phaser.Game) {
         super(game);
+        this.game = game;
 
         this.gridDescriptor = new GridDescriptor(
             game.width,

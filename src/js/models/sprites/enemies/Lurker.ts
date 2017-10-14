@@ -15,7 +15,7 @@ export default class Lurker extends PathfindingEnemy {
 
         this.paint(mission, row, col);
         this.addHealthbar(500);
-        this.pathfind(mission, row, col);
+        this.pathfindToBase(mission, row, col);
     }
 
     kill() {

@@ -1,6 +1,6 @@
 import GridDescriptor from "../models/state/GridDescriptor";
 import * as EasyStar from 'easystarjs';
-import {PlacedLootInfo} from "../models/state/GameData";
+import {GameState, PlacedLootInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 import SmartGroup from "../extensions/SmartGroup";
 import Projectile from "../models/sprites/projectiles/Projectile";
@@ -25,7 +25,9 @@ abstract class Mission {
     //abstract baseLocation: {x: number, y: number}
 
     game: Phaser.Game;
-    easystar: EasyStar.js;
+
+    totalGrid: EasyStar.js;
+    passableTerrainGrid: EasyStar.js;
 
     turrets: SmartGroup<Turret>;
     enemies: SmartGroup<Enemy>;
@@ -41,6 +43,8 @@ abstract class Mission {
 
     pendingFinalize = false;
 
+    gameState: GameState;
+
     constructor(game: Phaser.Game) {
 
         this.game = game;
@@ -48,8 +52,16 @@ abstract class Mission {
         this.reset();
     }
 
-    recalculateGrid(placedItems: Array<PlacedLootInfo>) {
+    setGameState(gameState: GameState) {
+        this.gameState = gameState;
+    }
 
+    recalculateGrid(placedItems: Array<PlacedLootInfo>) {
+        this.recalculateTotalGrid(placedItems);
+        this.recalculatePassableTerrainGrid();
+    }
+
+    recalculateTotalGrid(placedItems: Array<PlacedLootInfo>) {
         let myLoot =  placedItems.filter(it => it.mission === this.name);
 
         let easystar = new EasyStar.js();
@@ -64,7 +76,7 @@ abstract class Mission {
         }
 
         myLoot.forEach((i) =>{
-           lootGrid[i.col][i.row] = 1;
+            lootGrid[i.col][i.row] = 1;
         });
 
         let allTogetherNow : number[][] = _.zipWith(lootGrid, this.gridDescriptor.passableTerrain, (i,j) => {
@@ -78,7 +90,21 @@ abstract class Mission {
         easystar.disableCornerCutting();
         easystar.calculate();
 
-        this.easystar = easystar;
+        this.totalGrid = easystar;
+    }
+
+    recalculatePassableTerrainGrid() {
+
+        let easystar = new EasyStar.js();
+
+        easystar.setGrid(this.gridDescriptor.passableTerrain);
+        easystar.setAcceptableTiles([0]);
+        easystar.calculate();
+        easystar.enableDiagonals();
+        easystar.disableCornerCutting();
+        easystar.calculate();
+
+        this.passableTerrainGrid = easystar;
     }
 
     reset() {
@@ -129,7 +155,7 @@ abstract class Mission {
 
     update() {
 
-        this.easystar.calculate();
+        this.totalGrid.calculate();
 
         this.deploy();
 
@@ -255,6 +281,11 @@ abstract class Mission {
                 }
             });
         });
+    }
+
+    sendTurretKilled() {
+        this.recalculateGrid(this.gameState.placedLoot);
+        this.enemies.forEachAlive(e => e.handleTurretKilled(), true);
     }
 
     shutdown() {

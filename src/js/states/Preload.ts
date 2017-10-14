@@ -152,7 +152,11 @@ export default class Preload extends Phaser.State {
         let missions = AllMissions.AllMissionsAndInfos(this.game);
         //TODO add mission state from react-native as well...
 
-        return new GameState(placedItems, finalInventoryItems, missions, isReactNative);
+        let gameState = new GameState(placedItems, finalInventoryItems, missions, isReactNative);
+
+        missions.forEach(m => m[0].gameState = gameState);
+
+        return gameState;
     }
 
     groupItems(items, caps) : Array<LootInfo> {
@@ -216,7 +220,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "standard-turret"
+                "type": "turret-1"
             }, "-Kj-ezDNFAwbZsdfsdfirmeGOH": {
                 "foundBy": "TODO!",
                 "foundOn": "TODO!",
@@ -225,7 +229,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "standard-turret"
+                "type": "turret-1"
             }, "-Kj-ezDNFAwbZsdfsdfirmeGOI": {
                 "foundBy": "TODO!",
                 "foundOn": "TODO!",
@@ -234,7 +238,7 @@ export default class Preload extends Phaser.State {
                     "latitude": 43.06856735536175,
                     "longitude": -89.33985730479297
                 },
-                "type": "standard-turret"
+                "type": "turret-1"
             }
         }
     }

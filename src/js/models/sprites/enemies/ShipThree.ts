@@ -10,7 +10,7 @@ export default class ShipThree extends PathfindingEnemy {
     rotatingSprite = false;
     scaleFactor = 1.35;
     range = 200;
-    fireRate =150;
+    fireRate = 20;
 
     ship: Phaser.Sprite;
 
@@ -18,9 +18,9 @@ export default class ShipThree extends PathfindingEnemy {
         super(game, mission, '', 25);
 
         this.paint(mission, row, col);
-        this.addHealthbar(1600);
+        this.addHealthbar(6000);
         this.makeWeaponSystem();
-        this.pathfind(mission, row, col);
+        this.pathfindToBase(mission, row, col);
 
         //hide us
         this.visible = true;

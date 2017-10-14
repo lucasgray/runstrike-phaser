@@ -5,7 +5,7 @@ import Mission from "../../../../missions/Mission";
 import {GameState} from "../../../state/GameData";
 import InputHandler from "../../../../handlers/InputHandler";
 
-export class StandardSetupTurret extends SetupTurret {
+export class TurretOne extends SetupTurret {
 
     constructor(mission: Mission, game: Phaser.Game,
                 gameState: GameState,
