@@ -49,7 +49,7 @@ export default class Preload extends Phaser.State {
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
         //new and blue tint images
-        this.game.load.image('wasteland-craters', require('../../img/blue-tint/Buildings_Floor_WasteLandCraters.jpg'));
+        this.game.load.image('wasteland-craters', require('../../img/blue-tint/Buildings_Floor_WastelandCraters.jpg'));
         this.game.load.image('building-01', require('../../img/blue-tint/Buildings_Building001.png'));
         this.game.load.image('base', require('../../img/blue-tint/Buildings_Base.png'));
         this.game.load.image('scanlines', require('../../img/blue-tint/FXAssets_Scanlines_Multiply1x2-25pct.jpg'));
