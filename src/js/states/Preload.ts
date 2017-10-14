@@ -48,6 +48,35 @@ export default class Preload extends Phaser.State {
         this.load.audio('win', [require('../../audio/sounds/win.mp3')]);
         this.load.audio('lose', [require('../../audio/sounds/lose.mp3')]);
 
+        //new and blue tint images
+        this.game.load.image('wasteland-craters', require('../../img/blue-tint/Buildings_Floor_WasteLandCraters.jpg'));
+        this.game.load.image('building-01', require('../../img/blue-tint/Buildings_Building001.png'));
+        this.game.load.image('base', require('../../img/blue-tint/Buildings_Base.png'));
+        this.game.load.image('scanlines', require('../../img/blue-tintFXAssets_Scanlines_Multiply1x2-25pct.jpg'));
+        this.game.load.image('screen-glare', require('../../img/blue-tint/FXAssets_ScreenGlare_SoftLight.jpg'));
+        this.game.load.image('border-blend', require('../../img/blue-tint/FXAssets_ScreenBorder_Multiply.jpg'));
+        this.game.load.image('vignette', require('../../img/blue-tint/FXAssets_Vignette_Multiply.jpg'));
+        this.game.load.image('lut', require('../../img/blue-tint/lut.png'));
+        this.game.load.image('empty-grid', require('../../img/blue-tint/GridCell_empty.png'));
+        this.game.load.image('unplaceable-grid', require('../../img/blue-tint/GridCell_hatchedAA.png'));
+        this.game.load.image('turret-base', require('../../img/blue-tint/Turrets_TurretBase.png'));
+        this.game.load.image('turret-1', require('../../img/blue-tint/Turrets_M01.png'));
+        this.game.load.image('turret-heavy', require('../../img/blue-tint/Turrets_H01.png'));
+        this.game.load.image('auto-turret-ui', require('../../img/blue-tint/UIAssets_Button_TowerAutocannon001.png'));
+        this.game.load.image('heavy-turret-ui', require('../../img/blue-tint/UIAssets_Button_TowerHeavy001.png'));
+        this.game.load.image('debris-01', require('../../img/blue-tint/Debris_001.png'));
+        this.game.load.image('debris-02', require('../../img/blue-tint/Debris_002.png'));
+        this.game.load.image('debris-03', require('../../img/blue-tint/Debris_003.png'));
+        this.game.load.image('ship-01', require('../../img/blue-tint/Enemies_Enemy001.png'));
+        this.game.load.image('ship-02', require('../../img/blue-tint/Enemies_Enemy002.png'));
+        this.game.load.image('ship-03', require('../../img/blue-tint/Enemies_Enemy003.png'));
+        this.game.load.image('aa-shot-01', require('../../img/blue-tint/WeaponFX_Shot01.png'));
+        this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
+        this.game.load.spritesheet('weapon-explosion-sm', require('../../img/effects/weapon-explosion-sm.png').toString(), 65, 65, 4);
+        this.game.load.image('explosion-flare', require('../../img/blue-tint/ExplosionLGFX_Flare001.png'));
+        this.game.load.image('explosion-shockwave', require('../../img/blue-tint/ExplosionLGFX_Shockwave001.png'));
+
+        //old or crappy images
         this.game.load.image('cocktail_icon', require('../../img/ui/cocktail.png'));
         this.game.load.image('grenade_icon', require('../../img/deprecated/grenade.png'));
         this.game.load.spritesheet('drone', require('../../img/enemies/drone-sm.png').toString(), 32, 32, 3);
@@ -63,51 +92,13 @@ export default class Preload extends Phaser.State {
         this.game.load.image('green-turret', require('../../img/turrets/deprecated/green-turret.png'));
         this.game.load.image('retro-background', require('../../img/backgrounds/retro-background.jpg'));
         this.game.load.image('skirmish-background', require('../../img/deprecated/skirmish-background.jpg'));
-
-        //new
-        this.game.load.image('wasteland-craters', require('../../img/backgrounds/wasteland-craters.jpg'));
-        this.game.load.image('building-01', require('../../img/backgrounds/building-01.png'));
-        this.game.load.image('base', require('../../img/backgrounds/base.png'));
-        this.game.load.image('scanlines', require('../../img/effects/scanlines.png'));
-        this.game.load.image('screen-glare', require('../../img/effects/screen-glare.jpg'));
-        this.game.load.image('border-blend', require('../../img/effects/border-blend.jpg'));
-        this.game.load.image('vignette', require('../../img/effects/vignette.jpg'));
-        this.game.load.image('grid', require('../../img/effects/grid.png'));
-        this.game.load.image('lut', require('../../img/effects/lut.png'));
-
-        this.game.load.image('empty-grid', require('../../img/ui/GridCell_empty.png'));
-        this.game.load.image('unplaceable-grid', require('../../img/ui/GridCell_hatchedAA.png'));
-
-        this.game.load.image('turret-base', require('../../img/turrets/turret-base.png'));
-        this.game.load.image('turret-1', require('../../img/turrets/turret-aa.png'));
-        this.game.load.image('turret-heavy', require('../../img/turrets/turret-heavy.png'));
-
-        this.game.load.image('auto-turret-ui', require('../../img/ui/auto-turret-ui.png'));
-        this.game.load.image('heavy-turret-ui', require('../../img/ui/heavy-turret-ui.png'));
-
-        this.game.load.image('debris-01', require('../../img/effects/debris-01.png'));
-        this.game.load.image('debris-02', require('../../img/effects/debris-02.png'));
-        this.game.load.image('debris-03', require('../../img/effects/debris-03.png'));
-
-        this.game.load.image('ship-01', require('../../img/enemies/ship-01.png'));
-        this.game.load.image('ship-02', require('../../img/enemies/ship-02.png'));
-        this.game.load.image('ship-03', require('../../img/enemies/ship-03.png'));
-
-        this.game.load.image('aa-shot-01', require('../../img/projectiles/aa-shot-01.png'));
-        this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
-        this.game.load.spritesheet('weapon-explosion-sm', require('../../img/effects/weapon-explosion-sm.png').toString(), 65, 65, 4);
-
-        this.game.load.image('explosion-flare', require('../../img/effects/explosion-flare-01.png'));
-        this.game.load.image('explosion-shockwave', require('../../img/effects/explosion-shockwave-01.png'));
-
-        this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
-        this.game.load.image('red-spark', require('../../img/particles/red.png'));
-
         this.game.load.spritesheet('green-projectile', require('../../img/projectiles/green-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('missile-projectile', require('../../img/projectiles/missile-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-projectile', require('../../img/projectiles/blue-projectile.png').toString(), 32, 64, 5);
         this.game.load.spritesheet('blue-missile-projectile', require('../../img/projectiles/blue-missile-projectile.png').toString(), 32, 32, 5);
         this.game.load.spritesheet('pico-icons', require('../../img/ui/pico-icons.png').toString(), 8, 8);
+        this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
+        this.game.load.image('red-spark', require('../../img/particles/red.png'));
 
         let s  = this.makeGameData();
 
