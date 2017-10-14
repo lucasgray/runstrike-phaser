@@ -13,7 +13,7 @@ export default class StandardMap {
         // let s3 = game.add.sprite(0,0, 'grid');
         let s4 = game.add.sprite(0,0, 'border-blend');
         s4.blendMode = PIXI.blendModes.MULTIPLY;
-        s4.alpha = .75;
+        // s4.alpha = .75;
         let s45 = game.add.sprite(0,0, 'vignette');
         s45.alpha = .75;
         s45.blendMode = PIXI.blendModes.MULTIPLY;

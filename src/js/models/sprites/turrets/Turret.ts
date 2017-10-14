@@ -51,8 +51,8 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         let baseShadow = new Phaser.Sprite(game, this.x - 4, this.y + 2, 'turret-base');
         baseShadow.anchor.set(0.5);
         baseShadow.tint = 0x191919;
-        baseShadow.alpha = 0.6;
-        baseShadow.blendMode = PIXI.blendModes.LUMINOSITY;
+        baseShadow.alpha = .9;
+        // baseShadow.blendMode = PIXI.blendModes.LUMINOSITY;
         baseShadow.scale.setTo(scaleX, scaleY);
 
         let base = new Phaser.Sprite(game, this.x, this.y, 'turret-base');
@@ -67,8 +67,8 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         let turretShadow = new Phaser.Sprite(game, offsetX - 4, offsetY + 2, texture);
         turretShadow.anchor.set(0.5);
         turretShadow.tint = 0x191919;
-        turretShadow.alpha = 0.6;
-        turretShadow.blendMode = PIXI.blendModes.LUMINOSITY;
+        turretShadow.alpha = .9;
+        // turretShadow.blendMode = PIXI.blendModes.LUMINOSITY;
 
         this.base = new Phaser.Group(this.game);
         this.base.add(baseShadow);

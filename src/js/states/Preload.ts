@@ -52,11 +52,11 @@ export default class Preload extends Phaser.State {
         this.game.load.image('wasteland-craters', require('../../img/blue-tint/Buildings_Floor_WasteLandCraters.jpg'));
         this.game.load.image('building-01', require('../../img/blue-tint/Buildings_Building001.png'));
         this.game.load.image('base', require('../../img/blue-tint/Buildings_Base.png'));
-        this.game.load.image('scanlines', require('../../img/blue-tintFXAssets_Scanlines_Multiply1x2-25pct.jpg'));
+        this.game.load.image('scanlines', require('../../img/blue-tint/FXAssets_Scanlines_Multiply1x2-25pct.jpg'));
         this.game.load.image('screen-glare', require('../../img/blue-tint/FXAssets_ScreenGlare_SoftLight.jpg'));
         this.game.load.image('border-blend', require('../../img/blue-tint/FXAssets_ScreenBorder_Multiply.jpg'));
         this.game.load.image('vignette', require('../../img/blue-tint/FXAssets_Vignette_Multiply.jpg'));
-        this.game.load.image('lut', require('../../img/blue-tint/lut.png'));
+        // this.game.load.image('lut', require('../../img/blue-tint/lut.png'));
         this.game.load.image('empty-grid', require('../../img/blue-tint/GridCell_empty.png'));
         this.game.load.image('unplaceable-grid', require('../../img/blue-tint/GridCell_hatchedAA.png'));
         this.game.load.image('turret-base', require('../../img/blue-tint/Turrets_TurretBase.png'));
@@ -71,8 +71,8 @@ export default class Preload extends Phaser.State {
         this.game.load.image('ship-02', require('../../img/blue-tint/Enemies_Enemy002.png'));
         this.game.load.image('ship-03', require('../../img/blue-tint/Enemies_Enemy003.png'));
         this.game.load.image('aa-shot-01', require('../../img/blue-tint/WeaponFX_Shot01.png'));
-        this.game.load.spritesheet('weapon-muzzleflash', require('../../img/effects/weapon-muzzleflash.png').toString(), 65, 64, 3);
-        this.game.load.spritesheet('weapon-explosion-sm', require('../../img/effects/weapon-explosion-sm.png').toString(), 65, 65, 4);
+        this.game.load.spritesheet('weapon-muzzleflash', require('../../img/blue-tint/WeaponFx_MuzzleFlashFull01.png').toString(), 65, 64, 3);
+        this.game.load.spritesheet('weapon-explosion-sm', require('../../img/blue-tint/WeaponFx_ExplosionSmFull01.png').toString(), 65, 65, 5);
         this.game.load.image('explosion-flare', require('../../img/blue-tint/ExplosionLGFX_Flare001.png'));
         this.game.load.image('explosion-shockwave', require('../../img/blue-tint/ExplosionLGFX_Shockwave001.png'));
 
