@@ -1,5 +1,5 @@
 import GridDescriptor from "../models/state/GridDescriptor";
-import * as EasyStar from 'easystarjs';
+
 import {GameState, PlacedLootInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 import SmartGroup from "../extensions/SmartGroup";
@@ -12,6 +12,7 @@ import ShipOne from "../models/sprites/enemies/ShipOne";
 import ShipTwo from "../models/sprites/enemies/ShipTwo";
 import ShipThree from "../models/sprites/enemies/ShipThree";
 import Turret from "../models/sprites/turrets/Turret";
+import * as EasyStar  from "easystarjs";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -44,6 +45,8 @@ abstract class Mission {
     pendingFinalize = false;
 
     gameState: GameState;
+
+    lastUpdatedGrid: number;
 
     constructor(game: Phaser.Game) {
 
@@ -149,12 +152,16 @@ abstract class Mission {
         this.lastDeployment = Date.now();
 
         this.pendingFinalize = false;
+
+        this.lastUpdatedGrid = Date.now();
     }
 
     update() {
 
-        this.totalGrid.calculate();
-        this.passableTerrainGrid.calculate();
+        if (Date.now() - this.lastUpdatedGrid > 50) {
+            this.totalGrid.calculate();
+            this.passableTerrainGrid.calculate();
+        }
 
         this.deploy();
 

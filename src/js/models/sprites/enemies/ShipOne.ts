@@ -46,10 +46,9 @@ export default class ShipOne extends PathfindingEnemy {
         shipShadow.anchor.set(0.5);
         shipShadow.tint = 0x191919;
         shipShadow.alpha = 0.6;
-        shipShadow.blendMode = PIXI.blendModes.LUMINOSITY;
 
-        this.game.add.tween(ship).to( { x: '+8', y: '-8' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
-        this.game.add.tween(shipShadow).to( { x: '+2', y: '-2' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
+        this.game.add.tween(ship).to( { x: '+12', y: '-12' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
+        this.game.add.tween(shipShadow).to( { x: '+4', y: '-4' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
 
         this.addChild(shipShadow);
         this.addChild(ship);
