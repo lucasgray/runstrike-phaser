@@ -22,6 +22,7 @@ abstract class Mission {
     abstract name: string;
     abstract gridDescriptor: GridDescriptor;
     abstract background: () => Phaser.Sprite;
+    abstract base: () => Phaser.Sprite;
     abstract enemyArray: Array<object>;
 
     //abstract baseLocation: {x: number, y: number}

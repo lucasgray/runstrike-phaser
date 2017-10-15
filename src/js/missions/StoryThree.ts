@@ -57,6 +57,10 @@ export default class StoryThree extends Mission {
                 [1, 0, 0, 0, 0, 0, 0, 1],
                 [1, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1]
+            ],
+            [
+                [3,11],
+                [4,11],
             ]
         );
     }
@@ -68,5 +72,9 @@ export default class StoryThree extends Mission {
         background.inputEnabled = true;
 
         return background;
+    }
+
+    base = () => {
+        return new Phaser.Sprite(this.game,640/2 - (64 *2),960-(64*3), 'base');
     }
 }

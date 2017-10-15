@@ -31,10 +31,17 @@ export default class Play extends Phaser.State {
 
         mission.reset();
 
-        let spr = this.mission.background();
-        spr.sendToBack();
-        this.game.add.existing(spr);
-        this.backgroundSprite = spr;
+        let bkgrd = this.mission.background();
+        this.game.add.existing(bkgrd);
+
+        this.backgroundSprite = bkgrd;
+
+        let base = this.mission.base();
+        this.game.add.existing(base);
+
+        base.sendToBack();
+        bkgrd.sendToBack();
+
 
         let builder = new TurretBuilder()
             .withGame(this.game)

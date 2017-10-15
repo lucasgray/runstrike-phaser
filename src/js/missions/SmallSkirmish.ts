@@ -33,6 +33,7 @@ export default class SmallSkirmish extends Mission {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
+                [0, 0, 0, 0],
                 [0, 0, 0, 0]
             ],
             [
@@ -48,6 +49,10 @@ export default class SmallSkirmish extends Mission {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0]
+            ],
+            [
+                [2,11],
+                [3,11]
             ]
         );
     }
@@ -66,5 +71,9 @@ export default class SmallSkirmish extends Mission {
         background.inputEnabled = true;
 
         return background;
+    }
+
+    base = () => {
+        return new Phaser.Sprite(this.game,640/2 - (64 *2),960-(64*3), 'base');
     }
 }

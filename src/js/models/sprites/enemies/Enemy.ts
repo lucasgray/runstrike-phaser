@@ -60,6 +60,7 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     }
 
     paint(mission: Mission, row: number, col: number) {
+
         //get the right cell, then place into center of cell
         this.x = (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
         this.y = (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
@@ -173,14 +174,13 @@ export abstract class PathfindingEnemy extends Enemy {
 
         //TODO base doesnt need to be in center bottom of map
 
-        var toGoX = Math.floor(mission.gridDescriptor.rows / 2);
-        var toGoY = Math.floor(mission.gridDescriptor.columns - 1);
+        let loc = this.mission.gridDescriptor.getRandomBaseLocation();
 
-        mission.totalGrid.findPath(row, col, toGoX, toGoY, (path) => {
+        mission.totalGrid.findPath(row, col, loc[0], loc[1], (path) => {
             if (!path) {
                 console.log("The path to the base is blocked.  Going into closed path mode");
 
-                this.mission.passableTerrainGrid.findPath(row, col, toGoX, toGoY, (closedPath) => {
+                this.mission.passableTerrainGrid.findPath(row, col, loc[0], loc[1], (closedPath) => {
                     console.log("closed path success. ");
                     // path.forEach((p) => console.log(JSON.stringify(p)));
                     this.pathfindingMode = PathfindingMode.ClosedPath;
@@ -218,20 +218,18 @@ export abstract class PathfindingEnemy extends Enemy {
         if (cur) {
 
             //we want to move towards the CENTER of the next cell..
-            let xToGo = cur.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-            let yToGo = cur.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+            let toGo = this.mission.gridDescriptor.getCenterOf(cur);
 
             //have we made it yet, or are we going for the first time?
-            if (_.every(this.pathToBase, _ => !_.seen) || Phaser.Math.distance(this.x, this.y, xToGo, yToGo) < 10) {
+            if (_.every(this.pathToBase, _ => !_.seen) || Phaser.Math.distance(this.x, this.y, toGo.x, toGo.y) < 10) {
                 console.log('got to next!');
                 cur.seen = true;
                 let next = this.pathToBase.filter(_ => !_.seen)[0];
 
                 if (next) {
-                    xToGo = next.x * this.mission.gridDescriptor.cellWidth + Math.floor(this.mission.gridDescriptor.cellWidth / 2);
-                    yToGo = next.y * this.mission.gridDescriptor.cellHeight + Math.floor(this.mission.gridDescriptor.cellHeight / 2);
+                    let toGo = this.mission.gridDescriptor.getCenterOf(next);
 
-                    let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+                    let a = this.game.physics.arcade.moveToXY(this, toGo.x, toGo.y, this.randomVelocity);
 
                     if (this.rotatingSprite) {
                         let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
@@ -309,13 +307,11 @@ export abstract class FlyingEnemy extends Enemy {
 
     flyTowardsBase() {
 
-        //TODO base could be anywhere
-        let xToGo = ((this.mission.gridDescriptor.rows / 2) * this.mission.gridDescriptor.cellWidth)
-            + (this.mission.gridDescriptor.cellWidth / 2);
-        let yToGo = ((this.mission.gridDescriptor.columns - 1) * this.mission.gridDescriptor.cellHeight)
-            + (this.mission.gridDescriptor.cellHeight / 2);
+        let base = this.mission.gridDescriptor.getRandomBaseLocation();
 
-        let a = this.game.physics.arcade.moveToXY(this, xToGo, yToGo, this.randomVelocity);
+        let toGo = this.mission.gridDescriptor.getCenterOf({x: base[0], y: base[1]});
+
+        let a = this.game.physics.arcade.moveToXY(this, toGo.x, toGo.y, this.randomVelocity);
 
         let b = Phaser.Math.getShortestAngle(this.angle, Phaser.Math.radToDeg(a) + 90);
         this.game.add.tween(this).to({angle: this.angle + b}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
