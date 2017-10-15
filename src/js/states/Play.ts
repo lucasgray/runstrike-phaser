@@ -36,7 +36,8 @@ export default class Play extends Phaser.State {
 
         this.backgroundSprite = bkgrd;
 
-        let base = this.mission.base();
+        let base = this.mission.base(false);
+        this.mission.currentBase = base;
         this.game.add.existing(base);
 
         base.sendToBack();

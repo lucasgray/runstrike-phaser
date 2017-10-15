@@ -14,6 +14,8 @@ import Turret from "../models/sprites/turrets/Turret";
 import * as EasyStar from "easystarjs";
 import {Targetable} from "../models/state/WeaponSystem";
 import {Enemy} from "../models/sprites/enemies/Enemy";
+import Base from "../models/sprites/base/Base";
+import PercentBar from "../models/sprites/enemies/PercentBar";
 
 //this is a little big, maybe we can break it up somehow
 
@@ -22,7 +24,21 @@ abstract class Mission {
     abstract name: string;
     abstract gridDescriptor: GridDescriptor;
     abstract background: () => Phaser.Sprite;
-    abstract base: () => Phaser.Sprite;
+    base = (forSetup: boolean) => {
+
+        let base = new Base(this.game, this, 640/2,960-(64*1.5));
+        base.anchor.setTo(.5);
+
+        if (!forSetup) {
+            this.game.physics.enable(base, Phaser.Physics.ARCADE);
+            base.health = 10000;
+            base.maxHealth = 10000;
+            //health bar starts off on top?
+            this.game.add.existing(new PercentBar(this.game, base, base, 5, 1, Phaser.TOP_LEFT));
+        }
+
+        return base;
+    }
     abstract enemyArray: Array<object>;
 
     //abstract baseLocation: {x: number, y: number}
@@ -39,6 +55,7 @@ abstract class Mission {
     muzzleFlashes: Phaser.Group;
     projectileExplosions: Phaser.Group;
     doodads: Phaser.Group;
+    currentBase: Base;
 
     curEnemy: number = 0;
     allDeployed: boolean;
@@ -170,7 +187,7 @@ abstract class Mission {
         this.checkProjectileCollisions();
 
         if (!this.pendingFinalize) {
-            this.pendingFinalize = this.checkWinOrLose();
+            this.pendingFinalize = this.checkWin();
         }
     }
 
@@ -217,13 +234,12 @@ abstract class Mission {
         }
     }
 
-    checkWinOrLose() : boolean {
+    /**
+     * lose state is triggered when the base dies (and explosion is finished)
+     * @returns {boolean}
+     */
+    checkWin() : boolean {
         let won = this.allDeployed && !this.enemies.getFirstAlive();
-
-        let lost = _.some(this.enemies.all(), s => {
-            return s.alive && s.targetable &&
-            s.y > this.gridDescriptor.height - (this.gridDescriptor.cellHeight / 2)
-        });
 
         if (won) {
             setTimeout(() => {
@@ -231,15 +247,7 @@ abstract class Mission {
             }, 2000);
         }
 
-        if (lost) {
-            setTimeout(() => {
-                this.game.state.start('Defeat', true, false, this);
-            }, 500);
-        }
-
-        if (won || lost) {
-            return true;
-        } else return false;
+        return won;
     }
 
     checkProjectileCollisions() {
@@ -262,6 +270,17 @@ abstract class Mission {
             if(sprite.alive && enemyProjectilesThatCollided.indexOf(projectile) == -1){
                 sprite.shot(projectile);
                 enemyProjectilesThatCollided.push(projectile);
+                projectile.kill();
+            }
+        });
+
+        let enemyProjectilesThatHitBase = Array<Phaser.Sprite>();
+
+        //this is NOT an observer!  It fires once in the update loop.
+        this.game.physics.arcade.overlap(this.enemyProjectiles, this.currentBase, (base: Base, projectile: Projectile) => {
+            if(base.alive && enemyProjectilesThatHitBase.indexOf(projectile) == -1){
+                base.shot(projectile);
+                enemyProjectilesThatHitBase.push(projectile);
                 projectile.kill();
             }
         });

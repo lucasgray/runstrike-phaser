@@ -4,6 +4,7 @@ import GridDescriptor from "../models/state/GridDescriptor";
 import {GameState} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 import PercentBar from "../models/sprites/enemies/PercentBar";
+import Base from "../models/sprites/base/Base";
 
 export default class LargeSkirmish extends Mission {
 
@@ -63,11 +64,10 @@ export default class LargeSkirmish extends Mission {
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ],
             [
-                [4,12],
-                [4,13],
-                [5,13],
+                [3,14],
                 [4,14],
-                [5,14]
+                [5,14],
+                [6,14]
             ]
             );
     }
@@ -90,20 +90,5 @@ export default class LargeSkirmish extends Mission {
         background.addChild(b2);
 
         return background;
-    }
-
-    /**
-     * Base sprite for u
-     */
-    base = () => {
-
-        let base = new Phaser.Sprite(this.game,640/2 - (64 *2),960-(64*3), 'base');
-
-        base.health = 10000;
-        base.maxHealth = 10000;
-        //health bar starts off on top?
-        this.game.add.existing(new PercentBar(this.game, base, base, 5, 1, Phaser.TOP_LEFT));
-
-        return base;
     }
 }

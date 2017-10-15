@@ -3,6 +3,8 @@ import Mission from './Mission';
 import GridDescriptor from "../models/state/GridDescriptor";
 import {GameState} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
+import PercentBar from "../models/sprites/enemies/PercentBar";
+import Base from "../models/sprites/base/Base";
 
 export default class StoryOne extends Mission {
 
@@ -72,9 +74,5 @@ export default class StoryOne extends Mission {
         background.inputEnabled = true;
 
         return background;
-    }
-
-    base = () => {
-        return new Phaser.Sprite(this.game,640/2 - (64 *2),960-(64*3), 'base');
     }
 }

@@ -66,4 +66,39 @@ export default class DeathSequences {
         this.game.add.existing(spr);
         this.mission.doodads.add(spr);
     }
+
+    baseDeathSequence(): void {
+
+        this.game.camera.shake(0.04, 600);
+
+        let flare = this.game.add.sprite(this.targetable.x, this.targetable.y, 'explosion-flare');
+        let shockwave = this.game.add.sprite(this.targetable.x, this.targetable.y, 'explosion-shockwave');
+
+
+        shockwave.anchor.setTo(.5);
+        flare.anchor.setTo(.5);
+
+        shockwave.scale.setTo(3);
+        // shockwave.alpha = .8;
+        flare.scale.setTo(3);
+        // flare.alpha = .5;
+
+        shockwave.blendMode = PIXI.blendModes.ADD;
+        flare.blendMode = PIXI.blendModes.ADD;
+
+        let fallTween = this.game.add.tween(shockwave.scale).to({
+            x: 9,
+            y: 9,
+        }, 4000, Phaser.Easing.Linear.None, true, 0, 0, false);
+        let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
+
+        let fallTween2 = this.game.add.tween(flare.scale).to({
+            x: 4,
+            y: 4
+        }, 4000, Phaser.Easing.Linear.None, true, 0, 0, false);
+
+
+
+        fallTween2.onComplete.add(f => this.game.state.start('Defeat', true, false, this));
+    }
 }

@@ -3,6 +3,7 @@ import SmartGroup from "../../extensions/SmartGroup";
 import Mission from "../../missions/Mission";
 import Projectile from "../sprites/projectiles/Projectile";
 import * as _ from "lodash";
+import Base from "../sprites/base/Base";
 
 export class WeaponSystem {
 
@@ -21,9 +22,12 @@ export class WeaponSystem {
 
     shoot: (to: Targetable, mission: Mission) => Projectile;
 
+    base: Targetable | undefined;
+
     constructor(attachedTo: Targetable, mission: Mission, range: number,
                 fireRate: number, targetingGroup: SmartGroup<Targetable>,
-                projectileGroup: SmartGroup<Projectile>, shoot: (to: Targetable, mission: Mission) => Projectile) {
+                projectileGroup: SmartGroup<Projectile>, base: Base | undefined,
+                shoot: (to: Targetable, mission: Mission) => Projectile) {
 
         this.attachedTo = attachedTo;
         this.mission = mission;
@@ -34,6 +38,7 @@ export class WeaponSystem {
         this.projectileGroup = projectileGroup;
         this.shoot = shoot;
         this.lastShot = Date.now();
+        this.base = base;
     }
 
     update() {
@@ -70,12 +75,19 @@ export class WeaponSystem {
                 }
             );
 
-        if (spriteDistances) {
-            let s = _.minBy(spriteDistances, (s) => s.distance);
-            if (s) {
-                return s.sprite;
-            }
-            return undefined;
+        let closestTargetable = _.minBy(spriteDistances, (s) => s.distance);
+
+        let baseDistance: number | undefined = undefined;
+        if (this.base) {
+             baseDistance = Phaser.Math.distance(this.attachedTo.x, this.attachedTo.y, this.base.x, this.base.y);
+        }
+
+        if (closestTargetable && baseDistance) {
+            return closestTargetable.distance < baseDistance ? closestTargetable.sprite : this.base;
+        } else if (closestTargetable) {
+            return closestTargetable.sprite;
+        } else if (this.base) {
+            return this.base;
         }
 
         return undefined;

@@ -80,9 +80,12 @@ export default class GridDescriptor {
         };
     }
 
-    getRandomBaseLocation(): number[] {
+    getRandomBaseLocation(): {x: number, y: number} {
         let which = Math.floor(Phaser.Math.random(0, this.baseLocations.length));
-        return this.baseLocations[which];
+        let loc = this.baseLocations[which];
+
+
+        return {x: loc[0], y: loc[1]};
     }
 
 }

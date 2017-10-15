@@ -5,6 +5,7 @@ import Projectile from "../projectiles/Projectile";
 import {AutoShot} from "../projectiles/Projectiles";
 import {Targetable, WeaponSystem} from "../../state/WeaponSystem";
 import DeathSequences from "../../../effects/DeathSequences";
+import Base from "../base/Base";
 
 export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
@@ -20,6 +21,7 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     randomVelocity: number;
 
     targetable: boolean;
+    inRangeOfBase: boolean;
 
     healthBar: PercentBar;
     explodeSound: () => Phaser.Sound;
@@ -29,6 +31,9 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
     abstract range: number;
     abstract fireRate: number;
+
+    baseLocation: {x: number, y: number};
+    baseSprite: Base;
 
     constructor(game: Phaser.Game, mission: Mission, texture: string, speed: number) {
         super(game, 0, 0, texture);
@@ -42,6 +47,8 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
         this.deathSequences = new DeathSequences(this, this.mission);
 
+        this.inRangeOfBase = false;
+
         this.explodeSound = () => {
 
             let sound;
@@ -53,10 +60,13 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
             return sound;
         };
+
+        this.baseLocation = this.mission.gridDescriptor.getRandomBaseLocation();
+        this.baseSprite = this.mission.currentBase;
     }
 
     makeWeaponSystem() {
-        this.weaponSystem = new WeaponSystem(this, this.mission, this.range, this.fireRate, this.mission.turrets, this.mission.enemyProjectiles, this.shoot);
+        this.weaponSystem = new WeaponSystem(this, this.mission, this.range, this.fireRate, this.mission.turrets, this.mission.enemyProjectiles, this.mission.currentBase, this.shoot);
     }
 
     paint(mission: Mission, row: number, col: number) {
@@ -107,6 +117,10 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     update() {
         super.update();
         this.weaponSystem.update();
+
+        if (!this.inRangeOfBase) {
+            this.checkIfInRangeOfBase();
+        }
     }
 
     shoot = (to: Targetable, mission: Mission) => {
@@ -134,6 +148,14 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     };
 
     handleTurretKilled() {}
+
+    checkIfInRangeOfBase() {
+
+        if (Phaser.Math.distance(this.x, this.y, this.baseSprite.x, this.baseSprite.y) < this.range) {
+            console.log("in range!!");
+            this.inRangeOfBase = true;
+        }
+    }
 }
 
 enum PathfindingMode { OpenPath, ClosedPath }
@@ -172,11 +194,9 @@ export abstract class PathfindingEnemy extends Enemy {
 
     pathfindToBase(mission: Mission, row: number, col: number) {
 
-        //TODO base doesnt need to be in center bottom of map
+        let loc = this.baseLocation;
 
-        let loc = this.mission.gridDescriptor.getRandomBaseLocation();
-
-        mission.totalGrid.findPath(row, col, loc[0], loc[1], (path) => {
+        mission.totalGrid.findPath(row, col, loc.x, loc.y, (path) => {
             if (!path) {
                 console.log("The path to the base is blocked.  Going into closed path mode");
 
@@ -197,7 +217,13 @@ export abstract class PathfindingEnemy extends Enemy {
     }
 
     doPathfinding() {
-        if (this.alive && this.targetable
+
+        if (this.inRangeOfBase) {
+            if (this.body.velocity.x != 0 && this.body.velocity.y != 0) {
+                this.body.velocity.x = 0;
+                this.body.velocity.y = 0;
+            }
+        } else if (this.alive && this.targetable
             && this.pathToBase && this.pathToBase.length > 0
             && _.some(this.pathToBase, _ => !_.seen)) {
 

@@ -31,10 +31,17 @@ export default class Setup extends Phaser.State {
         let effectsGroup = StandardMap.AddMapEffects(this.game);
         this.game.add.existing(effectsGroup);
 
-        let spr = this.mission.background();
-        this.game.add.existing(spr);
-        spr.sendToBack();
-        this.backgroundSprite = spr;
+        let bkgrd = this.mission.background();
+        this.game.add.existing(bkgrd);
+
+        this.backgroundSprite = bkgrd;
+
+        let base = this.mission.base(true);
+        this.mission.currentBase = base;
+        this.game.add.existing(base);
+
+        base.sendToBack();
+        bkgrd.sendToBack();
 
         this.mission.addSetupGuidelines();
 
