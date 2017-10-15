@@ -11,8 +11,6 @@ import BossOne from "../../missions/BossOne";
 //everybody has this?
 export class GameState {
 
-    lockLoot: boolean = false;
-
     placedLoot: Array<PlacedLootInfo>;
     inventoryLoot: Array<LootInfo>;
 
@@ -33,11 +31,12 @@ export class GameState {
     }
 
     placeItem(itemType, row, col) {
-        if (this.lockLoot) return;
-        this.lockLoot = true;
 
         console.log("placing turret at: " );
         console.log(row, col);
+
+        let exists = _.some(this.placedLoot, (pl) => pl.type === itemType && pl.row === row && pl.col === col);
+        if (exists) return;
 
         this.placedLoot.push(new PlacedLootInfo(itemType, row, col));
 
@@ -59,13 +58,9 @@ export class GameState {
         if (i) {
             i.amount = i.amount - 1;
         }
-
-        this.lockLoot = false;
     }
 
     unplaceItem(itemType, mission, row, col) {
-        if (this.lockLoot) return;
-        this.lockLoot = true;
 
         console.log('unplacing loot');
 
@@ -88,8 +83,6 @@ export class GameState {
         if (i) {
             i.amount = i.amount + 1;
         }
-
-        this.lockLoot = false;
     }
 
     useItem(itemType) {
