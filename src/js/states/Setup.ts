@@ -81,7 +81,7 @@ export default class Setup extends Phaser.State {
             .andMission(this.mission)
             .andInputHandlers(this.setupPanel.handlers);
 
-        this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
+        this.gameState.placedLoot.forEach((it) => {
 
             let turret = builder
                 .at({row: it.row, col: it.col})

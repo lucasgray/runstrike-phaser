@@ -40,7 +40,7 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
             this.mission.turrets.add(turret);
             this.mission.doodads.add(turret.base);
 
-            this.gameState.placeItem(this.lootType, this.mission.name, grid.x, grid.y);
+            this.gameState.placeItem(this.lootType, grid.x, grid.y);
             this.updateText();
 
             let place = this.game.add.audio('place-item');

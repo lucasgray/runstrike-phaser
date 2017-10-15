@@ -84,7 +84,7 @@ abstract class Mission {
     }
 
     recalculateTotalGrid(placedItems: Array<PlacedLootInfo>) {
-        let myLoot =  placedItems.filter(it => it.mission === this.name);
+        let myLoot =  placedItems;
 
         let easystar = new EasyStar.js();
 

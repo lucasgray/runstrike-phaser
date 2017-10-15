@@ -11,9 +11,9 @@ import BossOne from "../../missions/BossOne";
 //everybody has this?
 export class GameState {
 
-    //TODO more structure now that we have TS!
+    lockLoot: boolean = false;
+
     placedLoot: Array<PlacedLootInfo>;
-    //TODO more structure here too!
     inventoryLoot: Array<LootInfo>;
 
     missionInfo: Array<[Mission, MissionInfo]>;
@@ -32,38 +32,45 @@ export class GameState {
         this.isReactNative = isReactNative;
     }
 
-    placeItem(itemType, mission, row, col) {
+    placeItem(itemType, row, col) {
+        if (this.lockLoot) return;
+        this.lockLoot = true;
+
         console.log("placing turret at: " );
         console.log(row, col);
 
-        this.placedLoot.push(new PlacedLootInfo(itemType, mission, row, col));
+        this.placedLoot.push(new PlacedLootInfo(itemType, row, col));
 
         let payload = {
             type: itemType,
             x: row,
-            y: col,
-            mission: mission
+            y: col
         };
 
-        if (this.isReactNative) {
-            window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
-                type: "PLACE_ITEM",
-                payload: payload
-            }))
-        }
+        // if (this.isReactNative) {
+        //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
+        //         type: "PLACE_ITEM",
+        //         payload: payload
+        //     }))
+        // }
 
         let i = _.find(this.inventoryLoot, it => it.type === itemType);
 
         if (i) {
             i.amount = i.amount - 1;
         }
+
+        this.lockLoot = false;
     }
 
     unplaceItem(itemType, mission, row, col) {
+        if (this.lockLoot) return;
+        this.lockLoot = true;
+
         console.log('unplacing loot');
 
         this.placedLoot.forEach((pl, i) => {
-            if (pl.row === row && pl.col === col && pl.mission === mission) {
+            if (pl.row === row && pl.col === col) {
                 this.placedLoot.splice(i, 1);
             }
         });
@@ -81,6 +88,8 @@ export class GameState {
         if (i) {
             i.amount = i.amount + 1;
         }
+
+        this.lockLoot = false;
     }
 
     useItem(itemType) {
@@ -135,14 +144,12 @@ export class LootInfo {
 export class PlacedLootInfo {
 
     type: string;
-    mission: string;
     row: number;
     col: number;
 
-    constructor(type: string, mission: string, row: number, col: number) {
+    constructor(type: string, row: number, col: number) {
 
         this.type = type;
-        this.mission = mission;
         this.row = row;
         this.col = col;
     }

@@ -48,7 +48,7 @@ export default class Play extends Phaser.State {
             .withGame(this.game)
             .andMission(this.mission);
 
-        this.gameState.placedLoot.filter(it => it.mission === this.mission.name).forEach((it) => {
+        this.gameState.placedLoot.forEach((it) => {
 
             let turret = builder
                 .at({row: it.row, col: it.col})

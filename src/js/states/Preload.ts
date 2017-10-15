@@ -135,7 +135,7 @@ export default class Preload extends Phaser.State {
 
         let asMissionArray = _.values(jsonString.placed_loot);
 
-        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i['type'], i['mission'], i['x'], i['y']));
+        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i['type'], i['x'], i['y']));
 
 
         let emptyLoot = AllLoots.EmptyLoots;
