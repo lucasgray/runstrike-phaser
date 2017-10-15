@@ -84,7 +84,6 @@ export default class GridDescriptor {
         let which = Math.floor(Phaser.Math.random(0, this.baseLocations.length));
         let loc = this.baseLocations[which];
 
-
         return {x: loc[0], y: loc[1]};
     }
 

@@ -200,7 +200,7 @@ export abstract class PathfindingEnemy extends Enemy {
             if (!path) {
                 console.log("The path to the base is blocked.  Going into closed path mode");
 
-                this.mission.passableTerrainGrid.findPath(row, col, loc[0], loc[1], (closedPath) => {
+                this.mission.passableTerrainGrid.findPath(row, col, loc.x, loc.y, (closedPath) => {
                     console.log("closed path success. ");
                     // path.forEach((p) => console.log(JSON.stringify(p)));
                     this.pathfindingMode = PathfindingMode.ClosedPath;
