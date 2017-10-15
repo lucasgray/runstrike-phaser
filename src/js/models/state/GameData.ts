@@ -63,6 +63,13 @@ export class GameState {
         console.log('unplacing loot');
 
         this.placedLoot = _.remove(this.placedLoot, (x => !((x.row === row && x.col === col) && x.mission === mission)));
+
+        this.placedLoot.forEach((pl, i) => {
+            if (pl.row === row && pl.col === col && pl.mission === mission) {
+                this.placedLoot.splice(i, 1);
+            }
+        });
+
         //
         // if (this.isReactNative) {
         //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
