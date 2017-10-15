@@ -64,8 +64,10 @@ export class GameState {
 
         console.log('unplacing loot');
 
+        let found = false;
         this.placedLoot.forEach((pl, i) => {
             if (pl.row === row && pl.col === col) {
+                found = true;
                 this.placedLoot.splice(i, 1);
             }
         });
@@ -78,10 +80,13 @@ export class GameState {
         //     }))
         // }
         //
-        let i = _.find(this.inventoryLoot, it => it.type === itemType);
 
-        if (i) {
-            i.amount = i.amount + 1;
+        if (found) {
+            let i = _.find(this.inventoryLoot, it => it.type === itemType);
+
+            if (i) {
+                i.amount = i.amount + 1;
+            }
         }
     }
 
