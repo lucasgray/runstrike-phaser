@@ -30,21 +30,20 @@ abstract class SetupTurret extends Turret {
 
         this.gameState = gameState;
 
-        this.events.onInputDown.add(this.remove, this);
-
         this.inputEnabled = true;
+        this.events.onInputDown.add(this.remove, this);
     }
 
     update() { }
 
     doRotation () { }
 
-    remove(turret: Turret, pointer: Phaser.Pointer) {
+    remove(turret: Turret) {
 
         console.log('removing placed sprite');
 
         //add one back into unplaced loot
-        let grid = this.mission.gridDescriptor.getGridLocation(pointer);
+        let grid = this.mission.gridDescriptor.getGridLocation({x: turret.x, y: turret.y});
         this.gameState.unplaceItem(this.inputHandler.lootType, this.mission.name, grid.x, grid.y);
 
         //update num

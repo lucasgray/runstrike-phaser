@@ -10,6 +10,8 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
 
     abstract spawnSetupTurret: (grid: {x: number, y: number}) => SetupTurret;
 
+    lockChoices: boolean;
+
     constructor(mission: Mission,
                 gameState: GameState,
                 allHandlers: Array<InputHandler>,
@@ -29,11 +31,11 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
         let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
-
         let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
         if (loot !== undefined && loot.amount > 0 &&
-            this.mission.gridDescriptor.placeableTerrain[grid.y][grid.x] === 0) {
+            this.mission.gridDescriptor.placeableTerrain[grid.y][grid.x] === 0 
+        ) {
 
             let turret = this.spawnSetupTurret(grid);
             this.game.add.existing(turret);
