@@ -23,14 +23,21 @@ export class GameState {
 
     isReactNative: boolean;
 
+    lockLoot: boolean;
+
     constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<[Mission, MissionInfo]>, isReactNative: boolean) {
         this.placedLoot = placedLoot;
         this.inventoryLoot = inventoryLoot;
         this.missionInfo = missionInfo;
         this.isReactNative = isReactNative;
+
+        this.lockLoot = false;
     }
 
     placeItem(itemType, row, col) {
+
+        if (this.lockLoot) return;
+        this.lockLoot = true;
 
         console.log("placing turret at: " );
         console.log(row, col);
@@ -58,9 +65,13 @@ export class GameState {
         if (i) {
             i.amount = i.amount - 1;
         }
+
+        this.lockLoot = false;
     }
 
     unplaceItem(itemType, mission, row, col) {
+        if (this.lockLoot) return;
+        this.lockLoot = true;
 
         console.log('unplacing loot');
 
@@ -88,6 +99,8 @@ export class GameState {
                 i.amount = i.amount + 1;
             }
         }
+
+        this.lockLoot = false;
     }
 
     useItem(itemType) {

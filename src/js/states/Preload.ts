@@ -17,6 +17,7 @@ export default class Preload extends Phaser.State {
     create() {
         this.game.renderer.renderSession.roundPixels = true;
         this.game.time.desiredFps = 60;
+        this.game.input.maxPointers = 1;
     }
 
     preload() {
