@@ -34,11 +34,11 @@ abstract class Mission {
             base.health = 10000;
             base.maxHealth = 10000;
             //health bar starts off on top?
-            this.game.add.existing(new PercentBar(this.game, base, base, 5, 1, Phaser.TOP_LEFT));
+            this.game.add.existing(new PercentBar(this.game, base, base, 0, 1, Phaser.BOTTOM_LEFT));
         }
 
         return base;
-    }
+    };
     abstract enemyArray: Array<object>;
 
     //abstract baseLocation: {x: number, y: number}
