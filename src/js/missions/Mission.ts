@@ -89,9 +89,9 @@ abstract class Mission {
         let easystar = new EasyStar.js();
 
         let lootGrid = Array<Array<number>>();
-        for (let y = 0; y < this.gridDescriptor.columns; y++) {
+        for (let y = 0; y < this.gridDescriptor.rows; y++) {
             let f = Array<number>();
-            for (let x = 0; x < this.gridDescriptor.rows; x++) {
+            for (let x = 0; x < this.gridDescriptor.columns; x++) {
                 f.push(0);
             }
             lootGrid.push(f);

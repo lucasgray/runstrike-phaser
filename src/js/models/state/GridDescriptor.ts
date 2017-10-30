@@ -44,13 +44,13 @@ export default class GridDescriptor {
         this.placeableTerrain = placeableTerrain;
         this.baseLocations = baseLocations;
 
-        this.rows = this.passableTerrain[0].length;
-        this.columns = this.passableTerrain.length;
+        this.rows = this.passableTerrain.length;
+        this.columns = this.passableTerrain[0].length;
 
-        this.cellWidth = Math.floor((this.gameWidth) / this.rows);
-        this.cellHeight = Math.floor((this.gameHeight) / this.columns);
-        this.width = this.rows * this.cellWidth;
-        this.height = this.columns * this.cellHeight;
+        this.cellWidth = Math.floor((this.gameWidth) / this.columns);
+        this.cellHeight = Math.floor((this.gameHeight) / this.rows);
+        this.width = this.columns * this.cellWidth;
+        this.height =  this.rows * this.cellHeight;
     }
 
     //from x/y coords, return grid location

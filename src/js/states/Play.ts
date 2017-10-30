@@ -7,6 +7,7 @@ import InputHandler from "../handlers/InputHandler";
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
 import SmartGroup from "../extensions/SmartGroup";
+import HudPanel from "../panels/HudPanel";
 
 export default class Play extends Phaser.State {
 
@@ -66,6 +67,7 @@ export default class Play extends Phaser.State {
         this.effectsGroup = StandardMap.AddMapEffects(this.game);
 
         this.drawInput();
+        this.drawHud();
     }
 
     drawInput() {
@@ -85,6 +87,18 @@ export default class Play extends Phaser.State {
                 this.state.start('Missions');
             }
         );
+    }
+
+    drawHud() {
+
+        let placement = new Phaser.Point(
+            (this.mission.gridDescriptor.columns - 2) * this.mission.gridDescriptor.cellWidth,
+            (this.mission.gridDescriptor.rows -3) * this.mission.gridDescriptor.cellHeight
+        );
+
+        let hudPanel = new HudPanel(this.game, placement, this.mission);
+        this.game.add.existing(hudPanel);
+
     }
 
     update() {
