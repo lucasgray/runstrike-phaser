@@ -4,6 +4,7 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import Button from "../models/sprites/buttons/Button";
 import SpriteExtensions from "../extensions/SpriteExtensions";
+import _ = require("lodash");
 
 export default class HudPanel extends Phaser.Sprite {
 
@@ -16,9 +17,11 @@ export default class HudPanel extends Phaser.Sprite {
     width: number;
     height: number;
 
-    enemyFormationString: string;
-    baseHealthString: string;
-    perimeter: string;
+    enemyFormationString: Phaser.Text;
+    baseHealthString: Phaser.Text;
+    perimeter: Phaser.Text;
+
+    mission: Mission;
 
     constructor(game: Phaser.Game, topLeft: Phaser.Point, mission: Mission) {
 
@@ -29,9 +32,7 @@ export default class HudPanel extends Phaser.Sprite {
         this.width = mission.gridDescriptor.cellWidth * 2;
         this.height = mission.gridDescriptor.cellHeight * 3;
 
-        this.enemyFormationString = "> STRONG";
-        this.baseHealthString = "> " + mission.currentBase.health + " / " + mission.currentBase.maxHealth;
-        this.perimeter = "> UNDER ATTACK";
+        this.mission = mission;
 
         this.paint(mission);
     }
@@ -47,31 +48,81 @@ export default class HudPanel extends Phaser.Sprite {
 
         this.addChild(rectSprite);
         this.game.add.existing(rectSprite);
+
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 15, "Enemy Formation", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
+        this.enemyFormationString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 25, "> STRONG", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 50, "Sensor Readings", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
+        this.baseHealthString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 60, "> 10000 / 10000", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 75, "Perimeter", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
+        this.perimeter  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 85, "> OK", {
+            font: 'Joystix',
+            fill: this.accentColor,
+            align: 'left',
+            fontSize: 9
+        });
+
     }
 
-    // update() {
-    //
-    //     let formationHeader = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 5, "Enemy Formation", {
-    //         font: 'Joystix',
-    //         fill: this.accentColor,
-    //         align: 'left',
-    //         fontSize: 9
-    //     });
-    //
-    //     let formationString = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 15, this.enemyFormationString, {
-    //         font: 'Joystix',
-    //         fill: this.accentColor,
-    //         align: 'left',
-    //         fontSize: 9
-    //     });
-    //
-    //
-    //     // this.addChild(formation);
-    // }
+    update() {
 
-    //
-    // destroy() {
-    //     this.sprite.destroy();
-    // }
+        let alive = this.mission.enemyArray.length - this.mission.enemies.countDead();
+        let amtToDeploy = this.mission.enemyArray.length;
+        let pct = alive / amtToDeploy;
+
+        let formationText = "> STRONG";
+        if (pct > .25 && pct < .75) {
+            formationText = "> WEAK";
+        } else if (pct < .25) {
+            formationText = "> CRITICAL";
+        }
+
+        this.enemyFormationString.setText(formationText);
+
+        let baseHealthString = "> " + this.mission.currentBase.health + " / " + this.mission.currentBase.maxHealth
+        this.baseHealthString.setText(baseHealthString);
+
+        let turretHealths = this.mission.turrets.all().map(t => t.health / t.maxHealth);
+        let avgTurretHealth = _.sum(turretHealths) / this.mission.turrets.length;
+
+        let perimeterHealth = "> STRONG";
+        if (avgTurretHealth > .25 && avgTurretHealth < .75) {
+            perimeterHealth = "> WEAK";
+        } else if (avgTurretHealth < .25) {
+            perimeterHealth = "> CRITICAL";
+        }
+
+        this.perimeter.setText(perimeterHealth);
+    }
+
 
 }

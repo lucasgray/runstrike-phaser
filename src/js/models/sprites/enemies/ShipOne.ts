@@ -47,8 +47,8 @@ export default class ShipOne extends PathfindingEnemy {
         shipShadow.tint = 0x191919;
         shipShadow.alpha = 0.6;
 
-        this.game.add.tween(ship).to( { x: '+12', y: '-12' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
-        this.game.add.tween(shipShadow).to( { x: '+4', y: '-4' }, 8000, Phaser.Easing.Cubic.InOut, true, 0, -1, true);
+        this.game.add.tween(ship).to( { x: '+12' }, 4000, Phaser.Easing.Linear.None, true, 0, -1, true);
+        this.game.add.tween(shipShadow).to( { x: '+2' }, 4000, Phaser.Easing.Linear.None, true, 0, -1, true);
 
         this.addChild(shipShadow);
         this.addChild(ship);
@@ -62,8 +62,7 @@ export default class ShipOne extends PathfindingEnemy {
         super.kill();
 
         this.deathSequences.basicDeathSequence();
-
-        this.destroy();
+        this.visible = false;
 
         return this;
     }

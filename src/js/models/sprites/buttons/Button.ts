@@ -13,7 +13,7 @@ export default class Button extends Phaser.Sprite {
     backgroundColor = '#005150';
 
     constructor(game: Phaser.Game, x: number, y: number, width: number, height: number, label: string, callback: Function) {
-        super(game, x, y);
+        super(game, Math.floor(x), Math.floor(y));
 
         this.width = width;
         this.height = height;
@@ -52,6 +52,8 @@ export default class Button extends Phaser.Sprite {
             align: 'center',
             fontSize: this.height * 0.4
         });
+
+        text.smoothed = false;
 
         text.anchor.setTo(0.5);
 
