@@ -63,28 +63,28 @@ export default class HudPanel extends Phaser.Sprite {
             fontSize: 9
         });
 
-        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 50, "Sensor Readings", {
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 40, "Sensor Readings", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
             fontSize: 9
         });
 
-        this.baseHealthString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 60, "> 10000 / 10000", {
+        this.baseHealthString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 50, "> 10000 / 10000", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
             fontSize: 9
         });
 
-        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 75, "Perimeter", {
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 65, "Perimeter", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
             fontSize: 9
         });
 
-        this.perimeter  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 85, "> OK", {
+        this.perimeter  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 75, "> OK", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
