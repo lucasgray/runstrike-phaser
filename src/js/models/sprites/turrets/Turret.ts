@@ -137,13 +137,6 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         }
     }
 
-    destroy() {
-        super.destroy();
-
-        this.turret.destroy();
-        this.base.destroy();
-    }
-
     kill() {
         super.kill();
 
@@ -154,7 +147,10 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         this.healthBar.destroy();
         this.mission.sendTurretKilled();
 
-        this.destroy();
+        this.targetable = false;
+        this.visible = false;
+        this.base.visible = false;
+        this.turret.visible = false;
 
         return this;
     }
