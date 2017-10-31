@@ -150,7 +150,9 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         this.targetable = false;
         this.visible = false;
         this.base.visible = false;
+        this.base.kill();
         this.turret.visible = false;
+        this.turret.kill();
 
         return this;
     }
