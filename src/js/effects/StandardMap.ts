@@ -19,14 +19,14 @@ export default class StandardMap {
         s45.blendMode = PIXI.blendModes.MULTIPLY;
         let s5 = game.add.sprite(0,0, 'screen-glare');
         s5.blendMode = PIXI.blendModes.SOFT_LIGHT;
-        s5.alpha = .75;
+        s5.alpha = .25;
 
         let grouped = new Phaser.Group(game);
         grouped.add(s1);
         // grouped.add(s3);
-        grouped.add(s4);
         grouped.add(s45);
         grouped.add(s5);
+        grouped.add(s4);
 
         // StandardMap.setupShader(game);
 

@@ -12,14 +12,15 @@ export default abstract class InputHandler {
     gameState: GameState;
     game: Phaser.Game;
     parentSprite: Phaser.Sprite;
-    backgroundSprite: Phaser.Sprite;
+    inputTargets: Phaser.Sprite[];
 
     accentColor: string = "#2cfefd";
 
     /**
-     * Icon to display inside circle
+     * Icon to display
      */
     abstract icon: string;
+
     /**
      * Key to look for when updating what is left of the type of loot we have
      */
@@ -31,7 +32,7 @@ export default abstract class InputHandler {
     constructor(mission: Mission,
                 gameState: GameState,
                 allHandlers: Array<InputHandler>,
-                backgroundSprite: Phaser.Sprite,
+                inputTargets: Phaser.Sprite[],
                 game: Phaser.Game,
                 x: number,
                 y: number) {
@@ -40,7 +41,7 @@ export default abstract class InputHandler {
         this.gameState = gameState;
         this.allHandlers = allHandlers;
         this.game = game;
-        this.backgroundSprite = backgroundSprite;
+        this.inputTargets = inputTargets;
 
         this.x = x;
         this.y = y;
@@ -77,7 +78,7 @@ export default abstract class InputHandler {
     inputListener() {
 
         //turn all active handlers off
-        this.backgroundSprite.events.onInputDown.removeAll();
+        this.allHandlers.forEach(h => h.removeListeners());
         // this.allHandlers.forEach(ih =>
         //     this.game.add.tween(ih.parentSprite.scale).to({x: 1.0, y: 1.0}, 400, Phaser.Easing.Exponential.In).start()
         // );
@@ -88,7 +89,7 @@ export default abstract class InputHandler {
         button.play();
 
         //add an onTap to listen for for the action we want to perform
-        this.backgroundSprite.events.onInputDown.add(this.action, this);
+        this.addMyListener();
     }
 
     /**
@@ -98,6 +99,26 @@ export default abstract class InputHandler {
      * @param sprite
      */
     abstract action(sprite: Phaser.Sprite, pointer: Phaser.Pointer);
+
+    /**
+     * How to add my listener
+     */
+    addMyListener() {
+        this.inputTargets.filter(t => t.alive).forEach(t => {
+            t.inputEnabled = true;
+            t.events.onInputDown.add(this.action, this)
+        });
+    }
+
+    /**
+     * How to remove listener when we're no longer the active input handler
+     */
+    removeListeners() {
+        this.inputTargets.filter(t => t.alive).forEach(t => {
+            t.inputEnabled = false;
+            t.events.onInputDown.removeAll()
+        });
+    }
 
     num() {
 

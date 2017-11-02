@@ -13,7 +13,7 @@ export class StandardTurretHandler extends SetupTurretInputHandler {
 
     constructor(mission: Mission,
                 gameState: GameState,
-                allHandlers: Array<InputHandler>,
+                allHandlers: InputHandler[],
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,
@@ -34,7 +34,7 @@ export class HeavyTurretHandler extends SetupTurretInputHandler {
 
     constructor(mission: Mission,
                 gameState: GameState,
-                allHandlers: Array<InputHandler>,
+                allHandlers: InputHandler[],
                 backgroundSprite: Phaser.Sprite,
                 game: Phaser.Game,
                 x: number,

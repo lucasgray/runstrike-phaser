@@ -8,6 +8,7 @@ import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
 import SmartGroup from "../extensions/SmartGroup";
 import HudPanel from "../panels/HudPanel";
+import WrenchHandler from "../handlers/WrenchHandler";
 
 export default class Play extends Phaser.State {
 
@@ -68,13 +69,41 @@ export default class Play extends Phaser.State {
 
         this.drawInput();
         this.drawHud();
+
+        //eh I think I like having the guidelines...
+        this.mission.addSetupGuidelines();
     }
 
     drawInput() {
 
-        let ih = new CocktailHandler(this.mission, this.gameState, this.backgroundSprite, this.game, 50, 300);
+        let cocktailLoc = this.mission.gridDescriptor.getCenterOf(
+            {x: this.mission.gridDescriptor.columns - 3, y: this.mission.gridDescriptor.rows - 1});
+
         this.inputHandlers = [];
+
+        let ih = new CocktailHandler(
+            this.mission,
+            this.gameState,
+            this.inputHandlers,
+            this.backgroundSprite,
+            this.game,
+            cocktailLoc.x,
+            cocktailLoc.y);
+
+        let cocktailLoc2 = this.mission.gridDescriptor.getCenterOf(
+            {x: this.mission.gridDescriptor.columns - 4, y: this.mission.gridDescriptor.rows - 1});
+
+        let ih2 = new WrenchHandler(
+            this.mission,
+            this.gameState,
+            this.inputHandlers,
+            this.mission.turrets.all(),
+            this.game,
+            cocktailLoc2.x,
+            cocktailLoc2.y);
+
         this.inputHandlers.push(ih);
+        this.inputHandlers.push(ih2);
 
         new Button(
             this.game,
@@ -98,7 +127,6 @@ export default class Play extends Phaser.State {
 
         let hudPanel = new HudPanel(this.game, placement, this.mission);
         this.game.add.existing(hudPanel);
-
     }
 
     update() {

@@ -34,7 +34,9 @@ abstract class Mission {
             base.health = 10000;
             base.maxHealth = 10000;
             //health bar starts off on top?
-            this.game.add.existing(new PercentBar(this.game, base, base, 0, 1, Phaser.BOTTOM_LEFT));
+            this.game.add.existing(
+                new PercentBar(this.game, base, base, 0, 1, Phaser.BOTTOM_CENTER, this.gridDescriptor.cellHeight / 10, this.gridDescriptor.cellWidth * 2)
+            );
         }
 
         return base;
@@ -252,9 +254,10 @@ abstract class Mission {
 
     checkProjectileCollisions() {
 
+        //these are NOT observers!  They fire once in the update loop.
+
         let friendlyProjectilesThatCollided = Array<Phaser.Sprite>();
 
-        //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.friendlyProjectiles, this.enemies, (projectile: Projectile, sprite: Enemy) => {
             if(sprite.alive && sprite.targetable && friendlyProjectilesThatCollided.indexOf(projectile) == -1){
                 sprite.shot(projectile);
@@ -265,7 +268,6 @@ abstract class Mission {
 
         let enemyProjectilesThatCollided = Array<Phaser.Sprite>();
 
-        //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.enemyProjectiles, this.turrets, (projectile: Projectile, sprite: Turret) => {
             if(sprite.alive && enemyProjectilesThatCollided.indexOf(projectile) == -1){
                 sprite.shot(projectile);
@@ -276,7 +278,6 @@ abstract class Mission {
 
         let enemyProjectilesThatHitBase = Array<Phaser.Sprite>();
 
-        //this is NOT an observer!  It fires once in the update loop.
         this.game.physics.arcade.overlap(this.enemyProjectiles, this.currentBase, (base: Base, projectile: Projectile) => {
             if(base.alive && enemyProjectilesThatHitBase.indexOf(projectile) == -1){
                 base.shot(projectile);

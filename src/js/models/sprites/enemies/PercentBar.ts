@@ -15,7 +15,15 @@ export default class PercentBar extends Phaser.Sprite {
     yOffset: number;
     positioning: number;
 
-    constructor (game: Phaser.Game, host: Phaser.Sprite, positioningHost: Phaser.Sprite, yOffset: number, yOffsetScale: number, positioning: number) {
+    constructor (
+        game: Phaser.Game,
+        host: Phaser.Sprite,
+        positioningHost: Phaser.Sprite,
+        yOffset: number,
+        yOffsetScale: number,
+        positioning: number,
+        height?: number,
+        width?: number) {
         super(game, positioningHost.x, positioningHost.y);
 
         this.host = host;
@@ -28,17 +36,22 @@ export default class PercentBar extends Phaser.Sprite {
         if (!game.cache.checkImageKey('white1x1pixel')) {
             // loads 1x1 white gif from data URI
             game.load.image('white1x1pixel', 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=');
-            game.load.onLoadComplete.add(() => this.runCreation());
+            game.load.onLoadComplete.add(() => this.runCreation(height, width));
             game.load.start()
         } else {
-            this.runCreation()
+            this.runCreation(height, width)
         }
     }
 
-    runCreation() {
+    runCreation(height: number | undefined, width: number | undefined) {
 
-        this.width = this.positioningHost.width * ( 1 / this.positioningHost.scale.x) - 4;
-        this.height = (this.positioningHost.height * ( 1 / this.positioningHost.scale.y)) / 16;
+        if (height && width) {
+            this.width = width;
+            this.height = height;
+        } else {
+            this.width = this.positioningHost.width * ( 1 / this.positioningHost.scale.x) - 4;
+            this.height = (this.positioningHost.height * ( 1 / this.positioningHost.scale.y)) / 16;
+        }
 
         this.outerFrame = this.game.make.sprite(0, 0, 'white1x1pixel');
         this.outerFrame.width = this.width + 2;
