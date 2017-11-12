@@ -15,7 +15,7 @@ export default class Victory extends Phaser.State {
 
     init(mission: Mission) {
 
-        this.gameState.markMissionAsWon(mission);
+        // this.gameState.markMissionAsWon(mission);
 
         let win = this.game.add.audio('win');
         win.play();
