@@ -88,6 +88,17 @@ export default class Debug extends Phaser.State {
         let lock = this.game.add.sprite(300, 300, 'pico-icons', 39);
         lock.scale.setTo(8)
 
+        var textThree = this.game.add.text(
+            this.game.world.centerX,
+            this.game.world.height - 140,
+            "missionaskedfor: " + this.gameState.missionAskedFor,
+            {
+                font: '14px monospace',
+                fill: 'white',
+                align: 'center'
+            });
+        textThree.anchor.setTo(0.5);
+
         new Button(
             this.game,
             100,

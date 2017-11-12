@@ -60,17 +60,17 @@ export default class Setup extends Phaser.State {
             this.backgroundSprite
         );
 
-        new Button(
-            this.game,
-            100,
-            this.game.height - 40,
-            100,
-            40,
-            'Back', () => {
-                console.log("asking to go back");
-                this.state.start('Missions');
-            }
-        );
+        // new Button(
+        //     this.game,
+        //     100,
+        //     this.game.height - 40,
+        //     100,
+        //     40,
+        //     'Back', () => {
+        //         console.log("asking to go back");
+        //         this.state.start('Missions');
+        //     }
+        // );
     }
 
     drawSetupTurrets() {

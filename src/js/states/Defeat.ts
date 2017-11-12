@@ -17,9 +17,6 @@ export default class Defeat extends Phaser.State {
 
         this.gameState.markMissionAsLost(mission);
 
-        this.gameState.backgroundMusic.pause();
-        this.gameState.musicPause = true;
-
         let lose = this.game.add.audio('lose');
         lose.play();
 

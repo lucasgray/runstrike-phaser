@@ -17,9 +17,6 @@ export default class Victory extends Phaser.State {
 
         this.gameState.markMissionAsWon(mission);
 
-        this.gameState.backgroundMusic.pause();
-        this.gameState.musicPause = true;
-
         let win = this.game.add.audio('win');
         win.play();
 

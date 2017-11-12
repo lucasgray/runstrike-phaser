@@ -16,18 +16,15 @@ export class GameState {
 
     missionInfo: Array<[Mission, MissionInfo]>;
 
-    backgroundMusic: Phaser.Sound;
-    isPlayingMusic: boolean;
-    hasStartedMusic: boolean;
-    musicPause: boolean;
-
     isReactNative: boolean;
+    missionAskedFor: string;
 
-    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<[Mission, MissionInfo]>, isReactNative: boolean) {
+    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<[Mission, MissionInfo]>, isReactNative: boolean, missionAskedFor: string) {
         this.placedLoot = placedLoot;
         this.inventoryLoot = inventoryLoot;
         this.missionInfo = missionInfo;
         this.isReactNative = isReactNative;
+        this.missionAskedFor = missionAskedFor;
     }
 
     placeItem(itemType, row, col) {

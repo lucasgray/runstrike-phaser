@@ -14,12 +14,12 @@ require('../../css/joystix-monospace.ttf');
 
 export default class Preload extends Phaser.State {
 
-    create() {
-        this.game.renderer.renderSession.roundPixels = false;
-        this.game.time.desiredFps = 60;
-    }
+    gameState: GameState;
+    foundGameState: boolean = false;
 
     preload() {
+        this.game.renderer.renderSession.roundPixels = false;
+        this.game.time.desiredFps = 60;
 
         WebFont.load({
             google: {
@@ -38,7 +38,7 @@ export default class Preload extends Phaser.State {
 
         this.load.setPreloadSprite(loaderBar);
 
-        this.load.audio('backgroundMusic', [require('../../audio/music/chiptune-dance.mp3')]);
+        // this.load.audio('backgroundMusic', [require('../../audio/music/chiptune-dance.mp3')]);
         this.load.audio('crash-1', [require('../../audio/sounds/crash-1.wav')]);
         this.load.audio('crash-2', [require('../../audio/sounds/crash-2.wav')]);
         this.load.audio('shoot', [require('../../audio/sounds/shoot-9.wav')]);
@@ -99,24 +99,40 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('pico-icons', require('../../img/ui/pico-icons.png').toString(), 8, 8);
         this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
         this.game.load.image('red-spark', require('../../img/particles/red.png'));
-
-        let s  = this.makeGameData();
-
-        this.game.state.add('Menu', new Menu(s));
-        this.game.state.add('Missions', new Missions(s));
-        this.game.state.add('Setup', new Setup(s));
-        this.game.state.add('Play', new Play(s));
-        this.game.state.add('Victory', new Victory(s));
-        this.game.state.add('Defeat', new Defeat(s));
-        this.game.state.add('Debug', new Debug(s));
-
-        this.game.state.add('ArtTesting', new ArtTesting(s));
     }
 
-    update() {
+    /**
+     * When the load is finished the create function is called
+     */
+    create() {
+        if (!this.foundGameState) {
+            this.gameState = this.makeGameData();
+        }
 
-        if (this.cache.isSoundDecoded("backgroundMusic")) {
+        this.game.state.add('Menu', new Menu(this.gameState));
+        this.game.state.add('Missions', new Missions(this.gameState));
+        this.game.state.add('Setup', new Setup(this.gameState));
+        this.game.state.add('Play', new Play(this.gameState));
+        this.game.state.add('Victory', new Victory(this.gameState));
+        this.game.state.add('Defeat', new Defeat(this.gameState));
+        this.game.state.add('Debug', new Debug(this.gameState));
+
+        this.game.state.add('ArtTesting', new ArtTesting(this.gameState));
+
+        if (this.gameState.missionAskedFor) {
+            this.state.start('Setup', true, false,
+                this.gameState.missionInfo.map(m => m[0])
+                    .filter(m => m.name === this.gameState.missionAskedFor)[0]);
+        } else {
             this.state.start('Menu');
+        }
+    }
+
+    //keep trying to find game state until load is finished......
+    update() {
+        if (typeof(window.DATA) !== "undefined" && !this.foundGameState) {
+            this.foundGameState = true;
+            this.gameState = this.makeGameData();
         }
     }
 
@@ -152,7 +168,9 @@ export default class Preload extends Phaser.State {
         let missions = AllMissions.AllMissionsAndInfos(this.game);
         //TODO add mission state from react-native as well...
 
-        let gameState = new GameState(placedItems, finalInventoryItems, missions, isReactNative);
+        let missionAskedFor = jsonString.mission;
+
+        let gameState = new GameState(placedItems, finalInventoryItems, missions, isReactNative, missionAskedFor);
 
         missions.forEach(m => m[0].gameState = gameState);
 
@@ -179,6 +197,7 @@ export default class Preload extends Phaser.State {
     }
 
     fakeData: object = {
+        "mission": "Large Skirmish",
         "caps": 395,
         "placed_loot": {
 
