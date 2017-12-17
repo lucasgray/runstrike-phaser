@@ -51,6 +51,11 @@ export default class Preload extends Phaser.State {
         //new and blue tint images
         this.game.load.image('wasteland-craters', require('../../img/blue-tint/Buildings_Floor_WastelandCraters.jpg'));
         this.game.load.image('building-01', require('../../img/blue-tint/Buildings_Building001.png'));
+        this.game.load.image('building-02', require('../../img/blue-tint/Buildings_Building002.png'));
+        this.game.load.image('building-03', require('../../img/blue-tint/Buildings_Building003.png'));
+        this.game.load.image('building-04', require('../../img/blue-tint/Buildings_Building004.png'));
+        this.game.load.image('building-05', require('../../img/blue-tint/Buildings_Building005.png'));
+        this.game.load.image('building-06', require('../../img/blue-tint/Buildings_Building006.png'));
         this.game.load.image('base', require('../../img/blue-tint/Buildings_Base.png'));
         this.game.load.image('scanlines', require('../../img/effects/scanlines.png'));
         this.game.load.image('screen-glare', require('../../img/blue-tint/FXAssets_ScreenGlare_SoftLight.jpg'));
@@ -197,7 +202,7 @@ export default class Preload extends Phaser.State {
     }
 
     fakeData: object = {
-        "mission": "Large Skirmish",
+        // "mission": "Large Skirmish",
         "caps": 395,
         "placed_loot": {
 

@@ -48,19 +48,19 @@ export default class LargeSkirmish extends Mission {
             ],
             [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 1, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 1, 1, 0, 0, 1, 1],
+                [1, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+                [1, 1, 1, 0, 1, 1, 0, 0, 0, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ],
             [
@@ -80,14 +80,42 @@ export default class LargeSkirmish extends Mission {
     background = () => {
 
         let background = new Phaser.Sprite(this.game, 0,0, 'wasteland-craters');
-        let b = new Phaser.Sprite(this.game,0,0, 'building-01');
-        let b2 = new Phaser.Sprite(this.game,64*8,64*10, 'building-01');
+
+        //left side!!
+        let b1 = new Phaser.Sprite(this.game, -85, -12, 'building-02');
+        let b2 = new Phaser.Sprite(this.game, 64*2 - 6,64*6, 'building-04');
+        b2.angle = 90;
+        b2.scale.x *= -1;
+        let b3 = new Phaser.Sprite(this.game, -35,64*6 - 12, 'building-05');
+        let b35 = new Phaser.Sprite(this.game, 64*2 - 4,64 * 14 + 8, 'building-06');
+        b35.angle = 90;
+        b35.scale.x *= -1;
+        let b5 = new Phaser.Sprite(this.game, -87,64*14 - 42, 'building-03');
+
+        //right side!!
+        let b6 = new Phaser.Sprite(this.game, 64 * 7 +25,-25, 'building-03');
+        let b7 = new Phaser.Sprite(this.game, 64 * 9 - 25,64 * 2 - 25, 'building-06');
+        let b8 = new Phaser.Sprite(this.game, 64 * 9 - 39,64*4 - 16, 'building-01');
+        let b9 = new Phaser.Sprite(this.game, 64 * 9 - 15,64*9 - 19, 'building-05');
+        let b10 = new Phaser.Sprite(this.game, 64 * 8, 64*14 - 15, 'building-03');
 
         background.width = this.gridDescriptor.width;
         background.height = this.gridDescriptor.height;
         background.inputEnabled = true;
-        background.addChild(b);
+
+        background.addChild(b1);
+        background.addChild(b3);
         background.addChild(b2);
+        background.addChild(b35);
+        background.addChild(b5);
+
+
+        background.addChild(b6);
+        background.addChild(b7);
+        background.addChild(b8);
+        background.addChild(b9);
+        background.addChild(b10);
+
 
         return background;
     }
