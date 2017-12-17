@@ -3,10 +3,12 @@ import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
 import * as _ from 'lodash';
 import Turret from "../models/sprites/turrets/Turret";
+import Texture = PIXI.Texture;
 
 export default class WrenchHandler extends InputHandler {
 
-    icon: string = 'auto-turret-ui';
+    icon: string = 'ui-wrench-inactive';
+    activeIcon: string = 'ui-wrench-active';
     lootType: string = 'wrench';
     lootPrettyName: 'wrench';
 
@@ -24,8 +26,14 @@ export default class WrenchHandler extends InputHandler {
         this.adjustScale();
     }
 
+    inputListener() {
+        super.inputListener();
+
+        this.parentSprite.loadTexture(this.activeIcon);
+    }
+
     adjustScale() {
-        let defaultSize = {width: 64, height: 73};
+        let defaultSize = {width: 58, height: 58};
         let scaleX = (this.mission.gridDescriptor.cellWidth / defaultSize.width);
         let scaleY = (this.mission.gridDescriptor.cellHeight / defaultSize.height);
         this.parentSprite.scale.setTo(scaleX, scaleY);

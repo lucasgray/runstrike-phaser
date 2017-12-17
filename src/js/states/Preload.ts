@@ -80,30 +80,12 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('weapon-explosion-sm', require('../../img/blue-tint/WeaponFx_ExplosionSmFull01.png').toString(), 65, 65, 5);
         this.game.load.image('explosion-flare', require('../../img/blue-tint/ExplosionLGFX_Flare001.png'));
         this.game.load.image('explosion-shockwave', require('../../img/blue-tint/ExplosionLGFX_Shockwave001.png'));
-
-        //old or crappy images
-        this.game.load.image('cocktail_icon', require('../../img/ui/cocktail.png'));
-        this.game.load.image('grenade_icon', require('../../img/deprecated/grenade.png'));
-        this.game.load.spritesheet('drone', require('../../img/enemies/drone-sm.png').toString(), 32, 32, 3);
-        this.game.load.spritesheet('lurker', require('../../img/enemies/LurkerA.png').toString(), 16, 16, 5);
-        this.game.load.spritesheet('shield', require('../../img/enemies/ShieldF.png').toString(), 16, 16, 4);
-        this.game.load.spritesheet('hack', require('../../img/deprecated/hack.png').toString(), 128, 128, 3);
-        this.game.load.spritesheet('explosion', require('../../img/effects/explosion.png').toString(), 86, 86);
-        this.game.load.image('bullet', require('../../img/projectiles/bullet.png'));
-        this.game.load.image('blue-turret', require('../../img/turrets/deprecated/turret.png'));
-        this.game.load.image('yellow-turret', require('../../img/turrets/deprecated/yellow-turret.png'));
-        this.game.load.image('red-turret', require('../../img/turrets/deprecated/red-turret.png'));
-        this.game.load.image('orange-turret', require('../../img/turrets/deprecated/orange-turret.png'));
-        this.game.load.image('green-turret', require('../../img/turrets/deprecated/green-turret.png'));
-        this.game.load.image('retro-background', require('../../img/backgrounds/retro-background.jpg'));
-        this.game.load.image('skirmish-background', require('../../img/deprecated/skirmish-background.jpg'));
-        this.game.load.spritesheet('green-projectile', require('../../img/projectiles/green-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('missile-projectile', require('../../img/projectiles/missile-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('blue-projectile', require('../../img/projectiles/blue-projectile.png').toString(), 32, 64, 5);
-        this.game.load.spritesheet('blue-missile-projectile', require('../../img/projectiles/blue-missile-projectile.png').toString(), 32, 32, 5);
-        this.game.load.spritesheet('pico-icons', require('../../img/ui/pico-icons.png').toString(), 8, 8);
-        this.game.load.image('blue-spark', require('../../img/particles/blue.png'));
-        this.game.load.image('red-spark', require('../../img/particles/red.png'));
+        this.game.load.image('ui-inactive', require('../../img/blue-tint/UIAssets_FrameG9.png'));
+        this.game.load.image('ui-active', require('../../img/blue-tint/UIAssets_ButtonG9.png'));
+        this.game.load.image('ui-rocket-inactive', require('../../img/blue-tint/UIAssets_Button_Rocket_Inactive.png'));
+        this.game.load.image('ui-rocket-active', require('../../img/blue-tint/UIAssets_Button_Rocket_Active.png'));
+        this.game.load.image('ui-wrench-inactive', require('../../img/blue-tint/UIAssets_Button_Wrench_Inactive.png'));
+        this.game.load.image('ui-wrench-active', require('../../img/blue-tint/UIAssets_Button_Wrench_Active.png'));
     }
 
     /**

@@ -60,7 +60,7 @@ export default abstract class InputHandler {
         text.anchor.setTo(1,0);
         parentSprite.addChild(text);
 
-        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, 0, 6);
+        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, 0, 4);
 
         parentSprite.inputEnabled = true;
         parentSprite.events.onInputDown.add(this.inputListener, this);
@@ -79,6 +79,7 @@ export default abstract class InputHandler {
 
         //turn all active handlers off
         this.allHandlers.forEach(h => h.removeListeners());
+        this.allHandlers.forEach(h => h.parentSprite.loadTexture(h.icon));
         // this.allHandlers.forEach(ih =>
         //     this.game.add.tween(ih.parentSprite.scale).to({x: 1.0, y: 1.0}, 400, Phaser.Easing.Exponential.In).start()
         // );
