@@ -61,15 +61,15 @@ export default class GridDescriptor {
         if (gridX < 0) {
             gridX = 0;
         }
-        if (gridX >= this.rows) {
-            gridX = this.rows - 1;
+        if (gridX >= this.columns) {
+            gridX = this.columns - 1;
         }
         let gridY = Math.floor(input.y / this.cellHeight);
         if (gridY < 0) {
             gridY = 0;
         }
-        if (gridY >= this.columns) {
-            gridY = this.columns - 1;
+        if (gridY >= this.rows) {
+            gridY = this.rows - 1;
         }
         return {x: gridX, y: gridY};
     }
