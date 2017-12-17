@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 export default class GridDescriptor {
 
     /**
@@ -80,11 +82,20 @@ export default class GridDescriptor {
         };
     }
 
-    getRandomBaseLocation(): {x: number, y: number} {
+    getClosestBaseLocation(input: {x: number, y: number}): {x: number, y: number} {
+
+        let xIn = input.x;
+        let closest = _.minBy(this.baseLocations, l => Math.abs(l[0] - xIn));
+
         let which = Math.floor(Phaser.Math.random(0, this.baseLocations.length));
         let loc = this.baseLocations[which];
 
-        return {x: loc[0], y: loc[1]};
+        if (closest) {
+            return {x: closest[0], y: closest[1]};
+        } else {
+            let first = this.baseLocations[0];
+            return {x: first[0], y: first[1]}
+        }
     }
 
 }

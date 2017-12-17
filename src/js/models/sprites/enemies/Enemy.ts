@@ -60,8 +60,6 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
 
             return sound;
         };
-
-        this.baseLocation = this.mission.gridDescriptor.getRandomBaseLocation();
         this.baseSprite = this.mission.currentBase;
     }
 
@@ -70,6 +68,8 @@ export abstract class Enemy extends Phaser.Sprite implements Targetable {
     }
 
     paint(mission: Mission, row: number, col: number) {
+
+        this.baseLocation = this.mission.gridDescriptor.getClosestBaseLocation({x: row, y: col});
 
         //get the right cell, then place into center of cell
         this.x = (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
@@ -333,7 +333,7 @@ export abstract class FlyingEnemy extends Enemy {
 
     flyTowardsBase() {
 
-        let base = this.mission.gridDescriptor.getRandomBaseLocation();
+        let base = this.mission.gridDescriptor.getClosestBaseLocation({x: this.x, y: this.y});
 
         let toGo = this.mission.gridDescriptor.getCenterOf({x: base[0], y: base[1]});
 

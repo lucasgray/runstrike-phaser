@@ -15,10 +15,10 @@ export default class LargeSkirmish extends Mission {
         //TODO
         // { type: 'Intro', delay: 0, showFor: 1000, size: 'large', at: 100, image: 'clock', imageSrc:'img/cocktail.png', imageSize: {row:128,col:128}, messages: ['','The','Droids','Are','Coming!']},
 
-        { type: 'ShipOne', delay: 1000, size: 'large', at: 9},
+        { type: 'ShipOne', delay: 1000, size: 'large', at: 2},
         { type: 'ShipTwo', delay: 1200, size: 'medium', at: 4},
         { type: 'ShipOne', delay: 3200, size: 'small', at: 5},
-        { type: 'ShipThree', delay: 400, size: 'large', at: 9},
+        { type: 'ShipThree', delay: 400, size: 'large', at: 1},
         { type: 'ShipOne', delay: 800, size: 'medium', at: 3}
     ];
 
@@ -30,21 +30,21 @@ export default class LargeSkirmish extends Mission {
             game.width,
             game.height,
             [
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+                [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
                 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 1, 1]
+                [1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+                [1, 1, 1, 0, 0, 0, 0, 0, 1, 1]
             ],
             [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],

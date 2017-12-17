@@ -15,7 +15,7 @@ export default class ShipOne extends PathfindingEnemy {
     ship: Phaser.Sprite;
 
     constructor(game: Phaser.Game, mission: Mission, row: number, col: number) {
-        super(game, mission, '', 100);
+        super(game, mission, '', 12);
 
         this.paint(mission, row, col);
         this.addHealthbar(6000);
