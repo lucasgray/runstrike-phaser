@@ -102,6 +102,29 @@ export class GameState {
         }
     }
 
+    beginVictorySequence(game: Phaser.Game, mission: Mission) {
+
+        if (this.isReactNative) {
+            window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
+                type: "MISSION_WON",
+                payload: JSON.stringify({ mission: mission.name })
+            }))
+        } else {
+            game.state.start('Victory', true, false, mission);
+        }
+    }
+
+    beginDefeatSequence(game: Phaser.Game, mission: Mission) {
+        if (this.isReactNative) {
+            window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
+                type: "MISSION_LOST",
+                payload: JSON.stringify({ mission: mission.name })
+            }))
+        } else {
+            game.state.start('Defeat', true, false, mission);
+        }
+    }
+
     markMissionAsWon(mission: Mission) {
         let i = _.find(this.missionInfo, i => i[0].name === mission.name);
 

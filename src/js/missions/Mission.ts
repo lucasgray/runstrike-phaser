@@ -236,16 +236,12 @@ abstract class Mission {
         }
     }
 
-    /**
-     * lose state is triggered when the base dies (and explosion is finished)
-     * @returns {boolean}
-     */
     checkWin() : boolean {
         let won = this.allDeployed && !this.enemies.getFirstAlive();
 
         if (won) {
             setTimeout(() => {
-                this.game.state.start('Victory', true, false, this);
+                this.gameState.beginVictorySequence(this.game, this);
             }, 2000);
         }
 

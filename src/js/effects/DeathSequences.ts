@@ -86,19 +86,18 @@ export default class DeathSequences {
         shockwave.blendMode = PIXI.blendModes.ADD;
         flare.blendMode = PIXI.blendModes.ADD;
 
-        let fallTween = this.game.add.tween(shockwave.scale).to({
+        let flareTween = this.game.add.tween(shockwave.scale).to({
             x: 9,
             y: 9,
         }, 4000, Phaser.Easing.Linear.None, true, 0, 0, false);
         let alphaTween = this.game.add.tween(shockwave).to({alpha: 0}, 1200, Phaser.Easing.Linear.None, true, 0, 0, false);
 
-        let fallTween2 = this.game.add.tween(flare.scale).to({
+        let scaleTween = this.game.add.tween(flare.scale).to({
             x: 4,
             y: 4
         }, 4000, Phaser.Easing.Linear.None, true, 0, 0, false);
 
-
-
-        fallTween2.onComplete.add(f => this.game.state.start('Defeat', true, false, this));
+        scaleTween.onComplete.add(f => this.mission.gameState.beginDefeatSequence(this.game, this.mission));
+        // this.game.state.start('Defeat', true, false, this));
     }
 }

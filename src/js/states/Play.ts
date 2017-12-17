@@ -105,17 +105,17 @@ export default class Play extends Phaser.State {
         this.inputHandlers.push(ih);
         this.inputHandlers.push(ih2);
 
-        new Button(
-            this.game,
-            100,
-            this.game.height - 40,
-            100,
-            40,
-            'Back', () => {
-                console.log("asking to go to menu");
-                this.state.start('Missions');
-            }
-        );
+        // new Button(
+        //     this.game,
+        //     100,
+        //     this.game.height - 40,
+        //     100,
+        //     40,
+        //     'Back', () => {
+        //         console.log("asking to go to menu");
+        //         this.state.start('Missions');
+        //     }
+        // );
     }
 
     drawHud() {
