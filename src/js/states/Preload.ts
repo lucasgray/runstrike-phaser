@@ -130,13 +130,13 @@ export default class Preload extends Phaser.State {
         let jsonString;
         let isReactNative;
 
-        // if (typeof(window.DATA) !== "undefined") {
-        //     jsonString = window.DATA;
-        //     isReactNative = true;
-        // } else {
-        jsonString = this.fakeData;
-        isReactNative = false;
-        // }
+        if (typeof(window.DATA) !== "undefined") {
+            jsonString = window.DATA;
+            isReactNative = true;
+        } else {
+            jsonString = this.fakeData;
+            isReactNative = false;
+        }
 
         let placedItems = jsonString.missionSequence.placed_defenses.map(
             i => new PlacedDefenseItemInfo(i['type'], i['row'], i['col']));
