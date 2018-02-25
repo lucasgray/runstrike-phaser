@@ -34,19 +34,6 @@ export class GameState {
 
         this.placedItems.push(new PlacedDefenseItemInfo(itemType, row, col));
 
-        let payload = {
-            type: itemType,
-            x: row,
-            y: col
-        };
-
-        // if (this.isReactNative) {
-        //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
-        //         type: "PLACE_ITEM",
-        //         payload: payload
-        //     }))
-        // }
-
         let i = _.find(this.inventoryItems, it => it.type === itemType);
 
         if (i) {
@@ -65,15 +52,6 @@ export class GameState {
             }
         });
 
-        //
-        // if (this.isReactNative) {
-        //     window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
-        //         type: "UNPLACE_ITEM",
-        //         payload: placed
-        //     }))
-        // }
-        //
-
         if (found) {
             let i = _.find(this.inventoryItems, it => it.type === itemType);
 
@@ -84,13 +62,6 @@ export class GameState {
     }
 
     useItem(itemType) {
-
-        if (this.isReactNative) {
-            window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
-                type: "USE_ITEM",
-                payload: itemType
-            }))
-        }
 
         let i = _.find(this.inventoryItems, it => it.type === itemType.toLowerCase());
 
@@ -105,8 +76,8 @@ export class GameState {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
                 type: "MISSION_WON",
                 payload: JSON.stringify({
-                    placedItems: this.placedItems,
-                    inventoryItems: this.inventoryItems,
+                    placed_defenses: this.placedItems,
+                    unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
                         return {row: t.row, col: t.col, health: t.health}
@@ -123,8 +94,8 @@ export class GameState {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
                 type: "MISSION_LOST",
                 payload: JSON.stringify({
-                    placedItems: this.placedItems,
-                    inventoryItems: this.inventoryItems,
+                    placed_defenses: this.placedItems,
+                    unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
                         return {row: t.row, col: t.col, health: t.health}
@@ -140,7 +111,10 @@ export class GameState {
         if (this.isReactNative) {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
                 type: "SETUP_FINISHED",
-                payload: this.placedItems
+                payload: {
+                    placed_defenses: this.placedItems,
+                    unused_defenses: this.inventoryItems
+                }
             }));
         } else {
             game.state.start('Play', true, false, mission);
