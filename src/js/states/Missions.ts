@@ -23,31 +23,31 @@ export default class Missions extends Phaser.State {
         });
         title.anchor.setTo(0.5);
 
-        this.gameState.missionInfo.forEach((m, i) => {
-
-            let beat = m[1].beat;
-
-            //lock this one if its not the first and you havent beat the last one
-            let isFirstStory = m[0].name === "Story One";
-            let isSkirmish = m[0].name.indexOf("Skirmish") !== -1;
-
-            let shouldBeLocked = !isFirstStory && !isSkirmish && (i !== 0 ? !this.gameState.missionInfo[i-1][1].beat : false);
-
-            let name = m[0].name;
-            let action = shouldBeLocked ? () => null : () => this.game.state.start('Setup', true, false, m[0]);
-
-            new MissionButton(
-                this.game,
-                this.game.world.centerX,
-                this.game.world.centerY + (i * 70),
-                this.game.width * 0.8,
-                60,
-                name,
-                action,
-                beat,
-                shouldBeLocked
-            );
-        });
+        // this.gameState.missionInfo.forEach((m, i) => {
+        //
+        //     let beat = m[1].beat;
+        //
+        //     //lock this one if its not the first and you havent beat the last one
+        //     let isFirstStory = m[0].name === "Story One";
+        //     let isSkirmish = m[0].name.indexOf("Skirmish") !== -1;
+        //
+        //     let shouldBeLocked = !isFirstStory && !isSkirmish && (i !== 0 ? !this.gameState.missionInfo[i-1][1].beat : false);
+        //
+        //     let name = m[0].name;
+        //     let action = shouldBeLocked ? () => null : () => this.game.state.start('Setup', true, false, m[0]);
+        //
+        //     new MissionButton(
+        //         this.game,
+        //         this.game.world.centerX,
+        //         this.game.world.centerY + (i * 70),
+        //         this.game.width * 0.8,
+        //         60,
+        //         name,
+        //         action,
+        //         beat,
+        //         shouldBeLocked
+        //     );
+        // });
 
         new Button(
             this.game,

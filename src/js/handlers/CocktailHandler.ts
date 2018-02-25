@@ -39,7 +39,7 @@ export default class RocketHandler extends InputHandler {
 
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
+        let loot = _.find(this.gameState.inventoryItems, i => i.type === this.lootType);
 
         if (loot !== undefined && loot.amount > 0) {
             let explosion = this.game.add.sprite(pointer.position.x, pointer.position.y, 'explosion');

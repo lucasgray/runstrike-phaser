@@ -1,5 +1,5 @@
 import * as WebFont from "webfontloader";
-import {PlacedLootInfo, GameState, LootInfo, AllLoots, AllMissions} from "../models/state/GameData";
+import {PlacedDefenseItemInfo, GameState, DefenseItemInfo, AllLoots} from "../models/state/GameData";
 import Menu from "./Menu";
 import Missions from "./Missions";
 import Setup from "./Setup";
@@ -106,12 +106,13 @@ export default class Preload extends Phaser.State {
 
         this.game.state.add('ArtTesting', new ArtTesting(this.gameState));
 
-        if (this.gameState.missionAskedFor) {
-            this.state.start('Setup', true, false,
-                this.gameState.missionInfo.map(m => m[0])
-                    .filter(m => m.name === this.gameState.missionAskedFor)[0]);
-        } else {
-            this.state.start('Menu');
+        if (this.gameState.activityRequested) {
+            if (this.gameState.activityRequested === 'setup') {
+                console.log("startin da thing");
+                this.game.state.start('Play', true, false);
+            } else {
+                this.game.state.start('Play');
+            }
         }
     }
 
@@ -128,21 +129,21 @@ export default class Preload extends Phaser.State {
         let jsonString;
         let isReactNative;
 
-        if (typeof(window.DATA) !== "undefined") {
-            jsonString = window.DATA;
-            isReactNative = true;
-        } else {
+        // if (typeof(window.DATA) !== "undefined") {
+        //     jsonString = window.DATA;
+        //     isReactNative = true;
+        // } else {
             jsonString = this.fakeData;
             isReactNative = false;
-        }
+        // }
 
-        let asMissionArray = _.values(jsonString.placed_loot);
+        let asMissionArray = _.values(jsonString.placed_defenses);
 
-        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedLootInfo(i['type'], i['x'], i['y']));
+        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedDefenseItemInfo(i['type'], i['x'], i['y']));
 
 
         let emptyLoot = AllLoots.EmptyLoots;
-        let inventoryItems : Array<LootInfo> = this.groupItems(jsonString.unused_loot, jsonString.caps);
+        let inventoryItems: Array<DefenseItemInfo> = this.groupItems(jsonString.unused_defenses);
 
         let finalInventoryItems = emptyLoot.map(i => {
 
@@ -152,31 +153,22 @@ export default class Preload extends Phaser.State {
             return i;
         });
 
-        let missions = AllMissions.AllMissionsAndInfos(this.game);
+        // let missions = AllMissions.AllMissionsAndInfos(this.game);
         //TODO add mission state from react-native as well...
 
-        let missionAskedFor = jsonString.mission;
+        let activityRequested = jsonString.activity;
 
-        let gameState = new GameState(placedItems, finalInventoryItems, missions, isReactNative, missionAskedFor);
-
-        missions.forEach(m => m[0].gameState = gameState);
-
-        return gameState;
+        return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested);
     }
 
-    groupItems(items, caps) : Array<LootInfo> {
+    groupItems(items): Array<DefenseItemInfo> {
         if (items) {
             let byType = _.countBy(items, i => i['type']);
             console.log("bytype " + JSON.stringify(byType));
-            let final = _.map(Object.keys(byType), it => {
+            return _.map(Object.keys(byType), it => {
                 console.log(JSON.stringify(it));
-                return new LootInfo(it, byType[it]);
+                return new DefenseItemInfo(it, byType[it]);
             });
-            if (caps) {
-                final.push(new LootInfo('caps', caps));
-            }
-
-            return final;
         }
         else {
             return [];
@@ -184,71 +176,20 @@ export default class Preload extends Phaser.State {
     }
 
     fakeData: object = {
-        // "mission": "Large Skirmish",
-        "caps": 395,
-        "placed_loot": {
-
-        },
-        "unused_loot": {
-            "-Kj-ezDNFAwbZirmeGOE": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIpPqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "cocktail"
-            },
-            "-Kj-ezDsdfNFAwbZirmeGOE": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIpPsdfqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "cocktail"
-            }, "-Kj-ezDNFAwbZsdfsdfirmeGOE": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "cocktail"
-            }, "-Kj-ezDNFAwbZsdfsdfirmeGOG": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "turret-1"
-            }, "-Kj-ezDNFAwbZsdfsdfirmeGOH": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "turret-1"
-            }, "-Kj-ezDNFAwbZsdfsdfirmeGOI": {
-                "foundBy": "TODO!",
-                "foundOn": "TODO!",
-                "key": "-Kj-bZwrlcIIsdfpPqnf-FQ",
-                "latLong": {
-                    "latitude": 43.06856735536175,
-                    "longitude": -89.33985730479297
-                },
-                "type": "turret-1"
-            }
-        }
+        "missionSequence": {
+            "days_between": 4,
+            "mission_sequence_identifier": 0,
+            "sequence_number": 0,
+            "score": {"total": 10},
+            "next_wave": {"enemies": {"enemy001": 1}, "due_at": 1519834300538, "assigned_at": 1519488700538},
+            "previous_waves": {},
+            "next_challenge": {"due_at": 1519834300538, "assigned_at": 1519488700538},
+            "previous_challenges": {},
+            "supplies": [],
+            "unused_defenses": [],
+            "placed_defenses": []
+        }, "action": "setup"
     }
-
 
 
 }

@@ -123,7 +123,7 @@ export default abstract class InputHandler {
 
     num() {
 
-        let amt = this.gameState.inventoryLoot.filter(it => it.type === this.lootType).pop();
+        let amt = this.gameState.inventoryItems.filter(it => it.type === this.lootType).pop();
 
         if (amt) {
             return amt.amount > 9 ? "" + amt.amount: "0" + amt.amount;

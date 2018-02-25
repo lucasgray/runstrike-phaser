@@ -30,7 +30,7 @@ export default abstract class SetupTurretInputHandler extends InputHandler {
      */
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
 
-        let loot = _.find(this.gameState.inventoryLoot, i => i.type === this.lootType);
+        let loot = _.find(this.gameState.inventoryItems, i => i.type === this.lootType);
         let grid = this.mission.gridDescriptor.getGridLocation(pointer);
 
         if (loot !== undefined && loot.amount > 0 &&

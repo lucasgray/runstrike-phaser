@@ -50,7 +50,7 @@ export default class Play extends Phaser.State {
             .withGame(this.game)
             .andMission(this.mission);
 
-        this.gameState.placedLoot.forEach((it) => {
+        this.gameState.placedItems.forEach((it) => {
 
             let turret = builder
                 .at({row: it.row, col: it.col})
@@ -63,7 +63,7 @@ export default class Play extends Phaser.State {
             }
         });
 
-        this.mission.recalculateGrid(gameState.placedLoot);
+        this.mission.recalculateGrid(gameState.placedItems);
 
         this.effectsGroup = StandardMap.AddMapEffects(this.game);
 

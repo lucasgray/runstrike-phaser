@@ -11,20 +11,17 @@ import BossOne from "../../missions/BossOne";
 //everybody has this?
 export class GameState {
 
-    placedLoot: Array<PlacedLootInfo>;
-    inventoryLoot: Array<LootInfo>;
-
-    missionInfo: Array<[Mission, MissionInfo]>;
+    placedItems: Array<PlacedDefenseItemInfo>;
+    inventoryItems: Array<DefenseItemInfo>;
 
     isReactNative: boolean;
-    missionAskedFor: string;
+    activityRequested: string;
 
-    constructor(placedLoot: Array<PlacedLootInfo>, inventoryLoot: Array<LootInfo>, missionInfo: Array<[Mission, MissionInfo]>, isReactNative: boolean, missionAskedFor: string) {
-        this.placedLoot = placedLoot;
-        this.inventoryLoot = inventoryLoot;
-        this.missionInfo = missionInfo;
+    constructor(placedLoot: Array<PlacedDefenseItemInfo>, inventoryLoot: Array<DefenseItemInfo>, isReactNative: boolean, activityRequested: string) {
+        this.placedItems = placedLoot;
+        this.inventoryItems = inventoryLoot;
         this.isReactNative = isReactNative;
-        this.missionAskedFor = missionAskedFor;
+        this.activityRequested = activityRequested;
     }
 
     placeItem(itemType, row, col) {
@@ -32,10 +29,10 @@ export class GameState {
         console.log("placing turret at: " );
         console.log(row, col);
 
-        let exists = _.some(this.placedLoot, (pl) => pl.type === itemType && pl.row === row && pl.col === col);
+        let exists = _.some(this.placedItems, (pl) => pl.type === itemType && pl.row === row && pl.col === col);
         if (exists) return;
 
-        this.placedLoot.push(new PlacedLootInfo(itemType, row, col));
+        this.placedItems.push(new PlacedDefenseItemInfo(itemType, row, col));
 
         let payload = {
             type: itemType,
@@ -50,7 +47,7 @@ export class GameState {
         //     }))
         // }
 
-        let i = _.find(this.inventoryLoot, it => it.type === itemType);
+        let i = _.find(this.inventoryItems, it => it.type === itemType);
 
         if (i) {
             i.amount = i.amount - 1;
@@ -61,10 +58,10 @@ export class GameState {
         console.log('unplacing loot');
 
         let found = false;
-        this.placedLoot.forEach((pl, i) => {
+        this.placedItems.forEach((pl, i) => {
             if (pl.row === row && pl.col === col) {
                 found = true;
-                this.placedLoot.splice(i, 1);
+                this.placedItems.splice(i, 1);
             }
         });
 
@@ -78,7 +75,7 @@ export class GameState {
         //
 
         if (found) {
-            let i = _.find(this.inventoryLoot, it => it.type === itemType);
+            let i = _.find(this.inventoryItems, it => it.type === itemType);
 
             if (i) {
                 i.amount = i.amount + 1;
@@ -95,7 +92,7 @@ export class GameState {
             }))
         }
 
-        let i = _.find(this.inventoryLoot, it => it.type === itemType.toLowerCase());
+        let i = _.find(this.inventoryItems, it => it.type === itemType.toLowerCase());
 
         if (i) {
             i.amount = i.amount - 1;
@@ -125,30 +122,10 @@ export class GameState {
         }
     }
 
-    markMissionAsWon(mission: Mission) {
-        let i = _.find(this.missionInfo, i => i[0].name === mission.name);
-
-        if (i == null) return;
-
-        i[1].beat = true;
-
-        //TODO react native
-    }
-
-    markMissionAsLost(mission: Mission) {
-        let i = _.find(this.missionInfo, i => i[0].name === mission.name);
-
-        if (i == null) return;
-
-        i[1].failedAttempts = i[1].failedAttempts + 1;
-
-        //TODO react native
-    }
-
     //more to come!
 }
 
-export class LootInfo {
+export class DefenseItemInfo {
     type: string;
     amount: number;
 
@@ -158,7 +135,7 @@ export class LootInfo {
     }
 }
 
-export class PlacedLootInfo {
+export class PlacedDefenseItemInfo {
 
     type: string;
     row: number;
@@ -174,47 +151,47 @@ export class PlacedLootInfo {
 
 export class AllLoots {
 
-    static Value = ["cocktail", "turret-1", "wrench"];
+    static Value = ["rocket", "auto_turret", "wrench"];
 
-    static EmptyLoots : Array<LootInfo> = AllLoots.Value.map(i => new LootInfo(i, 0));
-
-}
-
-export class MissionInfo {
-
-    failedAttempts: number;
-    beat: boolean;
-
-    constructor(failedAttempts: number, beat: boolean) {
-        this.failedAttempts = failedAttempts;
-        this.beat = beat;
-    }
-}
-
-export class AllMissions {
-
-    private static AllMissions(game: Phaser.Game) : Array<Mission> {
-        return [
-            new SmallSkirmish(game),
-            new LargeSkirmish(game),
-            new StoryOne(game),
-            new StoryTwo(game),
-            new StoryThree(game),
-            new BossOne(game)
-        ];
-    }
-
-    static AllMissionsAndInfos(game: Phaser.Game) : Array<[Mission, MissionInfo]> {
-
-        let missions = AllMissions.AllMissions(game);
-
-        let m = missions.map(m => {
-            let m1 : [Mission, MissionInfo] = [m, new MissionInfo(0, false)];
-
-            return m1;
-        });
-
-        return m;
-    }
+    static EmptyLoots : Array<DefenseItemInfo> = AllLoots.Value.map(i => new DefenseItemInfo(i, 0));
 
 }
+
+// export class MissionInfo {
+//
+//     failedAttempts: number;
+//     beat: boolean;
+//
+//     constructor(failedAttempts: number, beat: boolean) {
+//         this.failedAttempts = failedAttempts;
+//         this.beat = beat;
+//     }
+// }
+//
+// export class AllMissions {
+//
+//     private static AllMissions(game: Phaser.Game) : Array<Mission> {
+//         return [
+//             new SmallSkirmish(game),
+//             new LargeSkirmish(game),
+//             new StoryOne(game),
+//             new StoryTwo(game),
+//             new StoryThree(game),
+//             new BossOne(game)
+//         ];
+//     }
+//
+//     static AllMissionsAndInfos(game: Phaser.Game) : Array<[Mission, MissionInfo]> {
+//
+//         let missions = AllMissions.AllMissions(game);
+//
+//         let m = missions.map(m => {
+//             let m1 : [Mission, MissionInfo] = [m, new MissionInfo(0, false)];
+//
+//             return m1;
+//         });
+//
+//         return m;
+//     }
+//
+// }

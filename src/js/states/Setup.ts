@@ -16,15 +16,11 @@ export default class Setup extends Phaser.State {
     constructor(gameState: GameState) {
         super();
         this.gameState = gameState;
-        console.log("setup")
     }
 
-    init(mission: Mission) {
-        this.mission = mission;
-        console.log("mission" + mission);
-    }
+    init() {
 
-    create() {
+        console.log('init setup');
 
         this.mission.reset();
 
@@ -45,7 +41,7 @@ export default class Setup extends Phaser.State {
 
         this.mission.addSetupGuidelines();
 
-        console.log(this.gameState.placedLoot);
+        console.log(this.gameState.placedItems);
 
         this.drawInputs();
         this.drawSetupTurrets();
@@ -81,7 +77,7 @@ export default class Setup extends Phaser.State {
             .andMission(this.mission)
             .andInputHandlers(this.setupPanel.handlers);
 
-        this.gameState.placedLoot.forEach((it) => {
+        this.gameState.placedItems.forEach((it) => {
 
             let turret = builder
                 .at({row: it.row, col: it.col})

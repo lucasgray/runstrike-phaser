@@ -1,5 +1,5 @@
 
-import {GameState, LootInfo} from "../models/state/GameData";
+import {GameState, DefenseItemInfo} from "../models/state/GameData";
 import Button from "../models/sprites/buttons/Button";
 
 export default class Debug extends Phaser.State {
@@ -18,7 +18,7 @@ export default class Debug extends Phaser.State {
         var textOne = this.game.add.text(
             this.game.world.centerX,
             this.game.world.centerY - 200,
-            "placed items: " + this.gameState.placedLoot,
+            "placed items: " + this.gameState.placedItems,
             {
                 font: '14px monospace',
                 fill: 'white',
@@ -46,9 +46,9 @@ export default class Debug extends Phaser.State {
             'cheat', ()=>{
                 console.log("cheating!");
 
-                this.gameState.inventoryLoot =
-                    this.gameState.inventoryLoot.map(i =>
-                        new LootInfo(i.type, i.amount += 50)
+                this.gameState.inventoryItems =
+                    this.gameState.inventoryItems.map(i =>
+                        new DefenseItemInfo(i.type, i.amount += 50)
                     );
             }
         );
@@ -88,16 +88,16 @@ export default class Debug extends Phaser.State {
         let lock = this.game.add.sprite(300, 300, 'pico-icons', 39);
         lock.scale.setTo(8)
 
-        var textThree = this.game.add.text(
-            this.game.world.centerX,
-            this.game.world.height - 140,
-            "missionaskedfor: " + this.gameState.missionAskedFor,
-            {
-                font: '14px monospace',
-                fill: 'white',
-                align: 'center'
-            });
-        textThree.anchor.setTo(0.5);
+        // var textThree = this.game.add.text(
+        //     this.game.world.centerX,
+        //     this.game.world.height - 140,
+        //     "missionaskedfor: " + this.gameState.missionAskedFor,
+        //     {
+        //         font: '14px monospace',
+        //         fill: 'white',
+        //         align: 'center'
+        //     });
+        // textThree.anchor.setTo(0.5);
 
         new Button(
             this.game,

@@ -1,6 +1,6 @@
 import GridDescriptor from "../models/state/GridDescriptor";
 
-import {GameState, PlacedLootInfo} from "../models/state/GameData";
+import {GameState, PlacedDefenseItemInfo} from "../models/state/GameData";
 import Drone from "../models/sprites/enemies/Drone";
 import SmartGroup from "../extensions/SmartGroup";
 import Projectile from "../models/sprites/projectiles/Projectile";
@@ -80,12 +80,12 @@ abstract class Mission {
         this.gameState = gameState;
     }
 
-    recalculateGrid(placedItems: Array<PlacedLootInfo>) {
+    recalculateGrid(placedItems: Array<PlacedDefenseItemInfo>) {
         this.recalculateTotalGrid(placedItems);
         this.recalculatePassableTerrainGrid();
     }
 
-    recalculateTotalGrid(placedItems: Array<PlacedLootInfo>) {
+    recalculateTotalGrid(placedItems: Array<PlacedDefenseItemInfo>) {
         let myLoot =  placedItems;
 
         let easystar = new EasyStar.js();
@@ -308,7 +308,7 @@ abstract class Mission {
     }
 
     sendTurretKilled() {
-        this.recalculateGrid(this.gameState.placedLoot);
+        this.recalculateGrid(this.gameState.placedItems);
         this.enemies.forEachAlive(e => e.handleTurretKilled(), true);
     }
 
