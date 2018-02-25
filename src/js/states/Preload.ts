@@ -109,7 +109,7 @@ export default class Preload extends Phaser.State {
         if (this.gameState.activityRequested) {
             if (this.gameState.activityRequested === 'setup') {
                 console.log("startin da thing");
-                this.game.state.start('Play', true, false);
+                this.game.state.start('Setup', true, false);
             } else {
                 this.game.state.start('Play');
             }
@@ -156,7 +156,7 @@ export default class Preload extends Phaser.State {
         // let missions = AllMissions.AllMissionsAndInfos(this.game);
         //TODO add mission state from react-native as well...
 
-        let activityRequested = jsonString.activity;
+        let activityRequested = jsonString.action;
 
         return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested);
     }
