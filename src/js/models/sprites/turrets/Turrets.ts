@@ -53,7 +53,7 @@ export class AutoTurret extends Turret {
     };
 
     constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
-        super(mission, game, row, col, 'turret-1', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
+        super(mission, game, row, col, 'auto_turret', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
 
         this.init();
         this.addHealthbar(1000);

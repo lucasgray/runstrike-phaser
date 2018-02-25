@@ -1,7 +1,7 @@
 import Mission from "../../missions/Mission";
 import {GameState} from "../state/GameData";
 import InputHandler from "../../handlers/InputHandler";
-import {TurretOne} from "../sprites/turrets/setup/SetupTurrets";
+import {AutoSetupTurret} from "../sprites/turrets/setup/SetupTurrets";
 import * as _ from 'lodash';
 import {AutoTurret} from "../sprites/turrets/Turrets";
 
@@ -43,9 +43,9 @@ export default class TurretBuilder {
 
     buildForSetup(type: string) {
 
-        if (type.toLowerCase() == 'turret-1') {
-            return new TurretOne(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'turret-1')!);
+        if (type.toLowerCase() == 'auto_turret') {
+            return new AutoSetupTurret(
+                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'auto_turret')!);
         }
         //
         // if (type.toLowerCase() == 'blue-turret') {
@@ -76,7 +76,7 @@ export default class TurretBuilder {
 
     buildForPlay(type: string) {
 
-        if (type.toLowerCase() == 'turret-1') {
+        if (type.toLowerCase() == 'auto_turret') {
             return new AutoTurret(this.mission, this.game, this.row, this.col);
         }
         //

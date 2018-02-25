@@ -5,13 +5,13 @@ import Mission from "../../../../missions/Mission";
 import {GameState} from "../../../state/GameData";
 import InputHandler from "../../../../handlers/InputHandler";
 
-export class TurretOne extends SetupTurret {
+export class AutoSetupTurret extends SetupTurret {
 
     constructor(mission: Mission, game: Phaser.Game,
                 gameState: GameState,
                 row: number, col: number,
                 inputHandler: InputHandler
     ) {
-        super(mission, game, gameState, row, col, 'turret-1', inputHandler, 9, -15);
+        super(mission, game, gameState, row, col, 'auto_turret', inputHandler, 9, -15);
     }
 }

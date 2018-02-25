@@ -141,7 +141,7 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         super.kill();
 
         let whereAmI = this.mission.gridDescriptor.getGridLocation({x: this.x, y: this.y});
-        this.mission.gameState.unplaceItem('turret-1', this.mission.name, whereAmI.x, whereAmI.y);
+        this.mission.gameState.unplaceItem('auto_turret', this.mission.name, whereAmI.x, whereAmI.y);
         this.deathSequences.basicDeathSequence();
 
         this.healthBar.destroy();

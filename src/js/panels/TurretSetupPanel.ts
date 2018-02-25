@@ -32,7 +32,7 @@ export default class TurretSetupPanel {
 
     paint(mission, gameState, backgroundSprite) {
         let graphics = this.game.add.graphics(this.topLeft.x, this.topLeft.y);
-        graphics.beginFill(0x000000, .6);
+        graphics.beginFill(0x000000, .9);
         graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
         graphics.drawRect(0, 0, this.width, this.height);
 
@@ -53,9 +53,12 @@ export default class TurretSetupPanel {
             0,
             85,
             40,
-            'ready', () => {
-                console.log("asking to defend");
-                this.game.state.start('Play', true, false, mission, gameState);
+            'OK', () => {
+                console.log("fin!!");
+
+
+
+                // this.game.state.start('Play', true, false, mission, gameState);
             }
         );
         parentSprite.addChild(readyButton.baseSprite);

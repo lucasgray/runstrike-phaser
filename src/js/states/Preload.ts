@@ -8,7 +8,7 @@ import Play from "./Play";
 import Defeat from "./Defeat";
 import * as _ from 'lodash';
 import Debug from "./Debug";
-import ArtTesting from "./ArtTesting";
+import LargeSkirmish from "../missions/LargeSkirmish";
 
 require('../../css/joystix-monospace.ttf');
 
@@ -65,7 +65,7 @@ export default class Preload extends Phaser.State {
         this.game.load.image('empty-grid', require('../../img/blue-tint/GridCell_empty.png'));
         this.game.load.image('unplaceable-grid', require('../../img/blue-tint/GridCell_hatchedAA.png'));
         this.game.load.image('turret-base', require('../../img/blue-tint/Turrets_TurretBase.png'));
-        this.game.load.image('turret-1', require('../../img/blue-tint/Turrets_M01.png'));
+        this.game.load.image('auto_turret', require('../../img/blue-tint/Turrets_M01.png'));
         this.game.load.image('turret-heavy', require('../../img/blue-tint/Turrets_H01.png'));
         this.game.load.image('auto-turret-ui', require('../../img/blue-tint/UIAssets_Button_TowerAutocannon001.png'));
         this.game.load.image('heavy-turret-ui', require('../../img/blue-tint/UIAssets_Button_TowerHeavy001.png'));
@@ -104,14 +104,15 @@ export default class Preload extends Phaser.State {
         this.game.state.add('Defeat', new Defeat(this.gameState));
         this.game.state.add('Debug', new Debug(this.gameState));
 
-        this.game.state.add('ArtTesting', new ArtTesting(this.gameState));
-
         if (this.gameState.activityRequested) {
+
+            let largeSkirmish = new LargeSkirmish(this.game);
+            largeSkirmish.setGameState(this.gameState);
+
             if (this.gameState.activityRequested === 'setup') {
-                console.log("startin da thing");
-                this.game.state.start('Setup', true, false);
+                this.game.state.start('Setup', true, false, largeSkirmish);
             } else {
-                this.game.state.start('Play');
+                this.game.state.start('Play', true, false, largeSkirmish);
             }
         }
     }
@@ -133,17 +134,16 @@ export default class Preload extends Phaser.State {
         //     jsonString = window.DATA;
         //     isReactNative = true;
         // } else {
-            jsonString = this.fakeData;
-            isReactNative = false;
+        jsonString = this.fakeData;
+        isReactNative = false;
         // }
 
-        let asMissionArray = _.values(jsonString.placed_defenses);
-
-        let placedItems = _.flatMap(asMissionArray, (obj) => _.values(obj)).map(i => new PlacedDefenseItemInfo(i['type'], i['x'], i['y']));
-
+        let placedItems = jsonString.missionSequence.placed_defenses.map(
+            i => new PlacedDefenseItemInfo(i['type'], i['row'], i['col']));
 
         let emptyLoot = AllLoots.EmptyLoots;
-        let inventoryItems: Array<DefenseItemInfo> = this.groupItems(jsonString.unused_defenses);
+        let inventoryItems: Array<DefenseItemInfo> = jsonString.missionSequence.unused_defenses.map(
+            ud => new DefenseItemInfo(ud.type, ud.amount));
 
         let finalInventoryItems = emptyLoot.map(i => {
 
@@ -153,28 +153,10 @@ export default class Preload extends Phaser.State {
             return i;
         });
 
-        // let missions = AllMissions.AllMissionsAndInfos(this.game);
-        //TODO add mission state from react-native as well...
-
         let activityRequested = jsonString.action;
 
         return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested);
     }
-
-    groupItems(items): Array<DefenseItemInfo> {
-        if (items) {
-            let byType = _.countBy(items, i => i['type']);
-            console.log("bytype " + JSON.stringify(byType));
-            return _.map(Object.keys(byType), it => {
-                console.log(JSON.stringify(it));
-                return new DefenseItemInfo(it, byType[it]);
-            });
-        }
-        else {
-            return [];
-        }
-    }
-
     fakeData: object = {
         "missionSequence": {
             "days_between": 4,
@@ -186,8 +168,16 @@ export default class Preload extends Phaser.State {
             "next_challenge": {"due_at": 1519834300538, "assigned_at": 1519488700538},
             "previous_challenges": {},
             "supplies": [],
-            "unused_defenses": [],
-            "placed_defenses": []
+            "unused_defenses": [
+                {"type": "rocket", "amount": 10},
+                {"type": "auto_turret", "amount": 10},
+                {"type": "wrench", "amount": 10}
+            ],
+            "placed_defenses": [
+                {"type": "auto_turret", "row": 5, "col": 7},
+                {"type": "auto_turret", "row": 4, "col": 7},
+                {"type": "auto_turret", "row": 3, "col": 7}
+            ]
         }, "action": "setup"
     }
 

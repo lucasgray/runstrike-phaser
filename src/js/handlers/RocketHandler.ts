@@ -7,8 +7,8 @@ export default class RocketHandler extends InputHandler {
 
     icon: string = 'ui-rocket-inactive';
     activeIcon: string = 'ui-rocket-active';
-    lootType: string = 'cocktail';
-    lootPrettyName: 'cocktail';
+    lootType: string = 'rocket';
+    lootPrettyName: 'rocket';
 
     constructor(mission: Mission,
                 gameState: GameState,

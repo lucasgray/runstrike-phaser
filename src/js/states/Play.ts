@@ -2,13 +2,12 @@ import Button from "../models/sprites/buttons/Button";
 import 'phaser';
 import Mission from "../missions/Mission";
 import {GameState} from "../models/state/GameData";
-import CocktailHandler from "../handlers/CocktailHandler";
 import InputHandler from "../handlers/InputHandler";
 import TurretBuilder from "../models/builder/TurretBuilder";
 import StandardMap from "../effects/StandardMap";
-import SmartGroup from "../extensions/SmartGroup";
 import HudPanel from "../panels/HudPanel";
 import WrenchHandler from "../handlers/WrenchHandler";
+import RocketHandler from "../handlers/RocketHandler";
 
 export default class Play extends Phaser.State {
 
@@ -24,13 +23,11 @@ export default class Play extends Phaser.State {
         this.gameState = gameState;
     }
 
-    init(mission: Mission, gameState: GameState) {
+    init(mission: Mission) {
 
         console.log('init mission');
 
         this.mission = mission;
-        this.gameState = gameState;
-
         mission.reset();
 
         let bkgrd = this.mission.background();
@@ -44,7 +41,6 @@ export default class Play extends Phaser.State {
 
         base.sendToBack();
         bkgrd.sendToBack();
-
 
         let builder = new TurretBuilder()
             .withGame(this.game)
@@ -63,7 +59,7 @@ export default class Play extends Phaser.State {
             }
         });
 
-        this.mission.recalculateGrid(gameState.placedItems);
+        this.mission.recalculateGrid(this.gameState.placedItems);
 
         this.effectsGroup = StandardMap.AddMapEffects(this.game);
 
@@ -71,26 +67,26 @@ export default class Play extends Phaser.State {
         this.drawHud();
 
         //eh I think I like having the guidelines...
-        this.mission.addSetupGuidelines();
+        // this.mission.addSetupGuidelines();
     }
 
     drawInput() {
 
-        let cocktailLoc = this.mission.gridDescriptor.getCenterOf(
+        let rocketLoc = this.mission.gridDescriptor.getCenterOf(
             {x: this.mission.gridDescriptor.columns - 3, y: this.mission.gridDescriptor.rows - 1});
 
         this.inputHandlers = [];
 
-        let ih = new CocktailHandler(
+        let ih = new RocketHandler(
             this.mission,
             this.gameState,
             this.inputHandlers,
             this.backgroundSprite,
             this.game,
-            cocktailLoc.x,
-            cocktailLoc.y);
+            rocketLoc.x,
+            rocketLoc.y);
 
-        let cocktailLoc2 = this.mission.gridDescriptor.getCenterOf(
+        let wrenchLoc = this.mission.gridDescriptor.getCenterOf(
             {x: this.mission.gridDescriptor.columns - 4, y: this.mission.gridDescriptor.rows - 1});
 
         let ih2 = new WrenchHandler(
@@ -99,8 +95,8 @@ export default class Play extends Phaser.State {
             this.inputHandlers,
             this.mission.turrets.all(),
             this.game,
-            cocktailLoc2.x,
-            cocktailLoc2.y);
+            wrenchLoc.x,
+            wrenchLoc.y);
 
         this.inputHandlers.push(ih);
         this.inputHandlers.push(ih2);

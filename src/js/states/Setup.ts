@@ -18,9 +18,10 @@ export default class Setup extends Phaser.State {
         this.gameState = gameState;
     }
 
-    init() {
+    init(mission: Mission) {
 
         console.log('init setup');
+        this.mission = mission;
 
         this.mission.reset();
 
