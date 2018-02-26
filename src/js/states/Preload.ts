@@ -157,27 +157,87 @@ export default class Preload extends Phaser.State {
 
         return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested);
     }
+
     fakeData: object = {
         "missionSequence": {
             "days_between": 4,
             "mission_sequence_identifier": 0,
             "sequence_number": 0,
-            "score": {"total": 10},
+            "score": {
+                "total": 150922,
+                "1519586206014": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 5783
+                    }, {"reason": "distance", "amount": 4310}, {"reason": "supplies gathered", "amount": 8000}],
+                    "reason": "run",
+                    "amount": 23093
+                },
+                "1519586169915": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 5783
+                    }, {"reason": "distance", "amount": 4310}, {
+                        "reason": "intel found",
+                        "amount": 5000
+                    }, {"reason": "supplies scouted", "amount": 4500}], "reason": "run", "amount": 24593
+                },
+                "1519586137987": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 5783
+                    }, {"reason": "distance", "amount": 4310}, {
+                        "reason": "intel found",
+                        "amount": 5000
+                    }, {"reason": "supplies scouted", "amount": 6000}], "reason": "run", "amount": 26093
+                },
+                "1519586067087": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 5783
+                    }, {"reason": "distance", "amount": 4310}], "reason": "run", "amount": 15093
+                },
+                "1519586122404": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 5783
+                    }, {"reason": "distance", "amount": 4310}, {
+                        "reason": "intel found",
+                        "amount": 5000
+                    }, {"reason": "supplies scouted", "amount": 5500}], "reason": "run", "amount": 25593
+                },
+                "1519503203920": {
+                    "bonusMultipliers": [{"reason": "base", "amount": 5000}, {
+                        "reason": "pace",
+                        "amount": 3617
+                    }, {"reason": "distance", "amount": 7330}, {
+                        "reason": "intel found",
+                        "amount": 9000
+                    }, {"reason": "supplies scouted", "amount": 11500}], "reason": "run", "amount": 36447
+                }
+            },
             "next_wave": {"enemies": {"enemy001": 1}, "due_at": 1519834300538, "assigned_at": 1519488700538},
             "previous_waves": {},
             "next_challenge": {"due_at": 1519834300538, "assigned_at": 1519488700538},
             "previous_challenges": {},
-            "supplies": [],
-            "unused_defenses": [
-                {"type": "rocket", "amount": 10},
-                {"type": "auto_turret", "amount": 10},
-                {"type": "wrench", "amount": 10}
-            ],
-            "placed_defenses": [
-                {"type": "auto_turret", "row": 5, "col": 7},
-                {"type": "auto_turret", "row": 4, "col": 7},
-                {"type": "auto_turret", "row": 3, "col": 7}
-            ]
+            "supplies": [{"type": "supplies", "amount": 10}, {"type": "chemicals", "amount": 3}, {
+                "type": "salvage",
+                "amount": 6
+            }, {"type": "plastics", "amount": 2}, {"type": "electronics", "amount": 1}, {
+                "type": "intel",
+                "amount": 24
+            }],
+            "unused_defenses": [{"type": "rocket", "amount": 2}, {
+                "type": "wrench",
+                "amount": 1
+            }, {"type": "auto_turret", "amount": 1}],
+            "placed_defenses": {
+                "unused_defenses": [{"type": "rocket", "amount": 2}, {
+                    "type": "auto_turret",
+                    "amount": 1
+                }, {"type": "wrench", "amount": 1}], "placed_defenses": [{"row": 5, "type": "auto_turret", "col": 6}]
+            },
+            "intel": 24
         }, "action": "setup"
     }
 
