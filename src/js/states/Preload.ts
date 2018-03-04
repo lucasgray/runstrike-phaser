@@ -106,7 +106,7 @@ export default class Preload extends Phaser.State {
 
         if (this.gameState.activityRequested) {
 
-            let largeSkirmish = new LargeSkirmish(this.game);
+            let largeSkirmish = new LargeSkirmish(this.game, this.gameState.wave);
             largeSkirmish.setGameState(this.gameState);
 
             if (this.gameState.activityRequested === 'setup') {
@@ -154,8 +154,9 @@ export default class Preload extends Phaser.State {
         });
 
         let activityRequested = jsonString.action;
+        let wave = jsonString.wave;
 
-        return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested);
+        return new GameState(placedItems, finalInventoryItems, isReactNative, activityRequested, wave);
     }
 
     fakeData: object = {
@@ -231,12 +232,18 @@ export default class Preload extends Phaser.State {
                 "type": "wrench",
                 "amount": 1
             }, {"type": "auto_turret", "amount": 1}],
-            "placed_defenses": {
-                "unused_defenses": [{"type": "rocket", "amount": 2}, {
-                    "type": "auto_turret",
-                    "amount": 1
-                }, {"type": "wrench", "amount": 1}], "placed_defenses": [{"row": 5, "type": "auto_turret", "col": 6}]
-            },
+            "placed_defenses":
+                [
+                    {"row": 5, "type": "auto_turret", "col": 6},
+                    {"row": 6, "type": "auto_turret", "col": 6},
+                    {"row": 7, "type": "auto_turret", "col": 6},
+                    {"row": 8, "type": "auto_turret", "col": 6},
+                    {"row": 5, "type": "auto_turret", "col": 7},
+                    {"row": 6, "type": "auto_turret", "col": 7},
+                    {"row": 7, "type": "auto_turret", "col": 7},
+                    {"row": 8, "type": "auto_turret", "col": 7}
+                ]
+            ,
             "intel": 24
         }, "action": "setup"
     }

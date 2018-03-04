@@ -39,6 +39,9 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         this.x = (row * mission.gridDescriptor.cellWidth) + (mission.gridDescriptor.cellWidth / 2);
         this.y = (col * mission.gridDescriptor.cellHeight) + (mission.gridDescriptor.cellHeight / 2);
 
+        this.row = row;
+        this.col = col;
+
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
         let defaultSize = {width: 64, height: 64};

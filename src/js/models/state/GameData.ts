@@ -17,11 +17,14 @@ export class GameState {
     isReactNative: boolean;
     activityRequested: string;
 
-    constructor(placedLoot: Array<PlacedDefenseItemInfo>, inventoryLoot: Array<DefenseItemInfo>, isReactNative: boolean, activityRequested: string) {
+    wave: Array<object>;
+
+    constructor(placedLoot: Array<PlacedDefenseItemInfo>, inventoryLoot: Array<DefenseItemInfo>, isReactNative: boolean, activityRequested: string, wave: Array<object>) {
         this.placedItems = placedLoot;
         this.inventoryItems = inventoryLoot;
         this.isReactNative = isReactNative;
         this.activityRequested = activityRequested;
+        this.wave = wave;
     }
 
     placeItem(itemType, row, col) {
@@ -80,7 +83,7 @@ export class GameState {
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
-                        return {row: t.row, col: t.col, health: t.health}
+                        return {row: t.row, col: t.col, health: t.health / t.maxHealth}
                     })
                 })
             }))
@@ -98,7 +101,7 @@ export class GameState {
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
-                        return {row: t.row, col: t.col, health: t.health}
+                        return {row: t.row, col: t.col, health: t.health / t.maxHealth}
                     })
                 })
             }))
