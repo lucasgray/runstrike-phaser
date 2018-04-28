@@ -31,12 +31,20 @@ abstract class SetupTurret extends Turret {
         this.gameState = gameState;
 
         this.inputEnabled = true;
-        this.events.onInputDown.add(this.remove, this);
+
+        //can we remove???
+        //no, lets just make clicking on a setup turret a no-op for now?
+        this.events.onInputDown.add(this.noop, this);
+        //this.events.onInputDown.add(this.remove, this);
     }
 
     update() { }
 
     doRotation () { }
+
+    noop(turret: Turret) {
+
+    }
 
     remove(turret: Turret) {
 

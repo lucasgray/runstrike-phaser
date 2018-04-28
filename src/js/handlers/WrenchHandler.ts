@@ -47,6 +47,9 @@ export default class WrenchHandler extends InputHandler {
             sprite.heal(500);
             this.gameState.useItem(this.lootType);
             this.text.setText(this.num());
+
+            let place = this.game.add.audio('place-item');
+            place.play();
         } else {
             let cantplace = this.game.add.audio('wrong-choice');
             cantplace.play();
