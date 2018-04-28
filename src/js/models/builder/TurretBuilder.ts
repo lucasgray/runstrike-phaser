@@ -12,6 +12,7 @@ export default class TurretBuilder {
     gameState: GameState;
     row: number;
     col: number;
+    curHealth: number;
     inputHandlers: Array<InputHandler>;
 
     withGame(game: Phaser.Game) {
@@ -41,63 +42,24 @@ export default class TurretBuilder {
         return this;
     }
 
+    withCurrentHealth(curHealth: number) {
+        this.curHealth = curHealth;
+
+        return this;
+    }
+
     buildForSetup(type: string) {
 
         if (type.toLowerCase() == 'auto_turret') {
             return new AutoSetupTurret(
-                this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'auto_turret')!);
+                this.mission, this.game, this.gameState, this.row, this.col, this.curHealth, _.find(this.inputHandlers, s => s.lootType === 'auto_turret')!);
         }
-        //
-        // if (type.toLowerCase() == 'blue-turret') {
-        //     return new BlueSetupTurret(
-        //         this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'blue-turret')!);
-        // }
-        //
-        // if (type.toLowerCase() == 'green-turret') {
-        //     return new GreenSetupTurret(
-        //         this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'green-turret')!);
-        // }
-        //
-        // if (type.toLowerCase() == 'yellow-turret') {
-        //     return new YellowSetupTurret(
-        //         this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'yellow-turret')!);
-        // }
-        //
-        // if (type.toLowerCase() == 'red-turret') {
-        //     return new RedSetupTurret(
-        //         this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'red-turret')!);
-        // }
-        //
-        // if (type.toLowerCase() == 'orange-turret') {
-        //     return new OrangeSetupTurret(
-        //         this.mission, this.game, this.gameState, this.row, this.col, _.find(this.inputHandlers, s => s.lootType === 'orange-turret')!);
-        // }
     }
 
     buildForPlay(type: string) {
 
         if (type.toLowerCase() == 'auto_turret') {
-            return new AutoTurret(this.mission, this.game, this.row, this.col);
+            return new AutoTurret(this.mission, this.game, this.row, this.col, this.curHealth);
         }
-        //
-        // if (type.toLowerCase() == 'blue-turret') {
-        //     return new BlueTurret(this.mission, this.game, this.row, this.col);
-        // }
-        //
-        // if (type.toLowerCase() == 'green-turret') {
-        //     return new GreenTurret(this.mission, this.game, this.row, this.col);
-        // }
-        //
-        // if (type.toLowerCase() == 'yellow-turret') {
-        //     return new YellowTurret(this.mission, this.game, this.row, this.col);
-        // }
-        //
-        // if (type.toLowerCase() == 'red-turret') {
-        //     return new RedTurret(this.mission, this.game, this.row, this.col);
-        // }
-        //
-        // if (type.toLowerCase() == 'orange-turret') {
-        //     return new OrangeTurret(this.mission, this.game, this.row, this.col);
-        // }
     }
 }

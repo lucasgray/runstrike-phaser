@@ -139,7 +139,7 @@ export default class Preload extends Phaser.State {
         }
 
         let placedItems = jsonString.missionSequence.placed_defenses.map(
-            i => new PlacedDefenseItemInfo(i['type'], i['row'], i['col']));
+            i => new PlacedDefenseItemInfo(i['type'], i['row'], i['col'], i['health']));
 
         let emptyLoot = AllLoots.EmptyLoots;
         let inventoryItems: Array<DefenseItemInfo> = jsonString.missionSequence.unused_defenses.map(
@@ -234,14 +234,12 @@ export default class Preload extends Phaser.State {
             }, {"type": "auto_turret", "amount": 1}],
             "placed_defenses":
                 [
-                    {"row": 5, "type": "auto_turret", "col": 6},
-                    {"row": 6, "type": "auto_turret", "col": 6},
-                    {"row": 7, "type": "auto_turret", "col": 6},
-                    {"row": 8, "type": "auto_turret", "col": 6},
-                    {"row": 5, "type": "auto_turret", "col": 7},
-                    {"row": 6, "type": "auto_turret", "col": 7},
-                    {"row": 7, "type": "auto_turret", "col": 7},
-                    {"row": 8, "type": "auto_turret", "col": 7}
+                    {"row": 5, "type": "auto_turret", "col": 6, "health": 128},
+                    {"row": 6, "type": "auto_turret", "col": 6, "health": 748},
+                    {"row": 7, "type": "auto_turret", "col": 6, "health": 847},
+                    {"row": 5, "type": "auto_turret", "col": 8, "health": 1000},
+                    {"row": 6, "type": "auto_turret", "col": 8, "health": 1000},
+                    {"row": 7, "type": "auto_turret", "col": 8, "health": 1000}
                 ]
             ,
             "intel": 24

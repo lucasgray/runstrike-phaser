@@ -87,11 +87,11 @@ abstract class Turret extends Phaser.Sprite implements Targetable {
         this.weaponSystem = new WeaponSystem(this, mission, range, fireRate, mission.enemies, mission.friendlyProjectiles, undefined, shoot);
     }
 
-    addHealthbar(health: number) {
-        this.health = health;
-        this.maxHealth = health;
+    addHealthbar(curHealth: number, maxHealth: number) {
+        this.health = curHealth;
+        this.maxHealth = maxHealth;
         //health bar starts off on top?
-        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this.base.getFirstExists(true), 10, 1.45, Phaser.BOTTOM_CENTER));
+        this.healthBar = this.game.add.existing(new PercentBar(this.game, this, this.base.getFirstExists(true), 5, 1.45, Phaser.BOTTOM_CENTER));
     }
 
     update() {

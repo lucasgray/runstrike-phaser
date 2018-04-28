@@ -7,6 +7,7 @@ import StoryOne from "../../missions/StoryOne";
 import StoryTwo from "../../missions/StoryTwo";
 import StoryThree from "../../missions/StoryThree";
 import BossOne from "../../missions/BossOne";
+import {AutoTurret} from "../sprites/turrets/Turrets";
 
 //everybody has this?
 export class GameState {
@@ -35,7 +36,7 @@ export class GameState {
         let exists = _.some(this.placedItems, (pl) => pl.type === itemType && pl.row === row && pl.col === col);
         if (exists) return;
 
-        this.placedItems.push(new PlacedDefenseItemInfo(itemType, row, col));
+        this.placedItems.push(new PlacedDefenseItemInfo(itemType, row, col, AutoTurret.HEALTH));
 
         let i = _.find(this.inventoryItems, it => it.type === itemType);
 
@@ -142,12 +143,14 @@ export class PlacedDefenseItemInfo {
     type: string;
     row: number;
     col: number;
+    health: number;
 
-    constructor(type: string, row: number, col: number) {
+    constructor(type: string, row: number, col: number, health: number) {
 
         this.type = type;
         this.row = row;
         this.col = col;
+        this.health = health;
     }
 }
 
@@ -156,44 +159,4 @@ export class AllLoots {
     static Value = ["rocket", "auto_turret", "wrench"];
 
     static EmptyLoots : Array<DefenseItemInfo> = AllLoots.Value.map(i => new DefenseItemInfo(i, 0));
-
 }
-
-// export class MissionInfo {
-//
-//     failedAttempts: number;
-//     beat: boolean;
-//
-//     constructor(failedAttempts: number, beat: boolean) {
-//         this.failedAttempts = failedAttempts;
-//         this.beat = beat;
-//     }
-// }
-//
-// export class AllMissions {
-//
-//     private static AllMissions(game: Phaser.Game) : Array<Mission> {
-//         return [
-//             new SmallSkirmish(game),
-//             new LargeSkirmish(game),
-//             new StoryOne(game),
-//             new StoryTwo(game),
-//             new StoryThree(game),
-//             new BossOne(game)
-//         ];
-//     }
-//
-//     static AllMissionsAndInfos(game: Phaser.Game) : Array<[Mission, MissionInfo]> {
-//
-//         let missions = AllMissions.AllMissions(game);
-//
-//         let m = missions.map(m => {
-//             let m1 : [Mission, MissionInfo] = [m, new MissionInfo(0, false)];
-//
-//             return m1;
-//         });
-//
-//         return m;
-//     }
-//
-// }

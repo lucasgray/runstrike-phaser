@@ -82,13 +82,13 @@ export default class Setup extends Phaser.State {
 
             let turret = builder
                 .at({row: it.row, col: it.col})
+                .withCurrentHealth(it.health)
                 .buildForSetup(it.type);
 
             if (turret) {
                 this.game.add.existing(turret);
                 this.mission.turrets.add(turret);
                 this.mission.doodads.add(turret.base);
-
             }
 
         });

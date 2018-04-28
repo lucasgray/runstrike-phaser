@@ -22,6 +22,8 @@ export class AutoTurret extends Turret {
     static SHOOT_POINT_RIGHT_X = -2;
     static SHOOT_POINT_Y = 48;
 
+    static HEALTH = 1000;
+
     shoot = (to: Targetable, mission: Mission) => {
 
         this.doLeft = !this.doLeft;
@@ -52,11 +54,11 @@ export class AutoTurret extends Turret {
         }
     };
 
-    constructor(mission: Mission, game: Phaser.Game, row: number, col: number) {
+    constructor(mission: Mission, game: Phaser.Game, row: number, col: number, curHealth: number) {
         super(mission, game, row, col, 'auto_turret', AutoTurret.OFFSET_X, AutoTurret.OFFSET_Y);
 
         this.init();
-        this.addHealthbar(1000);
+        this.addHealthbar(curHealth, AutoTurret.HEALTH);
         this.makeWeaponSystem(this.range, this.fireRate, this.mission, this.shoot);
     }
 

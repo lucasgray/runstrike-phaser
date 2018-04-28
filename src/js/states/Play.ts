@@ -50,6 +50,7 @@ export default class Play extends Phaser.State {
 
             let turret = builder
                 .at({row: it.row, col: it.col})
+                .withCurrentHealth(it.health)
                 .buildForPlay(it.type);
 
             if (turret) {
@@ -65,9 +66,6 @@ export default class Play extends Phaser.State {
 
         this.drawInput();
         this.drawHud();
-
-        //eh I think I like having the guidelines...
-        // this.mission.addSetupGuidelines();
     }
 
     drawInput() {
@@ -86,32 +84,7 @@ export default class Play extends Phaser.State {
             rocketLoc.x,
             rocketLoc.y);
 
-        let wrenchLoc = this.mission.gridDescriptor.getCenterOf(
-            {x: this.mission.gridDescriptor.columns - 4, y: this.mission.gridDescriptor.rows - 1});
-
-        let ih2 = new WrenchHandler(
-            this.mission,
-            this.gameState,
-            this.inputHandlers,
-            this.mission.turrets.all(),
-            this.game,
-            wrenchLoc.x,
-            wrenchLoc.y);
-
         this.inputHandlers.push(ih);
-        this.inputHandlers.push(ih2);
-
-        // new Button(
-        //     this.game,
-        //     100,
-        //     this.game.height - 40,
-        //     100,
-        //     40,
-        //     'Back', () => {
-        //         console.log("asking to go to menu");
-        //         this.state.start('Missions');
-        //     }
-        // );
     }
 
     drawHud() {
