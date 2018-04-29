@@ -84,7 +84,7 @@ export class GameState {
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
-                        return {row: t.row, col: t.col, health: t.health / t.maxHealth}
+                        return {row: t.row, col: t.col, health: t.health}
                     })
                 })
             }))
@@ -102,7 +102,7 @@ export class GameState {
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
-                        return {row: t.row, col: t.col, health: t.health / t.maxHealth}
+                        return {row: t.row, col: t.col, health: t.health}
                     })
                 })
             }))
