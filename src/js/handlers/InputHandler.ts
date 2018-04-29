@@ -20,6 +20,7 @@ export default abstract class InputHandler {
      * Icon to display
      */
     abstract icon: string;
+    abstract activeIcon: string;
 
     /**
      * Key to look for when updating what is left of the type of loot we have
@@ -52,15 +53,14 @@ export default abstract class InputHandler {
         parentSprite.anchor.set(.5);
 
         let text = this.game.add.text(0, 0, this.num(), {
-            font: '10px Joystix',
+            font: '9px Joystix',
             fill: this.accentColor,
             align: "right"
         });
 
-        text.anchor.setTo(1,0);
         parentSprite.addChild(text);
 
-        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, 0, 4);
+        SpriteExtensions.alignInParent(text, parentSprite, Phaser.BOTTOM_RIGHT, -1, 4);
 
         parentSprite.inputEnabled = true;
         parentSprite.events.onInputDown.add(this.inputListener, this);
@@ -88,6 +88,9 @@ export default abstract class InputHandler {
         // this.game.add.tween(this.parentSprite.scale).to({x: 1.4, y: 1.4}, 400, Phaser.Easing.Exponential.In).start();
         let button = this.game.add.audio('button');
         button.play();
+
+        //set my UI to active
+        this.parentSprite.loadTexture(this.activeIcon);
 
         //add an onTap to listen for for the action we want to perform
         this.addMyListener();

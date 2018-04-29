@@ -80,12 +80,14 @@ export default class Preload extends Phaser.State {
         this.game.load.spritesheet('weapon-explosion-sm', require('../../img/blue-tint/WeaponFx_ExplosionSmFull01.png').toString(), 65, 65, 5);
         this.game.load.image('explosion-flare', require('../../img/blue-tint/ExplosionLGFX_Flare001.png'));
         this.game.load.image('explosion-shockwave', require('../../img/blue-tint/ExplosionLGFX_Shockwave001.png'));
-        this.game.load.image('ui-inactive', require('../../img/blue-tint/UIAssets_FrameG9.png'));
-        this.game.load.image('ui-active', require('../../img/blue-tint/UIAssets_ButtonG9.png'));
         this.game.load.image('ui-rocket-inactive', require('../../img/blue-tint/UIAssets_Button_Rocket_Inactive.png'));
         this.game.load.image('ui-rocket-active', require('../../img/blue-tint/UIAssets_Button_Rocket_Active.png'));
         this.game.load.image('ui-wrench-inactive', require('../../img/blue-tint/UIAssets_Button_Wrench_Inactive.png'));
         this.game.load.image('ui-wrench-active', require('../../img/blue-tint/UIAssets_Button_Wrench_Active.png'));
+        this.game.load.image('ui-autotower-inactive', require('../../img/blue-tint/UIAssets_Button_Autocannon001_Inactive.png'));
+        this.game.load.image('ui-autotower-active', require('../../img/blue-tint/UIAssets_Button_Autocannon001_Active.png'));
+        this.game.load.image('ui-heavytower-active', require('../../img/blue-tint/UIAssets_Button_TowerHeavy001_Active.png'));
+        this.game.load.image('ui-heavytower-inactive', require('../../img/blue-tint/UIAssets_Button_TowerHeavy001_Inactive.png'));
     }
 
     /**
@@ -244,7 +246,7 @@ export default class Preload extends Phaser.State {
             ,
             "intel": 24
         },
-        "action": "setup",
+        "action": "play",
         "wave": [
             { type: 'ShipOne', delay: 1000, size: 'large', at: 1},
             { type: 'ShipOne', delay: 0, size: 'large', at: 3},

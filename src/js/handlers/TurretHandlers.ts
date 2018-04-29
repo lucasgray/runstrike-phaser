@@ -7,9 +7,9 @@ import {AutoTurret} from "../models/sprites/turrets/Turrets";
 
 export class StandardTurretHandler extends SetupTurretInputHandler {
 
-    icon: string = 'auto-turret-ui';
+    icon: string = 'ui-autotower-inactive';
+    activeIcon: string = 'ui-autotower-active';
     lootType: string = 'auto_turret';
-    spriteScaling: number = .8;
     spawnSetupTurret = (grid) => new AutoSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, AutoTurret.HEALTH, this);
 
     constructor(mission: Mission,
@@ -28,9 +28,9 @@ export class StandardTurretHandler extends SetupTurretInputHandler {
 
 export class HeavyTurretHandler extends SetupTurretInputHandler {
 
-    icon: string = 'heavy-turret-ui';
-    lootType: string = 'standard-turret';
-    spriteScaling: number = .8;
+    icon: string = 'ui-heavytower-inactive';
+    activeIcon: string = 'ui-heavytower-active';
+    lootType: string = 'heavy_turret';
     spawnSetupTurret = (grid) => new AutoSetupTurret(this.mission, this.game, this.gameState, grid.x, grid.y, AutoTurret.HEALTH, this);
 
     constructor(mission: Mission,

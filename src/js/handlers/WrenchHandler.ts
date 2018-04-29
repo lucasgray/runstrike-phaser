@@ -23,20 +23,6 @@ export default class WrenchHandler extends InputHandler {
         super(mission, gameState, allHandlers, allTurrets, game, x, y);
 
         super.paint();
-        this.adjustScale();
-    }
-
-    inputListener() {
-        super.inputListener();
-
-        this.parentSprite.loadTexture(this.activeIcon);
-    }
-
-    adjustScale() {
-        let defaultSize = {width: 58, height: 58};
-        let scaleX = (this.mission.gridDescriptor.cellWidth / defaultSize.width);
-        let scaleY = (this.mission.gridDescriptor.cellHeight / defaultSize.height);
-        this.parentSprite.scale.setTo(scaleX, scaleY);
     }
 
     action(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
