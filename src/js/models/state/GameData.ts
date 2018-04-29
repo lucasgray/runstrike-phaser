@@ -79,14 +79,14 @@ export class GameState {
         if (this.isReactNative) {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
                 type: "MISSION_WON",
-                payload: JSON.stringify({
+                payload: {
                     placed_defenses: this.placedItems,
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
                         return {row: t.row, col: t.col, health: t.health}
                     })
-                })
+                }
             }))
         } else {
             game.state.start('Victory', true, false, mission);
@@ -97,14 +97,14 @@ export class GameState {
         if (this.isReactNative) {
             window.__REACT_WEB_VIEW_BRIDGE.postMessage(JSON.stringify({
                 type: "MISSION_LOST",
-                payload: JSON.stringify({
+                payload: {
                     placed_defenses: this.placedItems,
                     unused_defenses: this.inventoryItems,
                     baseHealth: mission.currentBase.health,
                     turretHealth: mission.turrets.all().map(t => {
                         return {row: t.row, col: t.col, health: t.health}
                     })
-                })
+                }
             }))
         } else {
             game.state.start('Defeat', true, false, mission);
