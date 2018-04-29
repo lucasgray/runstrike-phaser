@@ -117,7 +117,11 @@ export class GameState {
                 type: "SETUP_FINISHED",
                 payload: {
                     placed_defenses: this.placedItems,
-                    unused_defenses: this.inventoryItems
+                    unused_defenses: this.inventoryItems,
+                    baseHealth: mission.currentBase.health,
+                    turretHealth: mission.turrets.all().map(t => {
+                        return {row: t.row, col: t.col, health: t.health / t.maxHealth}
+                    })
                 }
             }));
         } else {
