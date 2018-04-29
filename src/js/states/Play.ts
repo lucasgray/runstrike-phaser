@@ -71,7 +71,7 @@ export default class Play extends Phaser.State {
     drawInput() {
 
         let rocketLoc = this.mission.gridDescriptor.getCenterOf(
-            {x: this.mission.gridDescriptor.columns - 3, y: this.mission.gridDescriptor.rows - 1});
+            {x: this.mission.gridDescriptor.columns - 3.6, y: this.mission.gridDescriptor.rows - 1.1});
 
         this.inputHandlers = [];
 
@@ -90,8 +90,8 @@ export default class Play extends Phaser.State {
     drawHud() {
 
         let placement = new Phaser.Point(
-            (this.mission.gridDescriptor.columns - 2) * this.mission.gridDescriptor.cellWidth,
-            (this.mission.gridDescriptor.rows -3) * this.mission.gridDescriptor.cellHeight
+            (this.mission.gridDescriptor.columns - 2.5) * this.mission.gridDescriptor.cellWidth,
+            (this.mission.gridDescriptor.rows - 3.75) * this.mission.gridDescriptor.cellHeight
         );
 
         let hudPanel = new HudPanel(this.game, placement, this.mission);

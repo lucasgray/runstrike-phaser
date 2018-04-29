@@ -29,8 +29,8 @@ export default class HudPanel extends Phaser.Sprite {
         this.game = game;
         this.topLeft = topLeft;
 
-        this.width = mission.gridDescriptor.cellWidth * 2;
-        this.height = mission.gridDescriptor.cellHeight * 3;
+        this.width = mission.gridDescriptor.cellWidth * 2.5;
+        this.height = mission.gridDescriptor.cellHeight * 3.75;
 
         this.mission = mission;
 
@@ -39,7 +39,7 @@ export default class HudPanel extends Phaser.Sprite {
 
     paint(mission) {
         let graphics = this.game.add.graphics(0, 0);
-        graphics.beginFill(0x000000, .6);
+        graphics.beginFill(0x22092d, .6);
         graphics.lineStyle(2, Phaser.Color.hexToRGB(this.accentColor));
         graphics.drawRect(0, 0, this.width - 2, this.height - 2);
 
@@ -53,42 +53,42 @@ export default class HudPanel extends Phaser.Sprite {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
-        this.enemyFormationString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 25, "> STRONG", {
+        this.enemyFormationString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 30, "> STRONG", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
-        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 40, "Sensor Readings", {
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 50, "Sensor Readings", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
-        this.baseHealthString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 50, "> 10000 / 10000", {
+        this.baseHealthString  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 65, "> 10000 / 10000", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
-        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 65, "Perimeter", {
+        this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 85, "Perimeter", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
-        this.perimeter  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 75, "> OK", {
+        this.perimeter  = this.game.add.text(this.topLeft.x + 5, this.topLeft.y + 100, "> OK", {
             font: 'Joystix',
             fill: this.accentColor,
             align: 'left',
-            fontSize: 9
+            fontSize: 11
         });
 
     }

@@ -243,7 +243,19 @@ export default class Preload extends Phaser.State {
                 ]
             ,
             "intel": 24
-        }, "action": "setup"
+        },
+        "action": "play",
+        "wave": [
+            { type: 'ShipOne', delay: 1000, size: 'large', at: 1},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 3},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 5},
+            { type: 'ShipOne', delay: 7000, size: 'large', at: 1},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 3},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 5},
+            { type: 'ShipOne', delay: 7000, size: 'large', at: 1},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 3},
+            { type: 'ShipOne', delay: 0, size: 'large', at: 5},
+        ]
     }
 
 
